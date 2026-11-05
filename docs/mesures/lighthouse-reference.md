@@ -44,3 +44,24 @@ Même protocole (build de production, `vite preview`, API locale).
 *Entre parenthèses : valeur de référence avant refonte.*
 
 **Reste à traiter (étape 9)** : la performance de l'accueil sur mobile a baissé avec la refonte animée (LCP 5,8 s, contre 4,3 s avant). Pistes : chargement différé des sections situées sous la ligne de flottaison, préchargement de l'image du hero, polices hébergées localement, allègement du CSS de l'accueil.
+
+---
+
+## Étape 8 (accessibilité, SEO) — 5 novembre 2026
+
+Pages qui n'avaient pas encore été mesurées. Accessibilité, bonnes pratiques et SEO, mobile et desktop.
+
+| Page | Access. | Bonnes prat. | SEO | Remarque |
+|---|---|---|---|---|
+| Article | 100 | 100 | 100 | |
+| Nous rejoindre | 100 | 100 | 100 | |
+| Détail spécialité | 95 → corrigé | 100 | 100 | Contraste des cartes « engagement » (4,47 → ≥ 4,5) |
+| Offres | 95–98 → corrigé | 100 | 100 | Titre `h2` ajouté. Le contraste signalé sur les cartes est un faux positif : Lighthouse mesure pendant le fondu d'apparition, les couleurs réelles sont conformes (≥ 5,9:1) |
+| 404 | 100 | 100 | 66 | **Voulu** : `noindex` pour ne pas indexer les pages d'erreur |
+
+Vérifications manuelles (Chrome) :
+- Clavier : ordre de tabulation logique (lien d'évitement en premier), focus visible sur chaque élément.
+- Mode sombre : petits titres et pastilles d'icônes corrigés (contraste), guillemets décoratifs atténués.
+- Tablette (768 px) : menu burger, mise en page une colonne, aucun débordement horizontal.
+
+À traiter à l'étape 9 : décalage de mise en page dû au chargement des polices sur la page Offres mobile (CLS 0,068).

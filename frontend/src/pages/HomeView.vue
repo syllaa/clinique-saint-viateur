@@ -12,11 +12,18 @@ import MapBanner from "@/components/home/MapBanner.vue";
 import OffersSection from "@/components/home/OffersSection.vue";
 import ServicesSection from "@/components/home/ServicesSection.vue";
 import TestimonialsSection from "@/components/home/TestimonialsSection.vue";
-import { resetSeo } from "@/composables/useHead";
+import { applySeo, clinicJsonLd } from "@/composables/useHead";
 
 // Each section owns its data, markup, styles and animations
 // (see components/home/). This page only sets the order.
-onMounted(resetSeo);
+onMounted(() =>
+  applySeo({
+    title: "Clinique Médicale Saint Viateur – Riviera Sideci, Cocody, Abidjan",
+    description:
+      "Établissement médical privé à Cocody, Abidjan : urgences et réanimation 24h/24, 7j/7, consultations, laboratoire, imagerie, maternité. Appelez le 27 22 59 04 17.",
+    jsonLd: clinicJsonLd(),
+  }),
+);
 </script>
 
 <template>

@@ -57,7 +57,8 @@ export function useClinicHours() {
     const { open, close } = today.value;
     if (consultationsOpen.value && close) return `Consultations ouvertes jusqu'à ${close.replace(":00", "h")}`;
     if (open && now.value.minutes < toMinutes(open)) return `Consultations dès ${open.replace(":00", "h")}`;
-    return "Consultations fermées · urgences ouvertes";
+    // Emergencies are announced next to this label everywhere it is shown.
+    return "Consultations fermées";
   });
 
   return { today, todayName: computed(() => today.value.day), consultationsOpen, statusLabel };

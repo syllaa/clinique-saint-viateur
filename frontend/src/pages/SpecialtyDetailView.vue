@@ -192,7 +192,8 @@ watch(
         />
         <span v-if="isAvailable24_7" v-reveal class="spd-badge"><Clock :size="14" aria-hidden="true" /> Disponible 24h/24</span>
         <h1 v-reveal class="d1">{{ specialties.current.name }}</h1>
-        <p v-reveal class="d2">{{ specialties.current.description }}</p>
+        <!-- Shown immediately: it is the largest text above the fold (LCP). -->
+        <p>{{ specialties.current.description }}</p>
         <div v-reveal class="spd-hero-btns d3">
           <a href="tel:+2252722590417" class="btn-primary"><Phone :size="16" aria-hidden="true" /> Prendre rendez-vous</a>
           <RouterLink to="/#contact" class="btn-outline-light">Nous contacter</RouterLink>
@@ -571,7 +572,7 @@ watch(
 }
 .spd-trust-card p {
   font-size: 0.86rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.78); /* ≥ 4.5:1 on the card */
   line-height: 1.65;
 }
 

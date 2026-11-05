@@ -78,8 +78,9 @@ function onPageChange(page: number) {
     :crumbs="[{ label: 'Accueil', to: '/' }, { label: 'Nos offres' }]"
   />
 
-  <section id="resultats" class="section list-section" aria-label="Offres">
+  <section id="resultats" class="section list-section" aria-labelledby="promo-list-title">
     <div class="section-inner">
+      <h2 id="promo-list-title" class="sr-only">Liste des offres</h2>
       <div class="list-toolbar">
         <label class="list-search">
           <Search :size="16" aria-hidden="true" />

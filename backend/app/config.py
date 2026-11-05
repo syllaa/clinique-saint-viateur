@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
+    # Public address of the website (absolute URLs in sitemap.xml / robots.txt)
+    site_url: str = "http://localhost:5173"
+
     # CORS
     cors_origins: list[str] = ["http://localhost:5173"]
 

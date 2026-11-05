@@ -79,8 +79,9 @@ function onPageChange(page: number) {
     :crumbs="[{ label: 'Accueil', to: '/' }, { label: 'Blog médical' }]"
   />
 
-  <section id="resultats" class="section list-section" aria-label="Articles">
+  <section id="resultats" class="section list-section" aria-labelledby="blog-list-title">
     <div class="section-inner">
+      <h2 id="blog-list-title" class="sr-only">Liste des articles</h2>
       <div class="list-toolbar">
         <label class="list-search">
           <Search :size="16" aria-hidden="true" />

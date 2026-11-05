@@ -17,6 +17,7 @@ from app.database import Base, SessionLocal, engine
 from app.jobs.router import router as jobs_router
 from app.promotions.router import router as promotions_router
 from app.seed import ensure_seed_content
+from app.seo.router import router as seo_router
 from app.site.router import router as site_router
 from app.specialties.router import router as specialties_router
 from app.support.router import router as support_router
@@ -84,6 +85,7 @@ app.include_router(jobs_router)
 app.include_router(promotions_router)
 app.include_router(support_router)
 app.include_router(uploads_router)
+app.include_router(seo_router)
 
 # Images and videos are public (specialty/article/job covers, ambient videos). CVs are never mounted here —
 # they're only reachable through the authenticated streaming route in app/jobs/router.py.

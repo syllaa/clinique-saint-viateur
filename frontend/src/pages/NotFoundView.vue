@@ -2,10 +2,12 @@
 import { Phone } from "@lucide/vue";
 import { onMounted } from "vue";
 
-import { setTitle } from "@/composables/useHead";
+import { setMeta, setTitle } from "@/composables/useHead";
 
 onMounted(() => {
   setTitle("Page introuvable – Clinique Saint Viateur");
+  // Keep error pages out of search results (the next page resets it).
+  setMeta("robots", "noindex");
 });
 </script>
 

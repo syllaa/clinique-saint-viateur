@@ -120,6 +120,28 @@
   margin-top: 34px;
 }
 
+/* ─── Dark theme: brand red as *text* ───
+   The brand red (#c8102e) is fine as a background but too dark as small
+   text on the dark surfaces (< 4.5:1). In dark mode, text uses the lighter
+   brand tone instead; buttons and fills keep the brand red. */
+:root[data-theme="dark"] .section-kicker,
+:root[data-theme="dark"] .svc-link,
+:root[data-theme="dark"] .spc-more,
+:root[data-theme="dark"] .gallery-n,
+:root[data-theme="dark"] .promo-category,
+:root[data-theme="dark"] .nf-urgent,
+:root[data-theme="dark"] .ccard a:hover {
+  color: var(--brand-400);
+}
+:root[data-theme="dark"] .ccard-icon,
+:root[data-theme="dark"] .icon-chip {
+  background: rgba(224, 71, 90, 0.14);
+  color: var(--brand-200);
+}
+:root[data-theme="dark"] .quote-mark {
+  color: rgba(224, 71, 90, 0.28);
+}
+
 /* ─── Search field with icon (list pages) ─── */
 .list-search {
   display: flex;
