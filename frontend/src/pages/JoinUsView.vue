@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
+import LoadError from "@/components/common/LoadError.vue";
 import LoadingOverlay from "@/components/common/LoadingOverlay.vue";
 import FooterBar from "@/components/layout/FooterBar.vue";
 import NavBar from "@/components/layout/NavBar.vue";
@@ -15,6 +16,7 @@ import { useJobOffersStore } from "@/stores/jobOffers";
 
 const jobs = useJobOffersStore();
 const jobsLoading = ref(true);
+const jobsError = ref(false);
 
 const mapsKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 const mapsQuery = "Clinique Medicale Saint Viateur, Route Akouédo, Riviera Sideci, Cocody, Abidjan";
@@ -26,12 +28,20 @@ onMounted(async () => {
       "Contactez la Clinique Saint Viateur ou découvrez nos offres d'emploi à Cocody, Abidjan.",
     canonical: window.location.href,
   });
+  await loadJobs();
+});
+
+async function loadJobs() {
+  jobsLoading.value = true;
+  jobsError.value = false;
   try {
     await jobs.fetchAll();
+  } catch {
+    jobsError.value = true;
   } finally {
     jobsLoading.value = false;
   }
-});
+}
 
 const name = ref("");
 const email = ref("");
@@ -164,6 +174,7 @@ async function submitContact() {
       </div>
 
       <div v-if="jobsLoading" style="position: relative; min-height: 160px"><LoadingOverlay message="Chargement des offres…" /></div>
+      <LoadError v-else-if="jobsError" title="Impossible de charger les offres d'emploi" @retry="loadJobs" />
       <div v-else-if="jobs.items.length" class="jobs-grid">
         <JobOfferCard v-for="o in jobs.items" :key="o.id" :offer="o" />
       </div>

@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 
 import BlogGrid from "@/components/blog/BlogGrid.vue";
+import LoadError from "@/components/common/LoadError.vue";
 import LoadingOverlay from "@/components/common/LoadingOverlay.vue";
 import Spinner from "@/components/common/Spinner.vue";
 import HeroCanvas from "@/components/hero/HeroCanvas.vue";
@@ -20,9 +21,25 @@ import { TESTIMONIALS as testimonials } from "@/constants/testimonials";
 const specialties = useSpecialtiesStore();
 const promotions = usePromotionsStore();
 
+const servicesError = ref(false);
+const servicesRetrying = ref(false);
+
+async function loadServices() {
+  servicesError.value = false;
+  servicesRetrying.value = true;
+  try {
+    await specialties.fetchAll();
+  } catch {
+    servicesError.value = true;
+  } finally {
+    servicesRetrying.value = false;
+  }
+}
+
 onMounted(() => {
-  specialties.fetchAll();
-  promotions.fetchActive();
+  loadServices();
+  // The offers section simply stays hidden if this fails (it is v-if'd on items).
+  promotions.fetchActive().catch(() => undefined);
   resetSeo();
 });
 
@@ -179,6 +196,12 @@ async function backToForm() {
           <p>{{ s.description }}</p>
         </RouterLink>
       </div>
+      <LoadError
+        v-if="servicesError && !specialties.items.length"
+        title="Impossible de charger nos spécialités"
+        :retrying="servicesRetrying"
+        @retry="loadServices"
+      />
       <div class="svc-more">
         <RouterLink to="/specialites" class="btn-ghost">Voir toutes nos spécialités →</RouterLink>
       </div>
@@ -310,19 +333,28 @@ async function backToForm() {
             <div v-if="!sent" class="form-fields" :class="{ 'is-sending': sending }">
               <h3>Envoyer un message</h3>
               <div class="form-row">
-                <div class="fg"><label>Nom complet</label><input v-model="name" type="text" placeholder="Votre nom…" /></div>
-                <div class="fg"><label>Téléphone</label><input v-model="phone" type="tel" placeholder="+225 …" /></div>
+                <div class="fg">
+                  <label for="contact-name">Nom complet*</label>
+                  <input id="contact-name" v-model="name" type="text" autocomplete="name" required placeholder="Votre nom…" />
+                </div>
+                <div class="fg">
+                  <label for="contact-phone">Téléphone</label>
+                  <input id="contact-phone" v-model="phone" type="tel" autocomplete="tel" placeholder="+225 …" />
+                </div>
               </div>
-              <div class="fg"><label>Email</label><input v-model="email" type="email" placeholder="votre@email.com" /></div>
               <div class="fg">
-                <label>Quel type de service médical recherchez-vous ?</label>
-                <select v-model="serviceType">
+                <label for="contact-email">Email</label>
+                <input id="contact-email" v-model="email" type="email" autocomplete="email" placeholder="votre@email.com" />
+              </div>
+              <div class="fg">
+                <label for="contact-service">Quel type de service médical recherchez-vous ?*</label>
+                <select id="contact-service" v-model="serviceType" required>
                   <option value="" disabled>Sélectionnez un service médical</option>
                   <option v-for="s in specialties.items" :key="s.id" :value="s.name">{{ s.name }}</option>
                 </select>
               </div>
-              <div class="fg">
-                <label>Avez-vous besoin d'une consultation urgente ou d'un rendez-vous programmé ?</label>
+              <fieldset class="fg">
+                <legend>Avez-vous besoin d'une consultation urgente ou d'un rendez-vous programmé ?</legend>
                 <div class="radio-group">
                   <label class="radio-card" :class="{ active: urgency === 'urgence' }">
                     <input type="radio" value="urgence" v-model="urgency" />
@@ -335,9 +367,9 @@ async function backToForm() {
                     Rendez-vous programmé
                   </label>
                 </div>
-              </div>
-              <div class="fg">
-                <label>Souhaitez-vous des informations sur les services d'hospitalisation ou de soins intensifs ?</label>
+              </fieldset>
+              <fieldset class="fg">
+                <legend>Souhaitez-vous des informations sur les services d'hospitalisation ou de soins intensifs ?</legend>
                 <div class="radio-group">
                   <label class="radio-card" :class="{ active: wantsHospitalizationInfo === 'oui' }">
                     <input type="radio" value="oui" v-model="wantsHospitalizationInfo" />
@@ -350,10 +382,10 @@ async function backToForm() {
                     Non
                   </label>
                 </div>
-              </div>
+              </fieldset>
               <div class="fg">
-                <label>Votre demande*</label>
-                <textarea v-model="message" placeholder="Précisez votre besoin : localisation, délais…"></textarea>
+                <label for="contact-message">Votre demande*</label>
+                <textarea id="contact-message" v-model="message" required placeholder="Précisez votre besoin : localisation, délais…"></textarea>
               </div>
               <button class="btn-submit" :disabled="sending" @click="submitForm">
                 <span class="btn-content">Envoyer le message →</span>
@@ -1021,8 +1053,14 @@ async function backToForm() {
 .fg {
   margin-bottom: 14px;
 }
-.fg label {
+fieldset.fg {
+  border: 0;
+  min-width: 0;
+}
+.fg label,
+.fg legend {
   display: block;
+  padding: 0;
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -1079,8 +1117,20 @@ async function backToForm() {
     border-color 0.2s,
     box-shadow 0.2s;
 }
+/* Visually hidden but still focusable/operable with the keyboard (arrow keys). */
 .radio-card input {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.radio-group label.radio-card {
+  position: relative;
+}
+.radio-card:has(input:focus-visible) {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
 }
 .radio-dot {
   display: inline-block;

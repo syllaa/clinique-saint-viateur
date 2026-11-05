@@ -1,4 +1,6 @@
-import { api } from "@/services/api";
+import axios from "axios";
+
+import { API_BASE_URL, api } from "@/services/api";
 
 export interface TokenResponse {
   access_token: string;
@@ -15,6 +17,13 @@ export interface CurrentUser {
 export const authService = {
   login(username: string, password: string) {
     return api.post<TokenResponse>("/auth/login", { username, password }).then((r) => r.data);
+  },
+  /** Uses the bare axios instance on purpose: going through `api` would re-enter
+   * its 401 interceptor and could loop if the refresh token itself is rejected. */
+  refresh(refreshToken: string) {
+    return axios
+      .post<TokenResponse>(`${API_BASE_URL}/auth/refresh`, { refresh_token: refreshToken })
+      .then((r) => r.data);
   },
   me() {
     return api.get<CurrentUser>("/auth/me").then((r) => r.data);

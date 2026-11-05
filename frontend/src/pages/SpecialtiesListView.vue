@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
+import LoadError from "@/components/common/LoadError.vue";
 import Spinner from "@/components/common/Spinner.vue";
 import FooterBar from "@/components/layout/FooterBar.vue";
 import NavBar from "@/components/layout/NavBar.vue";
@@ -11,10 +12,23 @@ import { applySeo } from "@/composables/useHead";
 import { useSpecialtiesStore } from "@/stores/specialties";
 
 const specialties = useSpecialtiesStore();
-const loading = specialties.items.length === 0;
+const loading = ref(false);
+const loadError = ref(false);
+
+async function load() {
+  loading.value = true;
+  loadError.value = false;
+  try {
+    await specialties.fetchAll();
+  } catch {
+    loadError.value = true;
+  } finally {
+    loading.value = false;
+  }
+}
 
 onMounted(() => {
-  specialties.fetchAll();
+  load();
   applySeo({
     title: "Nos spécialités médicales – Clinique Saint Viateur",
     description:
@@ -40,13 +54,14 @@ onMounted(() => {
       <div v-if="specialties.items.length" class="specialties-grid">
         <SpecialtyCard v-for="s in specialties.items" :key="s.id" :specialty="s" />
       </div>
+      <div v-else-if="loading" class="specialties-loading"><Spinner :size="26" /></div>
+      <LoadError v-else-if="loadError" @retry="load" />
       <EmptyState
-        v-else-if="!loading"
+        v-else
         icon="🩺"
         title="Aucune spécialité pour le moment"
         message="Revenez bientôt, notre offre de soins est mise à jour régulièrement."
       />
-      <div v-else class="specialties-loading"><Spinner :size="26" /></div>
     </div>
   </section>
 

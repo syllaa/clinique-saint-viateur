@@ -4,6 +4,7 @@ import { onMounted, ref, watch } from "vue";
 import BlogCard from "@/components/blog/BlogCard.vue";
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
+import LoadError from "@/components/common/LoadError.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import Spinner from "@/components/common/Spinner.vue";
 import FooterBar from "@/components/layout/FooterBar.vue";
@@ -18,11 +19,13 @@ const categories = useBlogCategoriesStore();
 const search = ref("");
 const activeCategory = ref<string | null>(null);
 const loading = ref(true);
+const loadError = ref(false);
 
 let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
 async function load(page = 1) {
   loading.value = true;
+  loadError.value = false;
   try {
     await articles.fetchPublished({
       page,
@@ -30,13 +33,16 @@ async function load(page = 1) {
       search: search.value || undefined,
       category: activeCategory.value || undefined,
     });
+  } catch {
+    loadError.value = true;
   } finally {
     loading.value = false;
   }
 }
 
 onMounted(() => {
-  categories.fetchAll();
+  // Category filters are optional: without them the list still works.
+  categories.fetchAll().catch(() => undefined);
   load();
   applySeo({
     title: "Blog médical – Actualités & Conseils santé – Clinique Saint Viateur",
@@ -94,6 +100,7 @@ function onPageChange(page: number) {
       </div>
 
       <div v-if="loading" class="blog-loading"><Spinner :size="26" /></div>
+      <LoadError v-else-if="loadError" @retry="load()" />
       <template v-else-if="articles.items.length">
         <div class="blog-grid">
           <BlogCard v-for="a in articles.items" :key="a.id" :article="a" />

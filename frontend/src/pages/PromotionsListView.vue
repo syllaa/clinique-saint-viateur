@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from "vue";
 
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
+import LoadError from "@/components/common/LoadError.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import Spinner from "@/components/common/Spinner.vue";
 import FooterBar from "@/components/layout/FooterBar.vue";
@@ -17,11 +18,13 @@ const search = ref("");
 const activeCategory = ref<string | null>(null);
 const sort = ref<"date" | "popular">("date");
 const loading = ref(true);
+const loadError = ref(false);
 
 let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
 async function load(page = 1) {
   loading.value = true;
+  loadError.value = false;
   try {
     await promotions.fetchAll({
       page,
@@ -30,13 +33,16 @@ async function load(page = 1) {
       category: activeCategory.value || undefined,
       sort: sort.value,
     });
+  } catch {
+    loadError.value = true;
   } finally {
     loading.value = false;
   }
 }
 
 onMounted(() => {
-  promotions.fetchCategories();
+  // Category filters are optional: without them the list still works.
+  promotions.fetchCategories().catch(() => undefined);
   load();
   applySeo({
     title: "Toutes nos offres – Clinique Saint Viateur",
@@ -103,6 +109,7 @@ function onPageChange(page: number) {
       </div>
 
       <div v-if="loading" class="promo-loading"><Spinner :size="26" /></div>
+      <LoadError v-else-if="loadError" @retry="load()" />
       <template v-else-if="promotions.allItems.length">
         <div class="promo-grid">
           <PromotionCard v-for="p in promotions.allItems" :key="p.id" :promotion="p" />

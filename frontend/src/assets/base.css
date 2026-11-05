@@ -97,6 +97,19 @@ button {
   font-family: inherit;
 }
 
+/* ─── KEYBOARD FOCUS (WCAG 2.4.7) ───
+   Only shown for keyboard navigation (:focus-visible), never on mouse click. */
+:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.fg input:focus-visible,
+.fg select:focus-visible,
+.fg textarea:focus-visible {
+  outline: none; /* these fields already draw their own focus ring */
+}
+
 /* ─── SECTION LAYOUT HELPERS (shared by page sections) ─── */
 .section {
   padding: 88px 5vw;

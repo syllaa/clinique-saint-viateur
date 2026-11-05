@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import { authService, type CurrentUser } from "@/services/authService";
+import { authService, type CurrentUser, type TokenResponse } from "@/services/authService";
+import { storageGet, storageRemove, storageSet } from "@/utils/storage";
 
 const STORAGE_KEY = "sv_auth";
 
@@ -14,14 +15,14 @@ export const useAuthStore = defineStore("auth", () => {
   const isAdmin = computed(() => user.value?.role === "admin");
 
   function persist() {
-    localStorage.setItem(
+    storageSet(
       STORAGE_KEY,
       JSON.stringify({ accessToken: accessToken.value, refreshToken: refreshToken.value, user: user.value }),
     );
   }
 
   function restoreSession() {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = storageGet(STORAGE_KEY);
     if (!raw) return;
     try {
       const data = JSON.parse(raw);
@@ -29,14 +30,19 @@ export const useAuthStore = defineStore("auth", () => {
       refreshToken.value = data.refreshToken ?? null;
       user.value = data.user ?? null;
     } catch {
-      localStorage.removeItem(STORAGE_KEY);
+      storageRemove(STORAGE_KEY);
     }
   }
 
-  async function login(username: string, password: string) {
-    const tokens = await authService.login(username, password);
+  /** Stores a fresh token pair (after login or a silent refresh). */
+  function setTokens(tokens: TokenResponse) {
     accessToken.value = tokens.access_token;
     refreshToken.value = tokens.refresh_token;
+    persist();
+  }
+
+  async function login(username: string, password: string) {
+    setTokens(await authService.login(username, password));
     user.value = await authService.me();
     persist();
   }
@@ -45,8 +51,8 @@ export const useAuthStore = defineStore("auth", () => {
     accessToken.value = null;
     refreshToken.value = null;
     user.value = null;
-    localStorage.removeItem(STORAGE_KEY);
+    storageRemove(STORAGE_KEY);
   }
 
-  return { accessToken, refreshToken, user, isAuthenticated, isAdmin, restoreSession, login, logout };
+  return { accessToken, refreshToken, user, isAuthenticated, isAdmin, restoreSession, setTokens, login, logout };
 });
