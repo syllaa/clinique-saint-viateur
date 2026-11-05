@@ -5,6 +5,7 @@ import facadePhoto from "@/assets/images/hero/hero-clinic-facade-street.webp";
 import labPhoto from "@/assets/images/facility/facility-laboratory-room.webp";
 import awardPhoto from "@/assets/images/team/team-award-founders.webp";
 import teamPhoto from "@/assets/images/team/team-staff-group-large.webp";
+import AmbientVideo from "@/components/common/AmbientVideo.vue";
 import { useScrollScene } from "@/motion/useScrollScene";
 
 /**
@@ -118,7 +119,9 @@ useScrollScene(storyRef, ({ gsap }, story) => {
 
 <template>
   <section id="about" class="section about-section" aria-labelledby="about-title">
-    <div class="section-inner">
+    <!-- Optional background film (src/assets/media/histoire.*): renders nothing until provided. -->
+    <AmbientVideo class="about-ambient" media="histoire" />
+    <div class="section-inner about-content">
       <header class="about-head">
         <p v-reveal class="section-kicker">Notre histoire</p>
         <h2 id="about-title" v-reveal="'words'" class="section-title d1">Une clinique moderne,<br />une médecine humaine</h2>
@@ -196,6 +199,16 @@ useScrollScene(storyRef, ({ gsap }, story) => {
   color: #fff;
   position: relative;
   overflow: clip;
+}
+.about-ambient {
+  position: absolute;
+  inset: 0;
+  opacity: 0.16;
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+}
+.about-content {
+  position: relative;
 }
 .about-head .section-kicker {
   color: var(--brand-200);

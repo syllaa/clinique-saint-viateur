@@ -3,6 +3,7 @@ import { Mail, MapPin, Phone } from "@lucide/vue";
 import { ref } from "vue";
 
 import IconFacebook from "@/components/brand/IconFacebook.vue";
+import AmbientVideo from "@/components/common/AmbientVideo.vue";
 import HeroCanvas from "@/components/hero/HeroCanvas.vue";
 import heroPhoto960 from "@/assets/images/hero/hero-ambulance-facade-960.webp";
 import heroPhoto from "@/assets/images/hero/hero-ambulance-facade.webp";
@@ -38,16 +39,17 @@ useScrollScene(heroRef, (kit, hero) => {
   <section id="hero" ref="heroRef" aria-labelledby="hero-title">
     <!-- GSAP moves the wrapper (parallax); CSS zooms the image inside it. -->
     <div class="hero-photo-wrap">
-      <img
+      <!-- Ambient video when src/assets/media/hero.* exists; otherwise (and
+           under reduced motion / data saver) the photo alone. -->
+      <AmbientVideo
         class="hero-photo"
-        :src="heroPhoto"
-        :srcset="`${heroPhoto960} 960w, ${heroPhoto} 1920w`"
-        sizes="100vw"
-        alt=""
-        width="1920"
-        height="1080"
-        fetchpriority="high"
-        decoding="async"
+        media="hero"
+        :poster="heroPhoto"
+        :poster-srcset="`${heroPhoto960} 960w, ${heroPhoto} 1920w`"
+        poster-sizes="100vw"
+        :poster-width="1920"
+        :poster-height="1080"
+        poster-priority="high"
       />
     </div>
     <HeroCanvas />

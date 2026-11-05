@@ -53,6 +53,23 @@ defineProps<{ specialty: SpecialtyListItem }>();
   transform: scale(1.12) rotate(-6deg);
   background: #fbe1e3;
 }
+.spc-card:hover :deep(.specialty-media.card:not(.is-image) svg) {
+  animation: iconBeat 1.2s ease-in-out infinite;
+}
+@keyframes iconBeat {
+  0%,
+  40%,
+  100% {
+    scale: 1;
+  }
+  10%,
+  28% {
+    scale: 1.18;
+  }
+  18% {
+    scale: 0.96;
+  }
+}
 .spc-card h3 {
   font-family: "DM Sans", sans-serif;
   font-size: 0.95rem;

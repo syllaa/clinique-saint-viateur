@@ -140,6 +140,24 @@ onMounted(load);
   transform: scale(1.12) rotate(-6deg);
   background: var(--brand-100);
 }
+/* Icon "heartbeat" while the card is hovered (double beat, then rest). */
+.svc-card:hover .svc-icon:not(.is-image) :deep(svg) {
+  animation: iconBeat 1.2s ease-in-out infinite;
+}
+@keyframes iconBeat {
+  0%,
+  40%,
+  100% {
+    scale: 1;
+  }
+  10%,
+  28% {
+    scale: 1.18;
+  }
+  18% {
+    scale: 0.96;
+  }
+}
 .svc-card.rv.vis .svc-icon {
   animation: iconPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--rv-delay, 0ms) + 0.15s) backwards;
 }

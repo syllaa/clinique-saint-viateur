@@ -4,6 +4,7 @@ import { onMounted } from "vue";
 import AboutSection from "@/components/home/AboutSection.vue";
 import BlogSection from "@/components/home/BlogSection.vue";
 import ContactSection from "@/components/home/ContactSection.vue";
+import EmergencyBanner from "@/components/home/EmergencyBanner.vue";
 import GallerySection from "@/components/home/GallerySection.vue";
 import HeroSection from "@/components/home/HeroSection.vue";
 import InfoStrip from "@/components/home/InfoStrip.vue";
@@ -25,6 +26,7 @@ onMounted(resetSeo);
   <OffersSection />
   <AboutSection />
   <GallerySection />
+  <EmergencyBanner />
   <BlogSection />
   <TestimonialsSection />
   <ContactSection />

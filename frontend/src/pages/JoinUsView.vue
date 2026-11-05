@@ -2,6 +2,7 @@
 import { Briefcase, Clock, Mail, MapPin, Phone } from "@lucide/vue";
 import { onMounted, ref } from "vue";
 
+import AmbientVideo from "@/components/common/AmbientVideo.vue";
 import PageHeader from "@/components/common/PageHeader.vue";
 import SkeletonGrid from "@/components/common/SkeletonGrid.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
@@ -169,7 +170,7 @@ async function submitContact() {
           </p>
         </div>
         <div v-reveal="'mask'" class="jobs-photo">
-          <img :src="teamPhoto" alt="L'équipe de la Clinique Médicale Saint Viateur" loading="lazy" />
+          <AmbientVideo class="jobs-media" media="recrutement" :poster="teamPhoto" poster-alt="L'équipe de la Clinique Médicale Saint Viateur" />
         </div>
       </div>
 
@@ -353,12 +354,9 @@ async function submitContact() {
   aspect-ratio: 16 / 10;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
 }
-.jobs-photo img {
+.jobs-media {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
 }
 .jobs-grid {
   display: grid;
