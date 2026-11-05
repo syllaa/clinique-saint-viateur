@@ -3,6 +3,7 @@ import { createApp } from "vue";
 
 import App from "./App.vue";
 import "./assets/base.css";
+import "./assets/ui.css";
 import { vCountUp } from "./directives/countUp";
 import { vReveal } from "./directives/reveal";
 import router from "./router";

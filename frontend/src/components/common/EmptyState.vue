@@ -1,12 +1,20 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ icon?: string; title: string; message?: string }>(), {
-  icon: "🔍",
+import { SearchX } from "@lucide/vue";
+import type { Component } from "vue";
+
+/** `icon` is a Lucide icon component (preferred). A plain string (emoji) is still accepted. */
+withDefaults(defineProps<{ icon?: Component | string; title: string; message?: string }>(), {
+  icon: () => SearchX,
+  message: undefined,
 });
 </script>
 
 <template>
   <div class="empty-state">
-    <div class="empty-icon">{{ icon }}</div>
+    <div class="empty-icon" aria-hidden="true">
+      <template v-if="typeof icon === 'string'">{{ icon }}</template>
+      <component :is="icon" v-else :size="40" :stroke-width="1.5" />
+    </div>
     <h3>{{ title }}</h3>
     <p v-if="message">{{ message }}</p>
     <slot />
@@ -20,9 +28,12 @@ withDefaults(defineProps<{ icon?: string; title: string; message?: string }>(), 
   color: var(--muted);
 }
 .empty-icon {
+  display: flex;
+  justify-content: center;
   font-size: 2.4rem;
   margin-bottom: 14px;
-  opacity: 0.6;
+  color: var(--brand-400);
+  opacity: 0.8;
 }
 .empty-state h3 {
   font-size: 1.05rem;

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Newspaper } from "@lucide/vue";
 import { onMounted, ref, watch } from "vue";
 
 import BlogCard from "@/components/blog/BlogCard.vue";
@@ -7,8 +8,6 @@ import EmptyState from "@/components/common/EmptyState.vue";
 import LoadError from "@/components/common/LoadError.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import Spinner from "@/components/common/Spinner.vue";
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
 import { applySeo } from "@/composables/useHead";
 import { useArticlesStore } from "@/stores/articles";
 import { useBlogCategoriesStore } from "@/stores/blogCategories";
@@ -69,7 +68,6 @@ function onPageChange(page: number) {
 </script>
 
 <template>
-  <NavBar />
 
   <section class="section blog-hero">
     <div class="section-inner">
@@ -107,11 +105,10 @@ function onPageChange(page: number) {
         </div>
         <Pagination :page="articles.page" :total="articles.total" :page-size="articles.pageSize" @update:page="onPageChange" />
       </template>
-      <EmptyState v-else icon="📰" title="Aucun article trouvé" message="Essayez une autre recherche ou catégorie." />
+      <EmptyState v-else :icon="Newspaper" title="Aucun article trouvé" message="Essayez une autre recherche ou catégorie." />
     </div>
   </section>
 
-  <FooterBar />
 </template>
 
 <style scoped>

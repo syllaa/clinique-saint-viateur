@@ -3,7 +3,9 @@ import { computed, onBeforeUnmount, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import DialogModal from "@/components/common/DialogModal.vue";
+import FooterBar from "@/components/layout/FooterBar.vue";
 import JobsTicker from "@/components/layout/JobsTicker.vue";
+import NavBar from "@/components/layout/NavBar.vue";
 import { useAdminAccess } from "@/composables/useAdminAccess";
 import { useAuthStore } from "@/stores/auth";
 
@@ -12,9 +14,10 @@ auth.restoreSession();
 
 const route = useRoute();
 const router = useRouter();
-// The ticker rides under the public NavBar on every public page — admin and
-// login are a separate internal tool with their own chrome, so it's skipped there.
-const showJobsTicker = computed(() => route.name !== "admin" && route.name !== "login");
+// Public pages share one chrome (skip link, NavBar, ticker, footer) rendered
+// here once, so it persists across navigations. Admin and login are a
+// separate internal tool with their own chrome, so it's skipped there.
+const isPublic = computed(() => route.name !== "admin" && route.name !== "login");
 
 // Hidden entry point: the "Admin" link and the /login, /admin routes stay
 // invisible/unreachable until unlocked with Ctrl+Shift+A (hide again with
@@ -39,7 +42,15 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKeydown));
 </script>
 
 <template>
-  <JobsTicker v-if="showJobsTicker" />
-  <router-view />
+  <template v-if="isPublic">
+    <a href="#main-content" class="skip-link">Aller au contenu</a>
+    <NavBar />
+    <JobsTicker />
+    <main id="main-content" tabindex="-1">
+      <router-view />
+    </main>
+    <FooterBar />
+  </template>
+  <router-view v-else />
   <DialogModal />
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Calendar } from "@lucide/vue";
 import { mediaUrl } from "@/services/api";
 import type { ArticleListItem } from "@/services/blogService";
 
@@ -11,7 +12,7 @@ defineProps<{ article: ArticleListItem }>();
       <img v-if="mediaUrl(article.cover_image_url)" :src="mediaUrl(article.cover_image_url)!" :alt="article.title" />
       <div v-else class="blog-emoji">{{ article.icon }}</div>
       <span class="blog-tag">{{ article.category.name }}</span>
-      <span class="blog-date">📅 {{ new Date(article.created_at).toLocaleDateString("fr-FR") }}</span>
+      <span class="blog-date meta-item"><Calendar :size="13" aria-hidden="true" />{{ new Date(article.created_at).toLocaleDateString("fr-FR") }}</span>
     </div>
     <div class="blog-body">
       <div class="blog-title">{{ article.title }}</div>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Gift } from "@lucide/vue";
 import { onMounted, ref, watch } from "vue";
 
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
@@ -6,8 +7,6 @@ import EmptyState from "@/components/common/EmptyState.vue";
 import LoadError from "@/components/common/LoadError.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import Spinner from "@/components/common/Spinner.vue";
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
 import PromotionCard from "@/components/promotions/PromotionCard.vue";
 import { applySeo } from "@/composables/useHead";
 import { usePromotionsStore } from "@/stores/promotions";
@@ -72,7 +71,6 @@ function onPageChange(page: number) {
 </script>
 
 <template>
-  <NavBar />
 
   <section class="section promo-hero">
     <div class="section-inner">
@@ -121,11 +119,10 @@ function onPageChange(page: number) {
           @update:page="onPageChange"
         />
       </template>
-      <EmptyState v-else icon="🎁" title="Aucune offre trouvée" message="Essayez une autre recherche ou catégorie." />
+      <EmptyState v-else :icon="Gift" title="Aucune offre trouvée" message="Essayez une autre recherche ou catégorie." />
     </div>
   </section>
 
-  <FooterBar />
 </template>
 
 <style scoped>

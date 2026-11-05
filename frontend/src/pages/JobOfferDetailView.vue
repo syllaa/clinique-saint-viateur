@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Briefcase, GraduationCap, Hourglass, MapPin } from "@lucide/vue";
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
@@ -7,8 +8,6 @@ import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
 import LoadingOverlay from "@/components/common/LoadingOverlay.vue";
 import Spinner from "@/components/common/Spinner.vue";
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
 import { alertDialog } from "@/composables/useDialog";
 import { applySeo, resetSeo } from "@/composables/useHead";
 import { useJobApplicationsStore } from "@/stores/jobApplications";
@@ -131,14 +130,13 @@ async function submitApplication() {
 </script>
 
 <template>
-  <NavBar />
 
   <div v-if="loading" class="detail-loading"><Spinner :size="30" /></div>
 
   <template v-else-if="notFound || !jobs.current">
     <section class="section" style="padding-top: 128px">
       <div class="section-inner">
-        <EmptyState icon="💼" title="Offre introuvable" message="Cette offre n'existe plus ou n'est plus ouverte aux candidatures.">
+        <EmptyState :icon="Briefcase" title="Offre introuvable" message="Cette offre n'existe plus ou n'est plus ouverte aux candidatures.">
           <RouterLink to="/nous-rejoindre" class="btn-primary" style="margin-top: 16px; display: inline-flex">
             ← Retour aux offres
           </RouterLink>
@@ -163,10 +161,10 @@ async function submitApplication() {
         </div>
         <h1>{{ jobs.current.title }}</h1>
         <div class="job-meta">
-          <span>📍 {{ jobs.current.location }}</span>
-          <span v-if="jobs.current.experience_level">🎓 {{ jobs.current.experience_level }}</span>
-          <span v-if="jobs.current.application_deadline">
-            ⏳ Candidatures jusqu'au {{ new Date(jobs.current.application_deadline).toLocaleDateString("fr-FR") }}
+          <span class="meta-item"><MapPin :size="14" aria-hidden="true" />{{ jobs.current.location }}</span>
+          <span v-if="jobs.current.experience_level" class="meta-item"><GraduationCap :size="14" aria-hidden="true" />{{ jobs.current.experience_level }}</span>
+          <span v-if="jobs.current.application_deadline" class="meta-item">
+            <Hourglass :size="14" aria-hidden="true" /> Candidatures jusqu'au {{ new Date(jobs.current.application_deadline).toLocaleDateString("fr-FR") }}
           </span>
         </div>
       </div>
@@ -228,7 +226,6 @@ async function submitApplication() {
     </section>
   </template>
 
-  <FooterBar />
 </template>
 
 <style scoped>
@@ -393,24 +390,6 @@ async function submitApplication() {
 }
 .job-consent input {
   margin-top: 3px;
-}
-.btn-submit {
-  width: 100%;
-  background: var(--blue);
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-}
-.btn-submit:hover {
-  background: var(--navy);
-}
-.btn-submit:active:not(:disabled) {
-  transform: scale(0.98);
 }
 .job-success {
   text-align: center;

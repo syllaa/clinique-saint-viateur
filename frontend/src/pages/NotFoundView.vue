@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
 import { setTitle } from "@/composables/useHead";
 
 onMounted(() => {
@@ -11,7 +9,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <NavBar />
 
   <section class="nf-section">
     <div class="nf-inner">
@@ -20,12 +17,11 @@ onMounted(() => {
       <p>La page que vous cherchez n'existe pas ou a été déplacée.</p>
       <div class="nf-actions">
         <RouterLink to="/" class="btn-primary">← Retour à l'accueil</RouterLink>
-        <RouterLink to="/specialites" class="btn-ghost-nf">Voir nos spécialités</RouterLink>
+        <RouterLink to="/specialites" class="btn-outline">Voir nos spécialités</RouterLink>
       </div>
     </div>
   </section>
 
-  <FooterBar />
 </template>
 
 <style scoped>
@@ -64,23 +60,5 @@ onMounted(() => {
   gap: 14px;
   justify-content: center;
   flex-wrap: wrap;
-}
-.btn-ghost-nf {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  color: var(--heading);
-  border: 1.5px solid var(--border-soft);
-  padding: 13px 26px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: all 0.25s;
-}
-.btn-ghost-nf:hover {
-  border-color: var(--blue);
-  color: var(--blue);
 }
 </style>

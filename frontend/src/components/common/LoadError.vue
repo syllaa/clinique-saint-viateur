@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { TriangleAlert } from "@lucide/vue";
 import EmptyState from "@/components/common/EmptyState.vue";
 
 withDefaults(defineProps<{ title?: string; message?: string; retrying?: boolean }>(), {
@@ -12,7 +13,7 @@ defineEmits<{ retry: [] }>();
 
 <template>
   <div role="alert">
-    <EmptyState icon="⚠️" :title="title" :message="message">
+    <EmptyState :icon="TriangleAlert" :title="title" :message="message">
       <button type="button" class="load-error-retry" :disabled="retrying" @click="$emit('retry')">
         {{ retrying ? "Chargement…" : "Réessayer" }}
       </button>

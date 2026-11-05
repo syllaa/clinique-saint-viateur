@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { Menu, Moon, Phone, Sun, X } from "@lucide/vue";
+import { Menu, Moon, Phone, Settings, Sun, X } from "@lucide/vue";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import BrandMark from "@/components/brand/BrandMark.vue";
 import { useAdminAccess } from "@/composables/useAdminAccess";
 import { useTheme } from "@/composables/useTheme";
 
@@ -23,6 +24,10 @@ const route = useRoute();
 const router = useRouter();
 const { isDark, toggle } = useTheme();
 const { unlocked: adminUnlocked } = useAdminAccess();
+
+// Transparent only over the home page's dark hero; every other page starts on
+// a light surface where white nav text would be invisible.
+const solid = computed(() => stuck.value || route.name !== "home");
 
 const themeLabel = computed(() => (isDark(false) ? "Passer en mode clair" : "Passer en mode sombre"));
 
@@ -69,9 +74,9 @@ function goAdmin() {
 </script>
 
 <template>
-  <nav id="nav" :class="{ stuck, 'menu-open': menuOpen }" aria-label="Navigation principale">
+  <nav id="nav" :class="{ stuck: solid, 'menu-open': menuOpen }" aria-label="Navigation principale">
     <RouterLink to="/" class="nav-logo" aria-label="Clinique Médicale Saint Viateur — Accueil">
-      <div class="nav-emblem" aria-hidden="true">✚</div>
+      <BrandMark :size="38" />
       <div class="nav-wordmark">
         Clinique Médicale Saint Viateur<span>Cocody · Abidjan · C.I.</span>
       </div>
@@ -90,8 +95,10 @@ function goAdmin() {
         <Sun v-if="isDark(false)" :size="16" aria-hidden="true" />
         <Moon v-else :size="16" aria-hidden="true" />
       </button>
-      <button v-if="adminUnlocked" type="button" class="btn-nav-admin" @click="goAdmin">⚙ Admin</button>
-      <a href="tel:+2252722590417" class="btn-nav-cta">
+      <button v-if="adminUnlocked" type="button" class="btn-nav-admin" @click="goAdmin">
+        <Settings :size="13" aria-hidden="true" /> Admin
+      </button>
+      <a href="tel:+2252722590417" class="btn-nav-cta" aria-label="Urgences : appeler le 27 22 59 04 17">
         <Phone :size="15" aria-hidden="true" /><span class="cta-label">Urgences</span>
       </a>
       <button
@@ -156,19 +163,6 @@ function goAdmin() {
   gap: 11px;
   text-decoration: none;
 }
-.nav-emblem {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold), var(--gold-lt));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: #fff;
-  font-weight: 700;
-  flex-shrink: 0;
-}
 .nav-wordmark {
   color: #fff;
   font-family: "Cormorant Garamond", serif;
@@ -218,6 +212,9 @@ function goAdmin() {
   background: rgba(255, 255, 255, 0.06);
 }
 .btn-nav-admin {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: rgba(255, 255, 255, 0.5);
@@ -319,8 +316,10 @@ function goAdmin() {
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   transition: color 0.2s, padding-left 0.2s;
 }
+/* Vue Router ignores the #hash when matching, so "/#about" would count as
+   active on the home page: only highlight real page links. */
 .nav-mobile-panel li a:hover,
-.nav-mobile-panel li a.router-link-exact-active {
+.nav-mobile-panel li a.router-link-exact-active:not([href*="#"]) {
   color: #fff;
   padding-left: 10px;
 }

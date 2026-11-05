@@ -9,6 +9,7 @@
       content="Clinique Médicale Saint Viateur – Établissement privé de santé à Cocody, Abidjan. Soins 24h/24, urgences, gynécologie, chirurgie, pédiatrie et plus."
     />
     <meta name="theme-color" content="#7a0f1a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -38,15 +39,6 @@
       .pl-emblem {
         width: 54px;
         height: 54px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #c8102e, #e0475a);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 26px;
-        color: #fff;
-        font-weight: 700;
-        font-family: "DM Sans", sans-serif;
       }
       .pl-spinner {
         width: 30px;
@@ -65,7 +57,16 @@
   </head>
   <body>
     <div id="preloader">
-      <div class="pl-emblem">✚</div>
+      <svg class="pl-emblem" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="pl-g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#c8102e" />
+            <stop offset="1" stop-color="#e0475a" />
+          </linearGradient>
+        </defs>
+        <circle cx="32" cy="32" r="32" fill="url(#pl-g)" />
+        <path d="M27 16h10v11h11v10H37v11H27V37H16V27h11z" fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round" />
+      </svg>
       <div class="pl-spinner"></div>
     </div>
     <div id="app"></div>

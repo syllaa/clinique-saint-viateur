@@ -1,12 +1,11 @@
 <script setup lang="ts">
+import { Stethoscope } from "@lucide/vue";
 import { onMounted, ref } from "vue";
 
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
 import LoadError from "@/components/common/LoadError.vue";
 import Spinner from "@/components/common/Spinner.vue";
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
 import SpecialtyCard from "@/components/specialties/SpecialtyCard.vue";
 import { applySeo } from "@/composables/useHead";
 import { useSpecialtiesStore } from "@/stores/specialties";
@@ -39,7 +38,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <NavBar />
 
   <section class="section specialties-hero">
     <div class="section-inner">
@@ -58,14 +56,13 @@ onMounted(() => {
       <LoadError v-else-if="loadError" @retry="load" />
       <EmptyState
         v-else
-        icon="🩺"
+        :icon="Stethoscope"
         title="Aucune spécialité pour le moment"
         message="Revenez bientôt, notre offre de soins est mise à jour régulièrement."
       />
     </div>
   </section>
 
-  <FooterBar />
 </template>
 
 <style scoped>

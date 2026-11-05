@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import { Clock, Mail, MapPin, Navigation, Phone, Siren, Trophy } from "@lucide/vue";
 import { onMounted, ref } from "vue";
 
 import BlogGrid from "@/components/blog/BlogGrid.vue";
+import IconFacebook from "@/components/brand/IconFacebook.vue";
 import LoadError from "@/components/common/LoadError.vue";
 import LoadingOverlay from "@/components/common/LoadingOverlay.vue";
 import Spinner from "@/components/common/Spinner.vue";
 import HeroCanvas from "@/components/hero/HeroCanvas.vue";
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
 import PromotionCarousel from "@/components/promotions/PromotionCarousel.vue";
 import SpecialtyMedia from "@/components/specialties/SpecialtyMedia.vue";
 import aboutPhoto from "@/assets/images/hero/hero-clinic-facade-street.webp";
@@ -94,7 +94,6 @@ async function backToForm() {
 </script>
 
 <template>
-  <NavBar />
 
   <!-- HERO -->
   <section id="hero">
@@ -115,8 +114,8 @@ async function backToForm() {
           équipements modernes et une prise en charge complète pour toute la famille.
         </p>
         <div v-reveal class="hero-btns d3">
-          <a href="tel:+2252722590417" class="btn-primary">📞 Prendre rendez-vous</a>
-          <a href="#services" class="btn-ghost">Nos services →</a>
+          <a href="tel:+2252722590417" class="btn-primary"><Phone :size="16" aria-hidden="true" /> Prendre rendez-vous</a>
+          <a href="#services" class="btn-outline-light">Nos services →</a>
         </div>
         <div v-reveal class="hero-stats d4">
           <div class="hstat"><div class="hstat-n" v-count-up="{ target: 79, suffix: 'K+' }">0K+</div><div class="hstat-l">Patients fidèles</div></div>
@@ -133,19 +132,19 @@ async function backToForm() {
         </div>
         <div class="info-stack">
           <div class="icard">
-            <div class="icard-icon">📍</div>
+            <div class="icard-icon"><MapPin :size="18" aria-hidden="true" /></div>
             <p><strong>Adresse</strong>Route Akouédo, Riviera Sideci – Cocody<br />22 BP 289, Abidjan 22</p>
           </div>
           <div class="icard">
-            <div class="icard-icon">📞</div>
+            <div class="icard-icon"><Phone :size="18" aria-hidden="true" /></div>
             <p><strong>Autres lignes</strong>01 01 46 65 76 &nbsp;·&nbsp; 07 07 09 55 49 &nbsp;·&nbsp; 22 47 26 47</p>
           </div>
           <div class="icard">
-            <div class="icard-icon">✉️</div>
+            <div class="icard-icon"><Mail :size="18" aria-hidden="true" /></div>
             <p><strong>Email</strong>cliniquestviateur@aviso.ci</p>
           </div>
           <div class="icard">
-            <div class="icard-icon">📘</div>
+            <div class="icard-icon"><IconFacebook :size="18" /></div>
             <p><strong>Facebook</strong>CliniqueMedicaleSaintViateur</p>
           </div>
         </div>
@@ -160,11 +159,11 @@ async function backToForm() {
 
   <!-- STRIP -->
   <div class="strip">
-    <div class="strip-item">🕐 Lun – Ven : 08h–20h</div>
-    <div class="strip-item">🕐 Samedi : 08h–12h</div>
-    <div class="strip-item">🚨 Urgences 24h/24 · 7j/7</div>
-    <div class="strip-item">📍 Riviera Sideci, Cocody – Abidjan</div>
-    <div class="strip-item">🏆 3ᵉ Prix national d'excellence médicale</div>
+    <div class="strip-item"><Clock :size="16" aria-hidden="true" /> Lun – Ven : 08h–20h</div>
+    <div class="strip-item"><Clock :size="16" aria-hidden="true" /> Samedi : 08h–12h</div>
+    <div class="strip-item"><Siren :size="16" aria-hidden="true" /> Urgences 24h/24 · 7j/7</div>
+    <div class="strip-item"><MapPin :size="16" aria-hidden="true" /> Riviera Sideci, Cocody – Abidjan</div>
+    <div class="strip-item"><Trophy :size="16" aria-hidden="true" /> 3ᵉ Prix national d'excellence médicale</div>
   </div>
 
   <!-- SERVICES -->
@@ -203,7 +202,7 @@ async function backToForm() {
         @retry="loadServices"
       />
       <div class="svc-more">
-        <RouterLink to="/specialites" class="btn-ghost">Voir toutes nos spécialités →</RouterLink>
+        <RouterLink to="/specialites" class="btn-outline">Voir toutes nos spécialités →</RouterLink>
       </div>
     </div>
   </section>
@@ -218,7 +217,7 @@ async function backToForm() {
       </p>
       <PromotionCarousel :items="promotions.items" />
       <div class="svc-more">
-        <RouterLink to="/promotions" class="btn-ghost">Voir toutes nos offres →</RouterLink>
+        <RouterLink to="/promotions" class="btn-outline">Voir toutes nos offres →</RouterLink>
       </div>
     </div>
   </section>
@@ -251,7 +250,7 @@ async function backToForm() {
           <div v-reveal class="astat"><div class="astat-n" v-count-up="{ target: 79, suffix: 'K+' }">0K+</div><div class="astat-l">Patients satisfaits</div></div>
           <div v-reveal class="astat gold"><div class="astat-n">24<span style="font-size: 1.1rem">/7</span></div><div class="astat-l">Urgences en permanence</div></div>
           <div v-reveal class="astat gold"><div class="astat-n" v-count-up="{ target: 10, suffix: '+' }">0+</div><div class="astat-l">Spécialités médicales</div></div>
-          <div v-reveal class="astat"><div class="astat-n">🏆</div><div class="astat-l">Prix national d'excellence</div></div>
+          <div v-reveal class="astat"><div class="astat-n">3<sup>ᵉ</sup></div><div class="astat-l">Prix national d'excellence</div></div>
         </div>
       </div>
     </div>
@@ -268,7 +267,7 @@ async function backToForm() {
       </p>
       <BlogGrid />
       <div class="svc-more">
-        <RouterLink to="/blog" class="btn-ghost">Voir tous les articles →</RouterLink>
+        <RouterLink to="/blog" class="btn-outline">Voir tous les articles →</RouterLink>
       </div>
     </div>
   </section>
@@ -307,13 +306,13 @@ async function backToForm() {
         <div>
           <div class="contact-cards">
             <div v-reveal class="ccard">
-              <div class="ccard-icon">📍</div>
-              <div><h4>Adresse</h4><p>Route Akouédo, Riviera Sideci – Cocody<br />22 BP 289, Abidjan 22, Côte d'Ivoire</p></div>
+              <div class="ccard-icon"><MapPin :size="20" aria-hidden="true" /></div>
+              <div><h3>Adresse</h3><p>Route Akouédo, Riviera Sideci – Cocody<br />22 BP 289, Abidjan 22, Côte d'Ivoire</p></div>
             </div>
             <div v-reveal class="ccard">
-              <div class="ccard-icon">📞</div>
+              <div class="ccard-icon"><Phone :size="20" aria-hidden="true" /></div>
               <div>
-                <h4>Téléphones</h4>
+                <h3>Téléphones</h3>
                 <a href="tel:+2252722590417">+225 27 22 59 04 17 (principal)</a>
                 <a href="tel:+2250101466576">+225 01 01 46 65 76</a>
                 <a href="tel:+2250707095549">+225 07 07 09 55 49</a>
@@ -321,12 +320,12 @@ async function backToForm() {
               </div>
             </div>
             <div v-reveal class="ccard">
-              <div class="ccard-icon">✉️</div>
-              <div><h4>Email</h4><a href="mailto:cliniquestviateur@aviso.ci">cliniquestviateur@aviso.ci</a></div>
+              <div class="ccard-icon"><Mail :size="20" aria-hidden="true" /></div>
+              <div><h3>Email</h3><a href="mailto:cliniquestviateur@aviso.ci">cliniquestviateur@aviso.ci</a></div>
             </div>
             <div v-reveal class="ccard">
-              <div class="ccard-icon">📘</div>
-              <div><h4>Facebook</h4><a href="https://www.facebook.com/CliniqueMedicaleSaintViateur/" target="_blank" rel="noopener">CliniqueMedicaleSaintViateur</a></div>
+              <div class="ccard-icon"><IconFacebook :size="20" /></div>
+              <div><h3>Facebook</h3><a href="https://www.facebook.com/CliniqueMedicaleSaintViateur/" target="_blank" rel="noopener">CliniqueMedicaleSaintViateur</a></div>
             </div>
           </div>
           <div v-reveal class="form-wrap">
@@ -418,7 +417,7 @@ async function backToForm() {
               <tr><td>Dimanche</td><td style="color: rgba(255, 255, 255, 0.38)">Urgences seulement</td></tr>
             </table>
             <div class="urgences-note">
-              🚨 Les urgences et la réanimation sont disponibles <strong>24 heures sur 24, 7 jours sur 7</strong> sans
+              <Siren :size="15" class="inline-icon" aria-hidden="true" /> Les urgences et la réanimation sont disponibles <strong>24 heures sur 24, 7 jours sur 7</strong> sans
               interruption.
             </div>
           </div>
@@ -439,12 +438,11 @@ async function backToForm() {
         target="_blank"
         rel="noopener"
       >
-        📍 Itinéraire Google Maps
+        <Navigation :size="16" aria-hidden="true" /> Itinéraire Google Maps
       </a>
     </div>
   </div>
 
-  <FooterBar />
 </template>
 
 <style scoped>
@@ -579,30 +577,6 @@ async function backToForm() {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-}
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.82);
-  border: 1.5px solid rgba(255, 255, 255, 0.28);
-  padding: 13px 26px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: all 0.25s;
-}
-.btn-ghost:hover {
-  border-color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
-  transform: translateY(-2px);
-}
-.btn-ghost:active {
-  transform: scale(0.96);
-  background: rgba(255, 255, 255, 0.12);
 }
 .hero-stats {
   display: grid;
@@ -776,15 +750,6 @@ async function backToForm() {
 .svc-more {
   text-align: center;
   margin-top: 30px;
-}
-.svc-more .btn-ghost {
-  color: var(--blue);
-  border-color: var(--border-soft);
-}
-.svc-more .btn-ghost:hover {
-  background: var(--bg-alt);
-  border-color: var(--blue);
-  color: var(--blue);
 }
 .svc-card:hover {
   transform: translateY(-7px);
@@ -1015,7 +980,8 @@ async function backToForm() {
   font-size: 1.2rem;
   flex-shrink: 0;
 }
-.ccard h4 {
+.ccard h3 {
+  font-family: "DM Sans", sans-serif;
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--heading);
@@ -1156,27 +1122,6 @@ fieldset.fg {
   border-radius: 50%;
   background: var(--blue);
 }
-.btn-submit {
-  width: 100%;
-  background: var(--blue);
-  color: #fff;
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-size: 0.92rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background 0.2s,
-    transform 0.15s;
-}
-.btn-submit:hover {
-  background: var(--navy);
-  transform: translateY(-1px);
-}
-.btn-submit:active:not(:disabled) {
-  transform: scale(0.97);
-}
 .form-fields {
   position: relative;
 }
@@ -1284,27 +1229,6 @@ fieldset.fg {
   margin-bottom: 28px;
   font-size: 0.94rem;
 }
-.btn-white {
-  background: #fff;
-  color: var(--blue);
-  padding: 13px 32px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.9rem;
-  display: inline-block;
-  transition:
-    transform 0.25s,
-    box-shadow 0.25s;
-}
-.btn-white:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.25);
-}
-.btn-white:active {
-  transform: scale(0.96);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
-}
 
 @media (max-width: 980px) {
   .hero-inner,
@@ -1317,14 +1241,47 @@ fieldset.fg {
   }
 }
 @media (max-width: 640px) {
-  .hero-stats,
   .about-stats {
     grid-template-columns: 1fr 1fr;
+  }
+  /* Three compact tiles on one row rather than 2 + 1 orphan. */
+  .hero-stats {
+    gap: 8px;
+  }
+  .hstat {
+    padding: 12px 6px;
+  }
+  .hstat-n {
+    font-size: 1.6rem;
+  }
+  .hstat-l {
+    font-size: 0.62rem;
+    letter-spacing: 0.02em;
   }
   .svc-grid,
   .form-row,
   .radio-group {
     grid-template-columns: 1fr;
   }
+}
+/* ─── Lucide icons (étape 2) ─── */
+.icard-icon {
+  display: flex;
+  justify-content: center;
+  color: var(--brand-200);
+}
+.ccard-icon {
+  color: var(--blue);
+}
+.strip-item svg {
+  opacity: 0.9;
+}
+.astat-n sup {
+  font-size: 0.5em;
+  vertical-align: super;
+}
+.inline-icon {
+  vertical-align: -2px;
+  margin-right: 2px;
 }
 </style>

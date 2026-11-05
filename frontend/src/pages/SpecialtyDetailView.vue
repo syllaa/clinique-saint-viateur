@@ -3,13 +3,15 @@ import {
   Activity,
   CalendarCheck,
   ClipboardList,
+  Clock,
   HeartPulse,
   Phone,
   Quote,
+  ShieldCheck,
   Sparkles,
   Stethoscope,
   Syringe,
-  ShieldCheck,
+  UserRound,
   Users,
 } from "@lucide/vue";
 import { computed, onMounted, ref, watch } from "vue";
@@ -18,8 +20,6 @@ import { useRoute } from "vue-router";
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
 import Spinner from "@/components/common/Spinner.vue";
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
 import SpecialtyMedia from "@/components/specialties/SpecialtyMedia.vue";
 import { TESTIMONIALS } from "@/constants/testimonials";
 import { applySeo, resetSeo } from "@/composables/useHead";
@@ -82,7 +82,7 @@ const introStats = [
   { n: "79K+", l: "Patients satisfaits" },
   { n: "24/7", l: "Urgences en permanence" },
   { n: "10+", l: "Spécialités médicales" },
-  { n: "🏆", l: "Prix national d'excellence" },
+  { n: "3ᵉ", l: "Prix national d'excellence" },
 ];
 
 const testimonial = computed(() => {
@@ -124,14 +124,13 @@ watch(
 </script>
 
 <template>
-  <NavBar />
 
   <div v-if="loading" class="detail-loading"><Spinner :size="30" /></div>
 
   <template v-else-if="notFound || !specialties.current">
     <section class="section" style="padding-top: 128px">
       <div class="section-inner">
-        <EmptyState icon="🩺" title="Spécialité introuvable" message="Cette spécialité n'existe pas ou n'est plus disponible.">
+        <EmptyState :icon="Stethoscope" title="Spécialité introuvable" message="Cette spécialité n'existe pas ou n'est plus disponible.">
           <RouterLink to="/specialites" class="btn-primary" style="margin-top: 16px; display: inline-flex">
             ← Retour aux spécialités
           </RouterLink>
@@ -165,12 +164,12 @@ watch(
           :image-alt="specialties.current.image_alt"
           :name="specialties.current.name"
         />
-        <span v-if="isAvailable24_7" v-reveal class="spd-badge">🕐 Disponible 24h/24</span>
+        <span v-if="isAvailable24_7" v-reveal class="spd-badge"><Clock :size="14" aria-hidden="true" /> Disponible 24h/24</span>
         <h1 v-reveal>{{ specialties.current.name }}</h1>
         <p v-reveal>{{ specialties.current.description }}</p>
         <div v-reveal class="spd-hero-btns">
-          <a href="tel:+2252722590417" class="btn-primary">📞 Prendre rendez-vous</a>
-          <RouterLink to="/#contact" class="btn-ghost-light">Nous contacter</RouterLink>
+          <a href="tel:+2252722590417" class="btn-primary"><Phone :size="16" aria-hidden="true" /> Prendre rendez-vous</a>
+          <RouterLink to="/#contact" class="btn-outline-light">Nous contacter</RouterLink>
         </div>
       </div>
     </section>
@@ -234,7 +233,7 @@ watch(
             <div class="spd-doctors">
               <div v-for="d in specialties.current.doctors" :key="d.id" class="spd-doctor">
                 <img v-if="mediaUrl(d.photo_url)" :src="mediaUrl(d.photo_url)!" :alt="d.name" class="spd-doctor-photo" />
-                <div v-else class="spd-doctor-photo spd-doctor-placeholder">👨‍⚕️</div>
+                <div v-else class="spd-doctor-photo spd-doctor-placeholder"><UserRound :size="34" aria-hidden="true" /></div>
                 <div>
                   <div class="spd-doctor-name">{{ d.name }}</div>
                   <div v-if="d.title" class="spd-doctor-title">{{ d.title }}</div>
@@ -266,8 +265,8 @@ watch(
             <a href="tel:+2252722590417" class="spd-phone-link"><Phone :size="15" :stroke-width="2" /> 27 22 59 04 17</a>
             <a href="tel:+2250101466576" class="spd-phone-link"><Phone :size="15" :stroke-width="2" /> 01 01 46 65 76</a>
             <a href="tel:+2250707095549" class="spd-phone-link"><Phone :size="15" :stroke-width="2" /> 07 07 09 55 49</a>
-            <a href="tel:+2252722590417" class="btn-primary spd-cta-btn">📞 Prendre rendez-vous</a>
-            <RouterLink to="/#contact" class="btn-ghost-light spd-cta-btn">Nous contacter</RouterLink>
+            <a href="tel:+2252722590417" class="btn-primary spd-cta-btn"><Phone :size="16" aria-hidden="true" /> Prendre rendez-vous</a>
+            <RouterLink to="/#contact" class="btn-outline-light spd-cta-btn">Nous contacter</RouterLink>
           </div>
         </aside>
       </div>
@@ -309,12 +308,11 @@ watch(
           <h2>Besoin de prendre rendez-vous ?</h2>
           <p>Notre équipe vous répond rapidement pour organiser votre consultation.</p>
         </div>
-        <a href="tel:+2252722590417" class="btn-primary">📞 Appeler la clinique</a>
+        <a href="tel:+2252722590417" class="btn-primary"><Phone :size="16" aria-hidden="true" /> Appeler la clinique</a>
       </div>
     </section>
   </template>
 
-  <FooterBar />
 </template>
 
 <style scoped>
@@ -373,9 +371,9 @@ watch(
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(196, 138, 42, 0.18);
-  border: 1px solid rgba(196, 138, 42, 0.5);
-  color: #e9c47c;
+  background: rgba(243, 170, 180, 0.14);
+  border: 1px solid rgba(243, 170, 180, 0.45);
+  color: var(--brand-200);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -400,25 +398,6 @@ watch(
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-}
-.btn-ghost-light {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.85);
-  border: 1.5px solid rgba(255, 255, 255, 0.28);
-  padding: 13px 26px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: all 0.25s;
-}
-.btn-ghost-light:hover {
-  border-color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
 }
 
 .spd-grid {
@@ -467,7 +446,7 @@ watch(
   transition: border-color 0.25s, transform 0.25s;
 }
 .spd-stat:hover {
-  border-color: #c48a2a;
+  border-color: var(--brand-400);
   transform: translateY(-3px);
 }
 .spd-stat-n {
@@ -499,7 +478,7 @@ watch(
 .spd-svc-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 18px 40px rgba(122, 15, 26, 0.12);
-  border-color: #c48a2a;
+  border-color: var(--brand-400);
 }
 .spd-svc-icon {
   width: 46px;
@@ -541,15 +520,15 @@ watch(
   transition: border-color 0.25s, transform 0.25s;
 }
 .spd-trust-card:hover {
-  border-color: #c48a2a;
+  border-color: var(--brand-400);
   transform: translateY(-4px);
 }
 .spd-trust-icon {
   width: 46px;
   height: 46px;
   border-radius: 11px;
-  background: rgba(196, 138, 42, 0.16);
-  color: #e9c47c;
+  background: rgba(243, 170, 180, 0.14);
+  color: var(--brand-200);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -671,11 +650,11 @@ watch(
   text-align: center;
   margin-top: 4px;
 }
-.spd-cta-btn.btn-ghost-light {
+.spd-cta-btn.btn-outline-light {
   color: var(--heading);
   border-color: var(--border-soft);
 }
-.spd-cta-btn.btn-ghost-light:hover {
+.spd-cta-btn.btn-outline-light:hover {
   background: var(--surface);
 }
 
@@ -694,7 +673,7 @@ watch(
   transition: border-color 0.25s, transform 0.25s;
 }
 .spd-step:hover {
-  border-color: #c48a2a;
+  border-color: var(--brand-400);
   transform: translateY(-4px);
 }
 .spd-step-icon {
@@ -740,7 +719,7 @@ watch(
   padding: 44px 40px;
 }
 .spd-testi-quote {
-  color: #c48a2a;
+  color: var(--brand-400);
   margin-bottom: 10px;
 }
 .spd-testi-stars {
@@ -821,5 +800,8 @@ watch(
   .spd-testi {
     padding: 32px 22px;
   }
+}
+.spd-doctor-placeholder {
+  color: var(--brand-400);
 }
 </style>

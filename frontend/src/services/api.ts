@@ -2,7 +2,8 @@ import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 
 import { useAuthStore } from "@/stores/auth";
 
-export const API_BASE_URL: string = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+// 127.0.0.1, not "localhost": see the proxy note in vite.config.ts.
+export const API_BASE_URL: string = import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8000";
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

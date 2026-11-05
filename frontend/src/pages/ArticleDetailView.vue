@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Calendar, Newspaper, PenLine, Phone, Share2, Timer } from "@lucide/vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
@@ -6,8 +7,6 @@ import BlogCard from "@/components/blog/BlogCard.vue";
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
 import Spinner from "@/components/common/Spinner.vue";
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
 import { applySeo, resetSeo } from "@/composables/useHead";
 import { mediaUrl } from "@/services/api";
 import { useArticlesStore } from "@/stores/articles";
@@ -95,14 +94,13 @@ async function share() {
 </script>
 
 <template>
-  <NavBar />
 
   <div v-if="loading" class="detail-loading"><Spinner :size="30" /></div>
 
   <template v-else-if="notFound || !articles.current">
     <section class="section" style="padding-top: 128px">
       <div class="section-inner">
-        <EmptyState icon="📰" title="Article introuvable" message="Cet article n'existe pas ou n'est plus publié.">
+        <EmptyState :icon="Newspaper" title="Article introuvable" message="Cet article n'existe pas ou n'est plus publié.">
           <RouterLink to="/blog" class="btn-primary" style="margin-top: 16px; display: inline-flex">
             ← Retour au blog
           </RouterLink>
@@ -128,9 +126,9 @@ async function share() {
         <span class="art-tag">{{ articles.current.category.name }}</span>
         <h1>{{ articles.current.title }}</h1>
         <div class="art-meta">
-          <span>✍️ {{ articles.current.author }}</span>
-          <span>📅 {{ new Date(articles.current.created_at).toLocaleDateString("fr-FR") }}</span>
-          <span>⏱ {{ readTimeMinutes }} min de lecture</span>
+          <span class="meta-item"><PenLine :size="14" aria-hidden="true" />{{ articles.current.author }}</span>
+          <span class="meta-item"><Calendar :size="14" aria-hidden="true" />{{ new Date(articles.current.created_at).toLocaleDateString("fr-FR") }}</span>
+          <span class="meta-item"><Timer :size="14" aria-hidden="true" />{{ readTimeMinutes }} min de lecture</span>
         </div>
       </div>
     </section>
@@ -189,9 +187,9 @@ async function share() {
           </section>
 
           <div class="art-actions">
-            <button class="btn-primary" type="button" @click="share">🔗 Partager</button>
+            <button class="btn-primary" type="button" @click="share"><Share2 :size="16" aria-hidden="true" /> Partager</button>
             <span v-if="shareCopied" class="art-copied">Lien copié !</span>
-            <a href="tel:+2252722590417" class="btn-ghost-art">📞 Prendre rendez-vous</a>
+            <a href="tel:+2252722590417" class="btn-outline"><Phone :size="16" aria-hidden="true" /> Prendre rendez-vous</a>
             <a href="tel:+2252722590417" class="art-phone-link">+225 27 22 59 04 17</a>
           </div>
         </article>
@@ -208,7 +206,6 @@ async function share() {
     </section>
   </template>
 
-  <FooterBar />
 </template>
 
 <style scoped>
@@ -414,24 +411,6 @@ async function share() {
   transition: color 0.2s;
 }
 .art-phone-link:hover {
-  color: var(--blue);
-}
-.btn-ghost-art {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  color: var(--heading);
-  border: 1.5px solid var(--border-soft);
-  padding: 13px 26px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: all 0.2s;
-}
-.btn-ghost-art:hover {
-  border-color: var(--blue);
   color: var(--blue);
 }
 .art-copied {

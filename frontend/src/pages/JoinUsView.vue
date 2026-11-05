@@ -1,12 +1,11 @@
 <script setup lang="ts">
+import { Briefcase, Clock, Mail, MapPin, Phone } from "@lucide/vue";
 import { onMounted, ref } from "vue";
 
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
 import LoadError from "@/components/common/LoadError.vue";
 import LoadingOverlay from "@/components/common/LoadingOverlay.vue";
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
 import JobOfferCard from "@/components/jobs/JobOfferCard.vue";
 import teamPhoto from "@/assets/images/team/team-staff-group-large.webp";
 import { alertDialog } from "@/composables/useDialog";
@@ -80,7 +79,6 @@ async function submitContact() {
 </script>
 
 <template>
-  <NavBar />
 
   <section class="section join-hero">
     <div class="section-inner">
@@ -94,25 +92,26 @@ async function submitContact() {
 
       <div class="join-grid">
         <div>
+          <h2 class="sr-only">Nos coordonnées</h2>
           <div class="join-cards">
             <div v-reveal class="ccard">
-              <div class="ccard-icon">📍</div>
-              <div><h4>Adresse</h4><p>Route Akouédo, Riviera Sideci – Cocody<br />22 BP 289, Abidjan 22, Côte d'Ivoire</p></div>
+              <div class="ccard-icon"><MapPin :size="20" aria-hidden="true" /></div>
+              <div><h3>Adresse</h3><p>Route Akouédo, Riviera Sideci – Cocody<br />22 BP 289, Abidjan 22, Côte d'Ivoire</p></div>
             </div>
             <div v-reveal class="ccard">
-              <div class="ccard-icon">📞</div>
+              <div class="ccard-icon"><Phone :size="20" aria-hidden="true" /></div>
               <div>
-                <h4>Téléphone</h4>
+                <h3>Téléphone</h3>
                 <a href="tel:+2252722590417">+225 27 22 59 04 17</a>
               </div>
             </div>
             <div v-reveal class="ccard">
-              <div class="ccard-icon">✉️</div>
-              <div><h4>Email</h4><a href="mailto:cliniquestviateur@aviso.ci">cliniquestviateur@aviso.ci</a></div>
+              <div class="ccard-icon"><Mail :size="20" aria-hidden="true" /></div>
+              <div><h3>Email</h3><a href="mailto:cliniquestviateur@aviso.ci">cliniquestviateur@aviso.ci</a></div>
             </div>
             <div v-reveal class="ccard">
-              <div class="ccard-icon">🕐</div>
-              <div><h4>Horaires</h4><p>Lun–Ven 08h–20h · Sam 08h–12h<br />Urgences 24h/24, 7j/7</p></div>
+              <div class="ccard-icon"><Clock :size="20" aria-hidden="true" /></div>
+              <div><h3>Horaires</h3><p>Lun–Ven 08h–20h · Sam 08h–12h<br />Urgences 24h/24, 7j/7</p></div>
             </div>
           </div>
 
@@ -126,7 +125,7 @@ async function submitContact() {
               allowfullscreen
             ></iframe>
             <div v-else class="join-map-fallback">
-              <p>📍 Route Akouédo, Riviera Sideci – Cocody, Abidjan</p>
+              <p class="meta-item"><MapPin :size="15" aria-hidden="true" /> Route Akouédo, Riviera Sideci – Cocody, Abidjan</p>
               <a
                 href="https://maps.google.com/?q=Clinique+Medicale+Saint+Viateur+Cocody+Abidjan"
                 target="_blank"
@@ -180,14 +179,13 @@ async function submitContact() {
       </div>
       <EmptyState
         v-else
-        icon="💼"
+        :icon="Briefcase"
         title="Aucune offre d'emploi actuellement"
         message="Revenez bientôt, de nouvelles opportunités sont publiées régulièrement."
       />
     </div>
   </section>
 
-  <FooterBar />
 </template>
 
 <style scoped>
@@ -227,7 +225,8 @@ async function submitContact() {
   font-size: 1.2rem;
   flex-shrink: 0;
 }
-.ccard h4 {
+.ccard h3 {
+  font-family: "DM Sans", sans-serif;
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--heading);
@@ -330,24 +329,6 @@ async function submitContact() {
   resize: vertical;
   min-height: 96px;
 }
-.btn-submit {
-  width: 100%;
-  background: var(--blue);
-  color: #fff;
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-size: 0.92rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-}
-.btn-submit:hover {
-  background: var(--navy);
-}
-.btn-submit:active:not(:disabled) {
-  transform: scale(0.98);
-}
 .form-ok {
   margin-top: 12px;
   background: #fde8ea;
@@ -397,5 +378,8 @@ async function submitContact() {
   .form-row {
     grid-template-columns: 1fr;
   }
+}
+.ccard-icon {
+  color: var(--blue);
 }
 </style>
