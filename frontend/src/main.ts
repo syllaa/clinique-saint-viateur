@@ -8,7 +8,7 @@ import { vCountUp } from "./directives/countUp";
 import { vReveal } from "./directives/reveal";
 // Imported for its side effect: sets <html data-motion> before the first render,
 // so reveal animations never flash when reduced motion is on.
-import "./motion/motionPreferences";
+import { isReducedMotion } from "./motion/motionPreferences";
 import router from "./router";
 
 const app = createApp(App);
@@ -20,8 +20,30 @@ app.directive("count-up", vCountUp);
 
 app.mount("#app");
 
+// Preloader exit. On the first visit of a session to the home page, it plays
+// the short brand intro (logo draw + curtain, ~1.9s, CSS in index.html) and
+// the hero's own entrance waits for it (--intro-delay). Otherwise it fades.
 const preloader = document.getElementById("preloader");
 if (preloader) {
-  preloader.classList.add("pl-hide");
-  preloader.addEventListener("transitionend", () => preloader.remove(), { once: true });
+  let playIntro = false;
+  try {
+    playIntro = location.pathname === "/" && !isReducedMotion() && !sessionStorage.getItem("sv_intro");
+    sessionStorage.setItem("sv_intro", "1");
+  } catch {
+    playIntro = false;
+  }
+  const done = () => {
+    preloader.remove();
+    document.documentElement.removeAttribute("data-intro");
+  };
+  if (playIntro) {
+    document.documentElement.setAttribute("data-intro", "");
+    preloader.classList.add("pl-intro");
+    preloader.addEventListener("animationend", (e) => e.animationName === "plCurtain" && done());
+    setTimeout(done, 3000); // safety net if animationend never fires
+  } else {
+    preloader.classList.add("pl-hide");
+    preloader.addEventListener("transitionend", done, { once: true });
+    setTimeout(done, 1000);
+  }
 }

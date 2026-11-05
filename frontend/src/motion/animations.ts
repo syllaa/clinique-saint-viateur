@@ -79,10 +79,17 @@ export function drawPath(
   path: SVGGeometryElement,
   opts: { duration?: number; delay?: number; scrub?: boolean | number; trigger?: Element; start?: string; end?: string } = {},
 ): void {
-  const length = path.getTotalLength();
-  gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-  gsap.to(path, {
-    strokeDashoffset: 0,
+  // Tweens a plain value and writes the style itself: GSAP's CSS plugin can
+  // drop stroke-dashoffset on SVG paths (notably with pathLength).
+  const length = path.hasAttribute("pathLength") ? Number(path.getAttribute("pathLength")) : path.getTotalLength();
+  const draw = { offset: length };
+  path.style.strokeDasharray = String(length);
+  path.style.strokeDashoffset = String(length);
+  gsap.to(draw, {
+    offset: 0,
+    onUpdate: () => {
+      path.style.strokeDashoffset = draw.offset.toFixed(3);
+    },
     ease: opts.scrub ? EASE.scrub : EASE.inOut,
     duration: opts.duration ?? DURATION.cinematic,
     delay: opts.delay ?? 0,

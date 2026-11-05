@@ -9,9 +9,11 @@ export interface CountUpValue {
 }
 
 function animate(el: HTMLElement, target: number, suffix: string, duration: number) {
-  const start = performance.now();
+  // Counters in the hero wait for the opening intro's curtain (see main.ts).
+  const introDelay = document.documentElement.hasAttribute("data-intro") && el.closest("#hero") ? 1300 : 0;
+  const start = performance.now() + introDelay;
   function tick(now: number) {
-    const p = Math.min((now - start) / duration, 1);
+    const p = Math.min(Math.max((now - start) / duration, 0), 1);
     const eased = 1 - Math.pow(1 - p, 3);
     el.textContent = `${Math.round(target * eased)}${suffix}`;
     if (p < 1) requestAnimationFrame(tick);

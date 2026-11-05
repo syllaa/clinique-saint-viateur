@@ -53,6 +53,74 @@
           transform: rotate(360deg);
         }
       }
+      .pl-name {
+        display: none;
+        color: #fff;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.5rem;
+        letter-spacing: 0.02em;
+        text-align: center;
+        line-height: 1.2;
+      }
+      .pl-name small {
+        display: block;
+        margin-top: 6px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.62rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: #f3aab4;
+      }
+      /* Opening intro (home, once per session — see main.ts): the emblem pops,
+         the cross draws, the name rises, then the curtain lifts upwards. */
+      #preloader.pl-intro {
+        animation: plCurtain 0.8s cubic-bezier(0.76, 0, 0.24, 1) 1.05s forwards;
+      }
+      #preloader.pl-intro .pl-spinner {
+        display: none;
+      }
+      #preloader.pl-intro .pl-emblem {
+        width: 72px;
+        height: 72px;
+        animation: plPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      #preloader.pl-intro .pl-cross {
+        fill-opacity: 0;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        animation: plDraw 0.55s ease-out 0.25s forwards;
+      }
+      #preloader.pl-intro .pl-name {
+        display: block;
+        animation: plRise 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
+      }
+      @keyframes plPop {
+        from {
+          transform: scale(0.4);
+          opacity: 0;
+        }
+      }
+      @keyframes plDraw {
+        70% {
+          stroke-dashoffset: 0;
+          fill-opacity: 0;
+        }
+        to {
+          stroke-dashoffset: 0;
+          fill-opacity: 1;
+        }
+      }
+      @keyframes plRise {
+        from {
+          transform: translateY(18px);
+          opacity: 0;
+        }
+      }
+      @keyframes plCurtain {
+        to {
+          clip-path: inset(0 0 100% 0);
+        }
+      }
     </style>
   </head>
   <body>
@@ -65,8 +133,9 @@
           </linearGradient>
         </defs>
         <circle cx="32" cy="32" r="32" fill="url(#pl-g)" />
-        <path d="M27 16h10v11h11v10H37v11H27V37H16V27h11z" fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round" />
+        <path class="pl-cross" d="M27 16h10v11h11v10H37v11H27V37H16V27h11z" fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round" pathLength="1" />
       </svg>
+      <div class="pl-name" aria-hidden="true">Clinique Médicale Saint Viateur<small>Cocody · Abidjan</small></div>
       <div class="pl-spinner"></div>
     </div>
     <div id="app"></div>

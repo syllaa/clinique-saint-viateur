@@ -33,6 +33,22 @@ export function loadGsap(): Promise<GsapKit> {
     motionBridge.scrollTriggerUpdate = () => st.ScrollTrigger.update();
     linkLenisToScrollTrigger();
 
+    // Trigger positions are measured once; content arriving later (API data,
+    // lazy images) moves everything below it. Re-measure whenever the page
+    // height changes, debounced. Pin spacers keep the height stable on
+    // refresh, so this does not loop.
+    if (typeof ResizeObserver !== "undefined") {
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      let lastHeight = document.body.scrollHeight;
+      new ResizeObserver(() => {
+        const h = document.body.scrollHeight;
+        if (h === lastHeight) return;
+        lastHeight = h;
+        clearTimeout(timer);
+        timer = setTimeout(() => st.ScrollTrigger.refresh(), 150);
+      }).observe(document.body);
+    }
+
     return { gsap, ScrollTrigger: st.ScrollTrigger, Flip: flip.Flip, SplitText: split.SplitText };
   });
   return kit;
