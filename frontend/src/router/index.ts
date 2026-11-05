@@ -1,14 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useAdminAccess } from "@/composables/useAdminAccess";
+import { scrollToHash, scrollToTop } from "@/motion/useLenis";
 import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHistory(),
-  scrollBehavior(to) {
+  scrollBehavior(to, _from, savedPosition) {
     if (to.hash) {
-      return { el: to.hash, behavior: "smooth" };
+      // Waits for the target (sections often render after an API call) and
+      // goes through Lenis when smooth scrolling is active.
+      scrollToHash(to.hash);
+      return false;
     }
+    // Back/forward restores where the visitor was.
+    if (savedPosition) return savedPosition;
+    scrollToTop();
     return { top: 0 };
   },
   routes: [

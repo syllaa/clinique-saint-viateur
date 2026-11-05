@@ -41,7 +41,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
 <template>
   <Teleport to="body">
     <Transition name="dlg">
-      <div v-if="state.open" class="dlg-overlay" @click.self="dismiss">
+      <div v-if="state.open" class="dlg-overlay" data-lenis-prevent @click.self="dismiss">
         <div class="dlg-card" :class="{ danger: state.danger }">
           <div class="dlg-icon" aria-hidden="true">
             <TriangleAlert v-if="state.danger" :size="22" />

@@ -76,7 +76,7 @@ function onPageChange(page: number) {
     <div class="section-inner">
       <Breadcrumbs :items="[{ label: 'Accueil', to: '/' }, { label: 'Nos offres' }]" />
       <p v-reveal class="section-kicker">Nos offres</p>
-      <h1 v-reveal class="section-title d1">Toutes nos offres</h1>
+      <h1 v-reveal="'words'" class="section-title d1">Toutes nos offres</h1>
       <p v-reveal class="section-lead d2">
         Consultez l'ensemble de nos offres et promotions, actives ou passées, et réagissez à celles qui vous
         intéressent.

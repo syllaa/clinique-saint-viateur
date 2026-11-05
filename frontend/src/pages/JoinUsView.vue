@@ -84,7 +84,7 @@ async function submitContact() {
     <div class="section-inner">
       <Breadcrumbs :items="[{ label: 'Accueil', to: '/' }, { label: 'Nous rejoindre' }]" />
       <p v-reveal class="section-kicker">Nous rejoindre</p>
-      <h1 v-reveal class="section-title d1">Contactez-nous & rejoignez notre équipe</h1>
+      <h1 v-reveal="'words'" class="section-title d1">Contactez-nous & rejoignez notre équipe</h1>
       <p v-reveal class="section-lead d2">
         Une question, un besoin d'orientation ou l'envie de rejoindre nos équipes soignantes ? Nous sommes à votre
         écoute.
@@ -162,7 +162,7 @@ async function submitContact() {
       <div class="jobs-intro">
         <div>
           <p v-reveal class="section-kicker">Carrières</p>
-          <h2 v-reveal class="section-title d1">Rejoignez notre équipe</h2>
+          <h2 v-reveal="'words'" class="section-title d1">Rejoignez notre équipe</h2>
           <p v-reveal class="section-lead d2">
             Découvrez nos opportunités de carrière et participez à une prise en charge médicale d'excellence.
           </p>

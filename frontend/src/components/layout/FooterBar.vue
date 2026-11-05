@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { Clock, Mail, MapPin, Phone } from "@lucide/vue";
+import { Clock, Mail, MapPin, Pause, Phone, Play } from "@lucide/vue";
 
 import BrandMark from "@/components/brand/BrandMark.vue";
 import IconFacebook from "@/components/brand/IconFacebook.vue";
+import { useMotionPreference } from "@/motion/motionPreferences";
 
 const year = new Date().getFullYear();
+const { reducedMotion, toggle: toggleMotion } = useMotionPreference();
 </script>
 
 <template>
@@ -75,6 +77,11 @@ const year = new Date().getFullYear();
 
     <div class="footer-bottom">
       <p>© {{ year }} Clinique Médicale Saint Viateur · Tous droits réservés</p>
+      <button type="button" class="motion-toggle" :aria-pressed="reducedMotion" @click="toggleMotion">
+        <Play v-if="reducedMotion" :size="14" aria-hidden="true" />
+        <Pause v-else :size="14" aria-hidden="true" />
+        {{ reducedMotion ? "Réactiver les animations" : "Réduire les animations" }}
+      </button>
     </div>
   </footer>
 </template>
@@ -208,6 +215,30 @@ const year = new Date().getFullYear();
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 0.78rem;
   color: rgba(255, 255, 255, 0.62);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast),
+    color var(--dur-fast);
+}
+.motion-toggle:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
 }
 
 @media (max-width: 980px) {

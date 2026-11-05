@@ -17,8 +17,24 @@ import { siteService } from "@/services/siteService";
 import { usePromotionsStore } from "@/stores/promotions";
 import { useSpecialtiesStore } from "@/stores/specialties";
 import { TESTIMONIALS as testimonials } from "@/constants/testimonials";
+import { magnetic } from "@/motion/animations";
+import { useScrollScene } from "@/motion/useScrollScene";
 
 const specialties = useSpecialtiesStore();
+
+// Hero scene: CTAs follow the cursor slightly; the hero content drifts up and
+// fades as the visitor scrolls past it (depth effect over the canvas).
+const heroRef = ref<HTMLElement | null>(null);
+useScrollScene(heroRef, (kit, hero) => {
+  const cleanups = Array.from(hero.querySelectorAll<HTMLElement>(".hero-btns a")).map((btn) => magnetic(kit, btn, 0.22));
+  kit.gsap.to(hero.querySelector(".hero-inner"), {
+    yPercent: -10,
+    autoAlpha: 0.25,
+    ease: "none",
+    scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: true },
+  });
+  return () => cleanups.forEach((fn) => fn());
+});
 const promotions = usePromotionsStore();
 
 const servicesError = ref(false);
@@ -96,7 +112,7 @@ async function backToForm() {
 <template>
 
   <!-- HERO -->
-  <section id="hero">
+  <section id="hero" ref="heroRef">
     <HeroCanvas />
     <div class="hero-grad"></div>
     <div class="hero-grid"></div>
@@ -108,7 +124,7 @@ async function backToForm() {
     <div class="hero-inner">
       <div>
         <div v-reveal class="hero-badge"><span class="live-dot"></span> Ouvert 24h/24 · 7j/7 · 79 897 patients</div>
-        <h1 v-reveal class="hero-title d1">Des soins de qualité,<br />au cœur de la <em>Riviera</em><br />Sideci.</h1>
+        <h1 v-reveal="'words'" class="hero-title d1">Des soins de qualité,<br />au cœur de la <em>Riviera</em><br />Sideci.</h1>
         <p v-reveal class="hero-sub d2">
           Établissement médical privé de référence à Cocody, Abidjan. Une équipe de professionnels expérimentés, des
           équipements modernes et une prise en charge complète pour toute la famille.
@@ -170,7 +186,7 @@ async function backToForm() {
   <section id="services" class="section">
     <div class="section-inner">
       <p v-reveal class="section-kicker">Nos spécialités</p>
-      <h2 v-reveal class="section-title d1">Une gamme complète de soins médicaux</h2>
+      <h2 v-reveal="'words'" class="section-title d1">Une gamme complète de soins médicaux</h2>
       <p v-reveal class="section-lead d2">
         De la médecine générale aux spécialités les plus pointues, la Clinique Saint Viateur vous accueille avec un
         plateau technique complet et des médecins qualifiés.
@@ -211,7 +227,7 @@ async function backToForm() {
   <section v-if="promotions.items.length" id="offres" class="section" style="background: var(--bg-alt)">
     <div class="section-inner">
       <p v-reveal class="section-kicker">Nos offres</p>
-      <h2 v-reveal class="section-title d1">Offres et promotions du moment</h2>
+      <h2 v-reveal="'words'" class="section-title d1">Offres et promotions du moment</h2>
       <p v-reveal class="section-lead d2">
         Profitez de nos offres en cours et faites-nous savoir ce que vous en pensez.
       </p>
@@ -227,7 +243,7 @@ async function backToForm() {
     <div class="section-inner about-inner">
       <div>
         <p v-reveal class="section-kicker" style="color: var(--sky-light)">Notre histoire</p>
-        <h2 v-reveal class="section-title d1" style="color: #fff">Une clinique moderne,<br />une médecine humaine</h2>
+        <h2 v-reveal="'words'" class="section-title d1" style="color: #fff">Une clinique moderne,<br />une médecine humaine</h2>
         <p v-reveal class="section-lead d2" style="color: rgba(255, 255, 255, 0.55); margin-bottom: 28px">
           Établissement privé de référence dans le quartier de Riviera Sideci à Cocody, la Clinique Médicale Saint
           Viateur conjugue expertise médicale, équipements de pointe et accueil chaleureux pour offrir les meilleurs
@@ -243,7 +259,7 @@ async function backToForm() {
         </ul>
       </div>
       <div class="about-visual">
-        <div v-reveal class="about-photo">
+        <div v-reveal="'mask'" class="about-photo">
           <img :src="aboutPhoto" alt="Façade de la Clinique Médicale Saint Viateur à Cocody" loading="lazy" />
         </div>
         <div class="about-stats">
@@ -260,7 +276,7 @@ async function backToForm() {
   <section id="blog" class="section" style="background: var(--bg-alt)">
     <div class="section-inner">
       <p v-reveal class="section-kicker">Notre blog médical</p>
-      <h2 v-reveal class="section-title d1">Actualités & Conseils santé</h2>
+      <h2 v-reveal="'words'" class="section-title d1">Actualités & Conseils santé</h2>
       <p v-reveal class="section-lead d2">
         Restez informé des actualités de la clinique, des conseils de prévention et des nouvelles médicales utiles
         pour votre santé et celle de votre famille.
@@ -276,7 +292,7 @@ async function backToForm() {
   <section id="temoignages" class="section">
     <div class="section-inner">
       <p v-reveal class="section-kicker">Avis de nos patients</p>
-      <h2 v-reveal class="section-title d1">Ils nous font confiance</h2>
+      <h2 v-reveal="'words'" class="section-title d1">Ils nous font confiance</h2>
       <p v-reveal class="section-lead d2">
         La satisfaction de nos patients est notre première récompense. Voici quelques témoignages partagés par nos
         patients sur Facebook et lors de leur passage.
@@ -297,7 +313,7 @@ async function backToForm() {
   <section id="contact" class="section" style="background: var(--bg-alt)">
     <div class="section-inner">
       <p v-reveal class="section-kicker">Nous rejoindre</p>
-      <h2 v-reveal class="section-title d1">Contact & Localisation</h2>
+      <h2 v-reveal="'words'" class="section-title d1">Contact & Localisation</h2>
       <p v-reveal class="section-lead d2">
         Notre équipe est disponible pour vous accueillir, répondre à vos questions et vous orienter vers le bon
         praticien.

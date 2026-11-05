@@ -108,6 +108,12 @@
   flex-shrink: 0;
 }
 
+/* Magnetic buttons (motion/animations.ts): GSAP owns `transform`, so CSS
+   only transitions the other properties. */
+.is-magnetic {
+  transition-property: background, border-color, color, box-shadow !important;
+}
+
 /* ─── Inline meta row (date · author · location…) ─── */
 .meta-row {
   display: flex;

@@ -6,6 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 import BrandMark from "@/components/brand/BrandMark.vue";
 import { useAdminAccess } from "@/composables/useAdminAccess";
 import { useTheme } from "@/composables/useTheme";
+import { lockScroll } from "@/motion/useLenis";
 
 const LINKS = [
   { to: "/specialites", label: "Spécialités" },
@@ -48,6 +49,7 @@ function onKeydown(e: KeyboardEvent) {
 // Lock page scroll behind the open mobile menu.
 watch(menuOpen, (open) => {
   document.body.style.overflow = open ? "hidden" : "";
+  lockScroll(open);
 });
 
 // Any navigation (including same-page anchors) closes the menu.
@@ -65,6 +67,7 @@ onBeforeUnmount(() => {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("keydown", onKeydown);
   document.body.style.overflow = "";
+  lockScroll(false);
 });
 
 function goAdmin() {
@@ -120,7 +123,7 @@ function goAdmin() {
     <div v-if="menuOpen" class="nav-backdrop" aria-hidden="true" @click="closeMenu()"></div>
   </Transition>
   <Transition name="nav-panel">
-    <div v-if="menuOpen" id="nav-mobile-panel" class="nav-mobile-panel">
+    <div v-if="menuOpen" id="nav-mobile-panel" class="nav-mobile-panel" data-lenis-prevent>
       <ul>
         <li v-for="(link, i) in LINKS" :key="link.to" :style="{ '--i': i }">
           <RouterLink :to="link.to" @click="closeMenu()">{{ link.label }}</RouterLink>

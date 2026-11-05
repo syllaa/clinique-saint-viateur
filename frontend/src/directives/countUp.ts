@@ -1,5 +1,7 @@
 import type { Directive } from "vue";
 
+import { isReducedMotion } from "@/motion/motionPreferences";
+
 export interface CountUpValue {
   target: number;
   suffix?: string;
@@ -17,8 +19,6 @@ function animate(el: HTMLElement, target: number, suffix: string, duration: numb
   requestAnimationFrame(tick);
 }
 
-const reducedMotion =
-  typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 const observer =
   typeof IntersectionObserver !== "undefined"
@@ -38,7 +38,7 @@ const observer =
  * prefers-reduced-motion or when IntersectionObserver isn't available. */
 export const vCountUp: Directive<HTMLElement & { __countUp?: CountUpValue }, CountUpValue> = {
   mounted(el, binding) {
-    if (reducedMotion) {
+    if (isReducedMotion()) {
       el.textContent = `${binding.value.target}${binding.value.suffix ?? ""}`;
       return;
     }

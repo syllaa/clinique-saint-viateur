@@ -43,7 +43,7 @@ onMounted(() => {
     <div class="section-inner">
       <Breadcrumbs :items="[{ label: 'Accueil', to: '/' }, { label: 'Nos spécialités' }]" />
       <p v-reveal class="section-kicker">Nos spécialités</p>
-      <h1 v-reveal class="section-title d1">Une gamme complète de soins médicaux</h1>
+      <h1 v-reveal="'words'" class="section-title d1">Une gamme complète de soins médicaux</h1>
       <p v-reveal class="section-lead d2">
         De la médecine générale aux spécialités les plus pointues, la Clinique Saint Viateur vous accueille avec un
         plateau technique complet et des médecins qualifiés. Sélectionnez une spécialité pour en savoir plus.

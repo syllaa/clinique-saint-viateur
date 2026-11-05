@@ -73,7 +73,7 @@ function onPageChange(page: number) {
     <div class="section-inner">
       <Breadcrumbs :items="[{ label: 'Accueil', to: '/' }, { label: 'Blog médical' }]" />
       <p v-reveal class="section-kicker">Notre blog médical</p>
-      <h1 v-reveal class="section-title d1">Actualités & Conseils santé</h1>
+      <h1 v-reveal="'words'" class="section-title d1">Actualités & Conseils santé</h1>
       <p v-reveal class="section-lead d2">
         Restez informé des actualités de la clinique, des conseils de prévention et des nouvelles médicales utiles
         pour votre santé et celle de votre famille.

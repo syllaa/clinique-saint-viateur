@@ -138,6 +138,14 @@
 html {
   scroll-behavior: smooth;
 }
+/* Lenis drives scrolling itself: native smooth scrolling would fight it. */
+html.lenis {
+  scroll-behavior: auto;
+}
+/* In-page anchors land below the fixed nav + jobs ticker. */
+[id] {
+  scroll-margin-top: 98px;
+}
 body {
   font-family: "DM Sans", sans-serif;
   color: var(--text);
@@ -204,37 +212,106 @@ button {
   margin-bottom: 52px;
 }
 
-/* ─── SCROLL REVEAL ─── */
+/* ─── SCROLL REVEAL (v-reveal, see directives/reveal.ts) ─── */
 .rv {
   opacity: 0;
   transform: translateY(30px);
   transition:
-    opacity 0.7s cubic-bezier(0.22, 0.68, 0, 1.2),
-    transform 0.7s cubic-bezier(0.22, 0.68, 0, 1.2);
+    opacity 0.7s var(--ease-spring),
+    transform 0.7s var(--ease-spring);
+  transition-delay: var(--rv-delay, 0ms);
 }
-.rv.rl {
+.rv.rl,
+.rv-left {
   transform: translateX(-32px);
 }
-.rv.rr {
+.rv.rr,
+.rv-right {
   transform: translateX(32px);
+}
+.rv-fade {
+  transform: none;
+}
+.rv-scale {
+  transform: scale(0.94);
 }
 .rv.vis {
   opacity: 1;
   transform: none;
 }
+
+/* Wipe in from the top. */
+.rv-mask {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.1s var(--ease-out);
+  transition-delay: var(--rv-delay, 0ms);
+}
+.rv-mask.vis {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Words rise one after another from behind their own mask. */
+.rv-words {
+  opacity: 1;
+  transform: none;
+}
+.rv-words .rv-w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* room for descenders (g, p, ç) inside the mask */
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.rv-words .rv-wi {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 0.95s var(--ease-out);
+  transition-delay: calc(var(--rv-delay, 0ms) + var(--i, 0) * 55ms);
+}
+.rv-words.vis .rv-wi {
+  transform: none;
+}
+
+/* Legacy stagger helpers: also feed the per-type delay variable. */
 .d1 {
+  --rv-delay: 80ms;
   transition-delay: 0.08s !important;
 }
 .d2 {
+  --rv-delay: 160ms;
   transition-delay: 0.16s !important;
 }
 .d3 {
+  --rv-delay: 260ms;
   transition-delay: 0.26s !important;
 }
 .d4 {
+  --rv-delay: 380ms;
   transition-delay: 0.38s !important;
 }
 
+/* ─── REDUCED MOTION ───
+   <html data-motion="reduce"> is set by motion/motionPreferences.ts from the
+   system setting or the visitor's choice in the footer. Everything is shown
+   in its final state; decorative loops stop. */
+:root[data-motion="reduce"] *,
+:root[data-motion="reduce"] *::before,
+:root[data-motion="reduce"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+  scroll-behavior: auto !important;
+}
+:root[data-motion="reduce"] .rv,
+:root[data-motion="reduce"] .rv .rv-wi {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+}
 @media (prefers-reduced-motion: reduce) {
   .rv {
     transition: none !important;

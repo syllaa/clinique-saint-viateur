@@ -194,7 +194,7 @@ watch(
     <section v-if="interventionItems.length" class="section" style="background: var(--bg-alt)">
       <div class="section-inner">
         <p v-reveal class="section-kicker">Nos services</p>
-        <h2 v-reveal class="section-title d1">Ce que nous proposons</h2>
+        <h2 v-reveal="'words'" class="section-title d1">Ce que nous proposons</h2>
         <div class="spd-svc-grid">
           <div v-for="(item, i) in interventionItems" :key="i" v-reveal class="spd-svc-card">
             <div class="spd-svc-icon"><component :is="item.icon" :size="22" :stroke-width="1.75" /></div>
@@ -209,7 +209,7 @@ watch(
     <section class="section spd-trust">
       <div class="section-inner">
         <p v-reveal class="section-kicker" style="color: var(--sky-light)">Notre engagement</p>
-        <h2 v-reveal class="section-title d1" style="color: #fff">Un environnement médical de confiance</h2>
+        <h2 v-reveal="'words'" class="section-title d1" style="color: #fff">Un environnement médical de confiance</h2>
         <div class="spd-trust-grid">
           <div v-for="(pt, i) in trustPoints" :key="i" v-reveal class="spd-trust-card">
             <div class="spd-trust-icon"><component :is="pt.icon" :size="24" :stroke-width="1.75" /></div>
@@ -276,7 +276,7 @@ watch(
     <section class="section" style="background: var(--bg-alt)">
       <div class="section-inner">
         <p v-reveal class="section-kicker">Votre parcours</p>
-        <h2 v-reveal class="section-title d1">Avant votre prise en charge</h2>
+        <h2 v-reveal="'words'" class="section-title d1">Avant votre prise en charge</h2>
         <div class="spd-timeline">
           <div v-for="(step, i) in careSteps" :key="i" v-reveal class="spd-step">
             <div class="spd-step-icon"><component :is="step.icon" :size="20" :stroke-width="1.75" /></div>
