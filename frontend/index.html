@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clinique Médicale Saint Viateur – Riviera Sideci, Cocody, Abidjan</title>
+    <meta
+      name="description"
+      content="Clinique Médicale Saint Viateur – Établissement privé de santé à Cocody, Abidjan. Soins 24h/24, urgences, gynécologie, chirurgie, pédiatrie et plus."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      #preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        background: #0a1f3c;
+        transition:
+          opacity 0.35s ease,
+          visibility 0.35s ease;
+      }
+      #preloader.pl-hide {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .pl-emblem {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #c48a2a, #e0ab4a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        color: #fff;
+        font-weight: 700;
+        font-family: "DM Sans", sans-serif;
+      }
+      .pl-spinner {
+        width: 30px;
+        height: 30px;
+        border: 3px solid rgba(255, 255, 255, 0.15);
+        border-top-color: #e0ab4a;
+        border-radius: 50%;
+        animation: pl-spin 0.8s linear infinite;
+      }
+      @keyframes pl-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="preloader">
+      <div class="pl-emblem">✚</div>
+      <div class="pl-spinner"></div>
+    </div>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

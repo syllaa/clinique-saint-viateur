@@ -1,0 +1,217 @@
+:root {
+  --navy: #7a0f1a;
+  --navy-mid: #8f1620;
+  --blue: #c8102e;
+  --sky: #e0475a;
+  --sky-light: #f3aab4;
+  --teal: #c8102e;
+  --gold: #c8102e;
+  --gold-lt: #e0475a;
+  --cream: #ffffff;
+  --offwhite: #fbf3f4;
+  --text: #1a1414;
+  --muted: #6b5457;
+  --green: #c8102e;
+  --red-alert: #b3121f;
+
+  /* admin */
+  --a-bg: #1a0a0d;
+  --a-panel: #230e12;
+  --a-card: #2d1216;
+  --a-border: #3f171b;
+  --a-text: #f2dcdd;
+  --a-muted: #8a5e60;
+  --a-gold: #e0475a;
+  --a-tint: rgba(255, 255, 255, 0.04);
+  --a-tint-strong: rgba(255, 255, 255, 0.09);
+  --a-hairline: rgba(255, 255, 255, 0.06);
+  --a-text-2: rgba(242, 220, 221, 0.75);
+  --a-text-3: rgba(242, 220, 221, 0.55);
+
+  /* theme-aware surfaces (public site, defaults to light) */
+  --bg: var(--cream);
+  --bg-alt: var(--offwhite);
+  --surface: #ffffff;
+  --border-soft: #f2d7d9;
+  --heading: var(--navy);
+}
+
+/* Explicit "dark" preference: flips the public site to a dark surface.
+   The admin panel is already dark by default, so it is untouched here. */
+:root[data-theme="dark"] {
+  --bg: #200c0f;
+  --bg-alt: #2b1013;
+  --surface: #2d1216;
+  --border-soft: #3f171b;
+  --heading: #fbeaea;
+  --text: #f2dcdd;
+  --muted: #b98d8f;
+}
+
+/* Explicit "light" preference: flips the admin panel to a light surface.
+   The public site is already light by default, so it is untouched here. */
+:root[data-theme="light"] {
+  --a-bg: #fbf3f4;
+  --a-panel: #ffffff;
+  --a-card: #ffffff;
+  --a-border: #f0dcdd;
+  --a-text: #241315;
+  --a-muted: #7a5658;
+  --a-tint: rgba(36, 19, 21, 0.035);
+  --a-tint-strong: rgba(36, 19, 21, 0.06);
+  --a-hairline: rgba(36, 19, 21, 0.12);
+  --a-text-2: rgba(36, 19, 21, 0.88);
+  --a-text-3: rgba(36, 19, 21, 0.7);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: "DM Sans", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.65;
+  overflow-x: hidden;
+  transition:
+    background 0.25s,
+    color 0.25s;
+}
+h1,
+h2,
+h3,
+.display {
+  font-family: "Cormorant Garamond", serif;
+}
+a {
+  color: inherit;
+}
+button {
+  font-family: inherit;
+}
+
+/* ─── SECTION LAYOUT HELPERS (shared by page sections) ─── */
+.section {
+  padding: 88px 5vw;
+}
+.section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-kicker {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 10px;
+}
+.section-title {
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  color: var(--heading);
+  margin-bottom: 14px;
+  line-height: 1.18;
+}
+.section-lead {
+  color: var(--muted);
+  max-width: 540px;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: 52px;
+}
+
+/* ─── SCROLL REVEAL ─── */
+.rv {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 0.68, 0, 1.2),
+    transform 0.7s cubic-bezier(0.22, 0.68, 0, 1.2);
+}
+.rv.rl {
+  transform: translateX(-32px);
+}
+.rv.rr {
+  transform: translateX(32px);
+}
+.rv.vis {
+  opacity: 1;
+  transform: none;
+}
+.d1 {
+  transition-delay: 0.08s !important;
+}
+.d2 {
+  transition-delay: 0.16s !important;
+}
+.d3 {
+  transition-delay: 0.26s !important;
+}
+.d4 {
+  transition-delay: 0.38s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ─── THEME TOGGLE ─── */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* ─── PRIMARY BUTTON (shared across pages) ─── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold);
+  color: #fff;
+  padding: 13px 28px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    transform 0.15s,
+    box-shadow 0.25s;
+}
+.btn-primary:hover {
+  background: var(--gold-lt);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(200, 16, 46, 0.45);
+}
+.btn-primary:active {
+  transform: scale(0.96);
+  box-shadow: 0 4px 14px rgba(200, 16, 46, 0.4);
+}
+
+/* ─── LOADING BUTTON CONTENT ─── */
+.btn-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
