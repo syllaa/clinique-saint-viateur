@@ -9,6 +9,8 @@ uploads/images/*
 uploads/cvs/*
 !uploads/images/.gitkeep
 !uploads/cvs/.gitkeep
+uploads/videos/*
+!uploads/videos/.gitkeep
 
 backups/*
 !backups/.gitkeep

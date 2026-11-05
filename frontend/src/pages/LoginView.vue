@@ -5,10 +5,11 @@ import { useRoute, useRouter } from "vue-router";
 import "@/assets/admin.css";
 import Spinner from "@/components/common/Spinner.vue";
 import { useAuthStore } from "@/stores/auth";
+import { apiErrorMessage } from "@/utils/apiError";
 
 const username = ref("");
 const password = ref("");
-const error = ref(false);
+const error = ref("");
 const loading = ref(false);
 
 const auth = useAuthStore();
@@ -17,14 +18,15 @@ const route = useRoute();
 
 async function doLogin() {
   if (loading.value) return;
-  error.value = false;
+  error.value = "";
   loading.value = true;
   try {
     await auth.login(username.value.trim(), password.value);
     const redirect = (route.query.redirect as string) || "/admin";
     router.push(redirect);
-  } catch {
-    error.value = true;
+  } catch (err) {
+    // 401 → wrong credentials; 429 → temporarily blocked (message from the API).
+    error.value = apiErrorMessage(err, "Identifiants incorrects. Veuillez réessayer.");
   } finally {
     loading.value = false;
   }
@@ -49,7 +51,7 @@ function backToSite() {
       </div>
       <h2>Connexion</h2>
       <p>Espace réservé au personnel administratif autorisé</p>
-      <div v-if="error" class="login-err">Identifiants incorrects. Veuillez réessayer.</div>
+      <div v-if="error" class="login-err" role="alert">{{ error }}</div>
       <label class="al" for="lu">Identifiant</label>
       <input id="lu" class="ai" v-model="username" type="text" placeholder="admin" :disabled="loading" @keydown.enter="doLogin" />
       <label class="al" for="lp">Mot de passe</label>

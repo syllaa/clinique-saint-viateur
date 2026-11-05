@@ -3,6 +3,7 @@ import { Briefcase, Clock, Mail, MapPin, Phone } from "@lucide/vue";
 import { onMounted, ref } from "vue";
 
 import AmbientVideo from "@/components/common/AmbientVideo.vue";
+import HoneypotField from "@/components/common/HoneypotField.vue";
 import PageHeader from "@/components/common/PageHeader.vue";
 import SkeletonGrid from "@/components/common/SkeletonGrid.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
@@ -14,6 +15,7 @@ import { alertDialog } from "@/composables/useDialog";
 import { applySeo } from "@/composables/useHead";
 import { siteService } from "@/services/siteService";
 import { useJobOffersStore } from "@/stores/jobOffers";
+import { apiErrorMessage } from "@/utils/apiError";
 
 const jobs = useJobOffersStore();
 const jobsLoading = ref(true);
@@ -52,6 +54,8 @@ const message = ref("");
 const sending = ref(false);
 const sent = ref(false);
 
+const honeypot = ref("");
+
 async function submitContact() {
   if (!name.value.trim() || !message.value.trim()) {
     await alertDialog("Veuillez remplir au moins votre nom et votre message.", { title: "Formulaire incomplet" });
@@ -67,6 +71,7 @@ async function submitContact() {
       content: message.value.trim(),
       urgency: "programme",
       wants_hospitalization_info: false,
+      website: honeypot.value,
     });
     sent.value = true;
     name.value = "";
@@ -74,6 +79,11 @@ async function submitContact() {
     phone.value = "";
     subject.value = "";
     message.value = "";
+  } catch (err) {
+    await alertDialog(
+      apiErrorMessage(err, "Votre message n'a pas pu être envoyé. Réessayez, ou appelez-nous au 27 22 59 04 17."),
+      { title: "Envoi impossible" },
+    );
   } finally {
     sending.value = false;
   }
@@ -150,6 +160,7 @@ async function submitContact() {
             <div class="fg"><label>Email</label><input v-model="email" type="email" placeholder="votre@email.com" /></div>
             <div class="fg"><label>Sujet</label><input v-model="subject" type="text" placeholder="Objet de votre message…" /></div>
             <div class="fg"><label>Message</label><textarea v-model="message" placeholder="Votre message…"></textarea></div>
+            <HoneypotField v-model="honeypot" />
             <button class="btn-submit" :disabled="sending" @click="submitContact">Envoyer le message →</button>
             <LoadingOverlay v-if="sending" message="Envoi en cours…" />
           </div>

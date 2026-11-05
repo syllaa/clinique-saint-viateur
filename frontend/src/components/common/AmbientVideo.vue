@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
-import { type VideoSlot, videoFor } from "@/media/videos";
+import { type VideoSlot, type VideoSources, videoFor } from "@/media/videos";
 import { reducedMotion } from "@/motion/motionPreferences";
 
 /**
@@ -19,8 +19,10 @@ import { reducedMotion } from "@/motion/motionPreferences";
  */
 const props = withDefaults(
   defineProps<{
-    /** Which video slot to play (files resolved by media/videos.ts). */
-    media: VideoSlot;
+    /** Which video slot to play (files resolved by media/videos.ts)… */
+    media?: VideoSlot;
+    /** …or a direct URL (e.g. a specialty video uploaded from the admin). */
+    src?: string | null;
     poster?: string;
     posterSrcset?: string;
     posterSizes?: string;
@@ -31,6 +33,8 @@ const props = withDefaults(
     posterPriority?: "high" | "low" | "auto";
   }>(),
   {
+    media: undefined,
+    src: undefined,
     poster: undefined,
     posterSrcset: undefined,
     posterSizes: undefined,
@@ -41,7 +45,10 @@ const props = withDefaults(
   },
 );
 
-const sources = videoFor(props.media);
+function sourcesFromUrl(url: string): VideoSources {
+  return url.toLowerCase().endsWith(".webm") ? { webm: url } : { mp4: url };
+}
+const sources = props.src ? sourcesFromUrl(props.src) : props.media ? videoFor(props.media) : null;
 
 function savingData(): boolean {
   const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;

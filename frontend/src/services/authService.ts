@@ -25,6 +25,12 @@ export const authService = {
       .post<TokenResponse>(`${API_BASE_URL}/auth/refresh`, { refresh_token: refreshToken })
       .then((r) => r.data);
   },
+  /** 204 on success; 400 wrong current password, 422 weak password, 429 too many tries. */
+  changePassword(currentPassword: string, newPassword: string) {
+    return api
+      .post("/auth/change-password", { current_password: currentPassword, new_password: newPassword })
+      .then(() => undefined);
+  },
   me() {
     return api.get<CurrentUser>("/auth/me").then((r) => r.data);
   },

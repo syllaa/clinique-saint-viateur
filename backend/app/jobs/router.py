@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, File, Form, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.auth.dependencies import require_admin
 from app.database import get_db
+from app.rate_limit import rate_limit
 from app.jobs import crud, service
 from app.jobs.schemas import (
     JobApplicationOut,
@@ -55,7 +56,12 @@ def delete_offer(offer_id: int, db: Session = Depends(get_db)):
 # ── Applications ──────────────────────────────────────────
 
 
-@router.post("/offers/{slug}/applications", response_model=JobApplicationOut, status_code=201)
+@router.post(
+    "/offers/{slug}/applications",
+    response_model=JobApplicationOut,
+    status_code=201,
+    dependencies=[Depends(rate_limit("application", 5, 3600))],
+)
 async def submit_application(
     slug: str,
     first_name: str = Form(...),
@@ -65,8 +71,11 @@ async def submit_application(
     cover_letter: str | None = Form(None),
     consent: bool = Form(...),
     cv: UploadFile = File(...),
+    website: str | None = Form(None),  # honeypot, see app/site/schemas.py
     db: Session = Depends(get_db),
 ):
+    if website:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Requête invalide")
     return await service.submit_application(db, slug, first_name, last_name, email, phone, cover_letter, consent, cv)
 
 

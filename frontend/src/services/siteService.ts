@@ -23,6 +23,8 @@ export const siteService = {
     content: string;
     urgency: "urgence" | "programme";
     wants_hospitalization_info: boolean;
+    /** Honeypot (HoneypotField): must stay empty for humans. */
+    website?: string;
   }) {
     return api.post<SiteMessage>("/api/messages", payload).then((r) => r.data);
   },

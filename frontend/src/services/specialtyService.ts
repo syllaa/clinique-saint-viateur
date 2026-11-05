@@ -13,6 +13,7 @@ export interface SpecialtyListItem {
   icon_name: string | null;
   cover_image_url: string | null;
   image_alt: string | null;
+  cover_video_url: string | null;
 }
 
 export interface SpecialtyDoctor {
@@ -53,6 +54,7 @@ export type SpecialtyPayload = Partial<{
   icon_name: string | null;
   cover_image_url: string | null;
   image_alt: string | null;
+  cover_video_url: string | null;
   full_description: string;
   services_offered: string;
   symptoms_text: string | null;

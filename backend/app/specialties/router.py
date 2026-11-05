@@ -62,7 +62,7 @@ def toggle_specialty_active(specialty_id: int, db: Session = Depends(get_db)):
 @router.delete("/{specialty_id}", status_code=204, dependencies=[Depends(require_admin)])
 def delete_specialty(specialty_id: int, db: Session = Depends(get_db)):
     specialty = service.get_specialty_or_404(db, specialty_id)
-    crud.delete_specialty(db, specialty)
+    service.delete_specialty(db, specialty)
 
 
 # ── Doctors (admin) ───────────────────────────────────────

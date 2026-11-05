@@ -10,6 +10,8 @@ VALID_URGENCY = {"urgence", "programme"}
 
 
 def create_message(db: Session, data: MessageCreate):
+    if data.website:  # honeypot filled in: automated submission
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Requête invalide")
     if not data.name.strip() or not data.content.strip():
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Nom et message sont requis")
     if data.urgency not in VALID_URGENCY:

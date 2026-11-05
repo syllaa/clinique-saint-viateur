@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.auth.dependencies import require_admin
 from app.database import get_db
+from app.rate_limit import rate_limit
 from app.promotions import crud, service
 from app.promotions.schemas import (
     PromotionCreate,
@@ -44,7 +45,11 @@ def list_all_promotions(
     return {"items": items, "total": total, "page": page, "page_size": page_size}
 
 
-@router.post("/{promotion_id}/reactions", response_model=PromotionOut)
+@router.post(
+    "/{promotion_id}/reactions",
+    response_model=PromotionOut,
+    dependencies=[Depends(rate_limit("reaction", 30, 60))],
+)
 def react_to_promotion(promotion_id: int, payload: ReactionIn, db: Session = Depends(get_db)):
     return service.react(db, promotion_id, payload.device_id, payload.reaction_type)
 

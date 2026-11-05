@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.auth.dependencies import require_admin
 from app.database import get_db
+from app.rate_limit import rate_limit
 from app.site import crud, service
 from app.site.schemas import MessageCreate, MessageOut
 
@@ -12,7 +13,12 @@ router = APIRouter(prefix="/api", tags=["site"])
 # Public: send a message. Admin-only: list / read / delete.
 
 
-@router.post("/messages", response_model=MessageOut, status_code=201)
+@router.post(
+    "/messages",
+    response_model=MessageOut,
+    status_code=201,
+    dependencies=[Depends(rate_limit("contact", 5, 600))],
+)
 def send_message(payload: MessageCreate, db: Session = Depends(get_db)):
     return service.create_message(db, payload)
 

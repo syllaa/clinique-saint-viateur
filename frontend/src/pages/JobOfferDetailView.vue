@@ -6,6 +6,7 @@ import { useRoute } from "vue-router";
 import Alert from "@/components/common/Alert.vue";
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
+import HoneypotField from "@/components/common/HoneypotField.vue";
 import LoadingOverlay from "@/components/common/LoadingOverlay.vue";
 import Spinner from "@/components/common/Spinner.vue";
 import { alertDialog } from "@/composables/useDialog";
@@ -86,6 +87,8 @@ function onCvChange(e: Event) {
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
+const honeypot = ref("");
+
 async function submitApplication() {
   submitError.value = "";
   if (!firstName.value.trim() || !lastName.value.trim() || !phone.value.trim()) {
@@ -113,6 +116,7 @@ async function submitApplication() {
   formData.append("cover_letter", coverLetter.value.trim());
   formData.append("consent", "true");
   formData.append("cv", cvFile.value);
+  formData.append("website", honeypot.value);
 
   submitting.value = true;
   try {
@@ -210,6 +214,7 @@ async function submitApplication() {
                 <input type="checkbox" v-model="consent" />
                 <span>J'accepte que mes données soient traitées dans le cadre de ma candidature.</span>
               </label>
+              <HoneypotField v-model="honeypot" />
               <button class="btn-submit" :disabled="submitting" @click="submitApplication">Envoyer ma candidature →</button>
               <LoadingOverlay v-if="submitting" message="Envoi de votre candidature…" />
             </div>

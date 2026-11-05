@@ -94,6 +94,10 @@ function logout() {
       <div class="a-nav-item" :class="{ on: activeTab === 'backups' }" @click="setTab('backups' as AdminTab)">
         <span class="a-nav-icon">🗄</span>Sauvegardes
       </div>
+      <div class="a-nav-item" :class="{ on: activeTab === 'security' }" @click="setTab('security' as AdminTab)">
+        <span class="a-nav-icon">🔒</span>Sécurité
+        <span v-if="auth.weakPassword" class="a-nav-badge" title="Mot de passe à changer">!</span>
+      </div>
     </nav>
     <div class="a-sidebar-foot">
       <button class="back-link theme-toggle-link" @click="toggle(true)">

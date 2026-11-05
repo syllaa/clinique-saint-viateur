@@ -18,6 +18,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
+import AmbientVideo from "@/components/common/AmbientVideo.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
 import Spinner from "@/components/common/Spinner.vue";
 import SpecialtyMedia from "@/components/specialties/SpecialtyMedia.vue";
@@ -32,7 +33,7 @@ const route = useRoute();
 // Cover photo drifts slower than the page while the hero scrolls away.
 const heroRef = ref<HTMLElement | null>(null);
 useScrollScene(heroRef, ({ gsap }, hero) => {
-  const img = hero.querySelector(".spd-hero-bg img");
+  const img = hero.querySelector(".spd-hero-media");
   if (!img) return;
   gsap.fromTo(img, { yPercent: -5, scale: 1.1 }, {
     yPercent: 10,
@@ -70,6 +71,8 @@ const heroImageUrl = computed(() => {
   if (!s || s.media_type !== "image") return null;
   return mediaUrl(s.cover_image_url);
 });
+// Optional ambient video uploaded from the admin (poster = the cover image).
+const heroVideoUrl = computed(() => mediaUrl(specialties.current?.cover_video_url));
 
 // Only surfaced when the specialty's own admin-entered hours actually say so —
 // never assumed, so it can't misrepresent a non-24/7 specialty.
@@ -154,9 +157,18 @@ watch(
   </template>
 
   <template v-else>
-    <section ref="heroRef" class="spd-hero" :class="{ 'has-image': heroImageUrl }">
-      <div v-if="heroImageUrl" class="spd-hero-bg">
-        <img :src="heroImageUrl" :alt="specialties.current.image_alt || specialties.current.name" />
+    <section ref="heroRef" class="spd-hero" :class="{ 'has-image': heroImageUrl || heroVideoUrl }">
+      <div v-if="heroImageUrl || heroVideoUrl" class="spd-hero-bg">
+        <AmbientVideo
+          v-if="heroVideoUrl"
+          :key="heroVideoUrl"
+          class="spd-hero-media"
+          :src="heroVideoUrl"
+          :poster="heroImageUrl || undefined"
+          :poster-alt="specialties.current.image_alt || specialties.current.name"
+          poster-priority="high"
+        />
+        <img v-else class="spd-hero-media" :src="heroImageUrl!" :alt="specialties.current.image_alt || specialties.current.name" />
         <div class="spd-hero-overlay"></div>
       </div>
 
@@ -357,7 +369,7 @@ watch(
   inset: 0;
   z-index: 0;
 }
-.spd-hero-bg img {
+.spd-hero-media {
   width: 100%;
   height: 100%;
   object-fit: cover;

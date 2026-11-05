@@ -57,6 +57,36 @@ def decode_token(token: str) -> dict | None:
         return None
 
 
+# Passwords refused outright, whatever their length (includes the seed default).
+_COMMON_PASSWORDS = {
+    "admin123", "password", "motdepasse", "azerty123", "qwerty123", "123456789",
+    "1234567890", "administrateur", "clinique123", "saintviateur",
+}
+
+
+def password_problem(new_password: str, username: str) -> str | None:
+    """Returns a French message describing why the password is too weak, or None."""
+    if len(new_password) < 10:
+        return "Le mot de passe doit contenir au moins 10 caractères."
+    if not any(c.isalpha() for c in new_password) or not any(c.isdigit() for c in new_password):
+        return "Le mot de passe doit contenir au moins une lettre et un chiffre."
+    lowered = new_password.lower()
+    if lowered in _COMMON_PASSWORDS or lowered == username.lower():
+        return "Ce mot de passe est trop courant. Choisissez-en un autre."
+    return None
+
+
+def change_password(db: Session, user: User, new_password: str) -> None:
+    user.hashed_password = hash_password(new_password)
+    db.commit()
+
+
+def uses_default_password(db: Session) -> bool:
+    """True if the seed admin account still has the documented default password."""
+    user = get_user_by_username(db, settings.admin_username)
+    return bool(user and verify_password("admin123", user.hashed_password))
+
+
 def ensure_seed_admin(db: Session) -> None:
     """Create the initial admin user from settings if the users table is empty."""
     if db.query(User).first() is not None:

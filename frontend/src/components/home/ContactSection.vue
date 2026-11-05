@@ -3,12 +3,14 @@ import { Check, Mail, MapPin, Phone, Send, Siren } from "@lucide/vue";
 import { ref } from "vue";
 
 import IconFacebook from "@/components/brand/IconFacebook.vue";
+import HoneypotField from "@/components/common/HoneypotField.vue";
 import LoadingOverlay from "@/components/common/LoadingOverlay.vue";
 import Spinner from "@/components/common/Spinner.vue";
 import { alertDialog } from "@/composables/useDialog";
 import { OPENING_HOURS_WEEK, useClinicHours } from "@/composables/useClinicHours";
 import { siteService } from "@/services/siteService";
 import { useSpecialtiesStore } from "@/stores/specialties";
+import { apiErrorMessage } from "@/utils/apiError";
 
 const specialties = useSpecialtiesStore();
 const { todayName, consultationsOpen, statusLabel } = useClinicHours();
@@ -24,6 +26,7 @@ const sent = ref(false);
 const sending = ref(false);
 const backLoading = ref(false);
 const shake = ref(false);
+const honeypot = ref("");
 
 async function submitForm() {
   if (!name.value.trim() || !serviceType.value || !message.value.trim()) {
@@ -44,6 +47,7 @@ async function submitForm() {
       content: message.value.trim(),
       urgency: urgency.value,
       wants_hospitalization_info: wantsHospitalizationInfo.value === "oui",
+      website: honeypot.value,
     });
     sent.value = true;
     name.value = "";
@@ -53,6 +57,11 @@ async function submitForm() {
     urgency.value = "urgence";
     wantsHospitalizationInfo.value = "non";
     message.value = "";
+  } catch (err) {
+    await alertDialog(
+      apiErrorMessage(err, "Votre message n'a pas pu être envoyé. Réessayez, ou appelez-nous au 27 22 59 04 17."),
+      { title: "Envoi impossible" },
+    );
   } finally {
     sending.value = false;
   }
@@ -113,6 +122,7 @@ async function backToForm() {
             <Transition name="form-swap" mode="out-in">
               <form v-if="!sent" key="form" class="form-fields" :class="{ 'is-sending': sending }" novalidate @submit.prevent="submitForm">
                 <h3>Envoyer un message</h3>
+                <HoneypotField v-model="honeypot" />
                 <div class="form-row">
                   <div class="fg">
                     <label for="contact-name">Nom complet*</label>
