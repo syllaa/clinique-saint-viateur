@@ -6,16 +6,31 @@ import { useRoute } from "vue-router";
 import BlogCard from "@/components/blog/BlogCard.vue";
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
-import Spinner from "@/components/common/Spinner.vue";
+import ReadingProgress from "@/components/common/ReadingProgress.vue";
 import { applySeo, resetSeo } from "@/composables/useHead";
 import { mediaUrl } from "@/services/api";
 import { useArticlesStore } from "@/stores/articles";
+import { useScrollScene } from "@/motion/useScrollScene";
 
 const route = useRoute();
 const articles = useArticlesStore();
 const loading = ref(true);
 const notFound = ref(false);
 const shareCopied = ref(false);
+const articleRef = ref<HTMLElement | null>(null);
+
+// Cover photo drifts slower than the page (depth) while the hero scrolls away.
+const heroRef = ref<HTMLElement | null>(null);
+useScrollScene(heroRef, ({ gsap }, hero) => {
+  const img = hero.querySelector(".art-hero-img img");
+  if (!img) return;
+  gsap.fromTo(img, { yPercent: -6, scale: 1.12 }, {
+    yPercent: 10,
+    scale: 1.02,
+    ease: "none",
+    scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: true },
+  });
+});
 
 const readTimeMinutes = computed(() => {
   const text = (articles.current?.content || "").replace(/<[^>]*>/g, " ");
@@ -95,7 +110,16 @@ async function share() {
 
 <template>
 
-  <div v-if="loading" class="detail-loading"><Spinner :size="30" /></div>
+  <!-- Loading placeholder shaped like the dark hero (no white flash, no jump). -->
+  <div v-if="loading" class="art-hero art-hero-skeleton" role="status" aria-live="polite">
+    <span class="sr-only">Chargement de l'article…</span>
+    <div class="section-inner art-hero-inner" aria-hidden="true">
+      <div class="sk-bar" style="width: 18%"></div>
+      <div class="sk-bar sk-bar-lg" style="width: 70%"></div>
+      <div class="sk-bar sk-bar-lg" style="width: 45%"></div>
+      <div class="sk-bar" style="width: 30%"></div>
+    </div>
+  </div>
 
   <template v-else-if="notFound || !articles.current">
     <section class="section" style="padding-top: 128px">
@@ -110,7 +134,8 @@ async function share() {
   </template>
 
   <template v-else>
-    <section class="art-hero">
+    <ReadingProgress :target="articleRef" />
+    <section ref="heroRef" class="art-hero">
       <div v-if="mediaUrl(articles.current.cover_image_url)" class="art-hero-img">
         <img :src="mediaUrl(articles.current.cover_image_url)!" :alt="articles.current.title" />
         <div class="art-hero-fade"></div>
@@ -123,9 +148,9 @@ async function share() {
             { label: articles.current.title },
           ]"
         />
-        <span class="art-tag">{{ articles.current.category.name }}</span>
-        <h1>{{ articles.current.title }}</h1>
-        <div class="art-meta">
+        <span v-reveal class="art-tag">{{ articles.current.category.name }}</span>
+        <h1 v-reveal class="d1">{{ articles.current.title }}</h1>
+        <div v-reveal class="art-meta d2">
           <span class="meta-item"><PenLine :size="14" aria-hidden="true" />{{ articles.current.author }}</span>
           <span class="meta-item"><Calendar :size="14" aria-hidden="true" />{{ new Date(articles.current.created_at).toLocaleDateString("fr-FR") }}</span>
           <span class="meta-item"><Timer :size="14" aria-hidden="true" />{{ readTimeMinutes }} min de lecture</span>
@@ -135,11 +160,11 @@ async function share() {
 
     <section class="section">
       <div class="section-inner art-grid">
-        <article class="art-body">
+        <article ref="articleRef" class="art-body">
           <div v-if="!mediaUrl(articles.current.cover_image_url)" class="art-emoji">{{ articles.current.icon }}</div>
-          <div class="art-content" v-html="articles.current.content || `<p>${articles.current.excerpt}</p>`"></div>
+          <div v-reveal="'fade'" class="art-content" v-html="articles.current.content || `<p>${articles.current.excerpt}</p>`"></div>
 
-          <section v-if="practicalInfoItems.length" class="art-section">
+          <section v-if="practicalInfoItems.length" v-reveal class="art-section">
             <h2>Informations pratiques</h2>
             <div class="art-icon-grid">
               <div v-for="(item, i) in practicalInfoItems" :key="i" class="art-icon-card">
@@ -149,7 +174,7 @@ async function share() {
             </div>
           </section>
 
-          <section v-if="includedItems.length" class="art-section">
+          <section v-if="includedItems.length" v-reveal class="art-section">
             <h2>L'essentiel</h2>
             <div class="art-icon-grid">
               <div v-for="(item, i) in includedItems" :key="i" class="art-icon-card">
@@ -159,7 +184,7 @@ async function share() {
             </div>
           </section>
 
-          <div v-if="mediaUrl(articles.current.secondary_image_url)" class="art-secondary-img">
+          <div v-if="mediaUrl(articles.current.secondary_image_url)" v-reveal="'mask'" class="art-secondary-img">
             <img
               :src="mediaUrl(articles.current.secondary_image_url)!"
               :alt="articles.current.secondary_image_alt || articles.current.title"
@@ -168,7 +193,7 @@ async function share() {
             />
           </div>
 
-          <section v-if="benefitItems.length" class="art-section">
+          <section v-if="benefitItems.length" v-reveal class="art-section">
             <h2>Les bénéfices</h2>
             <div class="art-icon-grid">
               <div v-for="(item, i) in benefitItems" :key="i" class="art-icon-card">
@@ -178,9 +203,9 @@ async function share() {
             </div>
           </section>
 
-          <section v-if="articles.current.faqs.length" class="art-section">
+          <section v-if="articles.current.faqs.length" v-reveal class="art-section">
             <h2>Questions fréquentes</h2>
-            <details v-for="f in articles.current.faqs" :key="f.id" class="art-faq">
+            <details v-for="f in articles.current.faqs" :key="f.id" class="art-faq faq-smooth">
               <summary>{{ f.question }}</summary>
               <p>{{ f.answer }}</p>
             </details>
@@ -188,7 +213,7 @@ async function share() {
 
           <div class="art-actions">
             <button class="btn-primary" type="button" @click="share"><Share2 :size="16" aria-hidden="true" /> Partager</button>
-            <span v-if="shareCopied" class="art-copied">Lien copié !</span>
+            <Transition name="copied"><span v-if="shareCopied" class="art-copied" role="status">Lien copié !</span></Transition>
             <a href="tel:+2252722590417" class="btn-outline"><Phone :size="16" aria-hidden="true" /> Prendre rendez-vous</a>
             <a href="tel:+2252722590417" class="art-phone-link">+225 27 22 59 04 17</a>
           </div>
@@ -198,7 +223,7 @@ async function share() {
           <div v-if="articles.related.length" class="art-related">
             <h3>Articles similaires</h3>
             <div class="art-related-list">
-              <BlogCard v-for="a in articles.related" :key="a.id" :article="a" />
+              <BlogCard v-for="(a, i) in articles.related" :key="a.id" v-reveal="{ type: 'right', delay: i * 100 }" :article="a" />
             </div>
           </div>
         </aside>
@@ -433,5 +458,41 @@ async function share() {
   .art-grid {
     grid-template-columns: 1fr;
   }
+}
+.art-hero-skeleton {
+  min-height: 360px;
+}
+.sk-bar {
+  height: 12px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0.06) 30%, rgba(255, 255, 255, 0.16) 50%, rgba(255, 255, 255, 0.06) 70%);
+  background-size: 300% 100%;
+  animation: skShimmer 1.4s linear infinite;
+}
+.sk-bar-lg {
+  height: 30px;
+}
+@keyframes skShimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+.art-hero-img {
+  overflow: hidden;
+}
+.copied-enter-active,
+.copied-leave-active {
+  transition:
+    opacity 0.3s,
+    translate 0.3s var(--ease-out);
+}
+.copied-enter-from,
+.copied-leave-to {
+  opacity: 0;
+  translate: 0 6px;
 }
 </style>

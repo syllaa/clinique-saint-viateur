@@ -107,7 +107,9 @@ async function backToForm() {
             </div>
           </div>
 
-          <div v-reveal class="form-wrap" :class="{ shake }" @animationend="shake = false">
+          <!-- Entrance on the wrapper, "shake" feedback on the card itself. -->
+          <div v-reveal>
+          <div class="form-wrap" :class="{ shake }" @animationend.self="shake = false">
             <Transition name="form-swap" mode="out-in">
               <form v-if="!sent" key="form" class="form-fields" :class="{ 'is-sending': sending }" novalidate @submit.prevent="submitForm">
                 <h3>Envoyer un message</h3>
@@ -188,6 +190,7 @@ async function backToForm() {
                 </button>
               </div>
             </Transition>
+          </div>
           </div>
         </div>
 

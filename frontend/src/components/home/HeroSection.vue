@@ -67,7 +67,9 @@ useScrollScene(heroRef, (kit, hero) => {
         <h1 id="hero-title" v-reveal="'words'" class="hero-title d1">
           Des soins de qualité,<br />au cœur de la <em>Riviera</em><br />Sideci.
         </h1>
-        <p v-reveal class="hero-sub d2">
+        <!-- No entrance animation on purpose: this paragraph is the page's
+             Largest Contentful Paint, it must be visible at first render. -->
+        <p class="hero-sub">
           Établissement médical privé de référence à Cocody, Abidjan. Une équipe de professionnels expérimentés, des
           équipements modernes et une prise en charge complète pour toute la famille.
         </p>
@@ -83,12 +85,13 @@ useScrollScene(heroRef, (kit, hero) => {
       </div>
 
       <div class="hero-right">
+        <!-- The wrapper carries the entrance; the card keeps its own
+             "breathing" animation (one element can't run both). -->
+        <div v-reveal="'scale'" class="d2">
         <a
-          v-reveal="'scale'"
           href="tel:+2252722590417"
-          class="urgence-box d2"
+          class="urgence-box"
           :class="{ rippling }"
-          aria-label="Urgences disponibles maintenant : appeler le 27 22 59 04 17, ligne principale 24h/24"
           @click="ripple"
           @animationend="rippling = false"
         >
@@ -96,6 +99,7 @@ useScrollScene(heroRef, (kit, hero) => {
           <span class="urgence-phone">27 22 59 04 17</span>
           <span class="urgence-sub">Ligne principale · 24h/24 · 7j/7 · Touchez pour appeler</span>
         </a>
+        </div>
         <ul class="info-stack">
           <li v-reveal="'right'" class="icard d2">
             <span class="icard-icon"><MapPin :size="18" aria-hidden="true" /></span>
@@ -127,7 +131,7 @@ useScrollScene(heroRef, (kit, hero) => {
       </div>
     </div>
 
-    <a href="#services" class="scroll-hint" aria-label="Descendre vers nos spécialités">
+    <a href="#services" class="scroll-hint" aria-label="Défiler vers nos spécialités">
       <span class="scroll-mouse" aria-hidden="true"><span class="scroll-wheel"></span></span>
       <span aria-hidden="true">Défiler</span>
     </a>
@@ -548,6 +552,21 @@ useScrollScene(heroRef, (kit, hero) => {
   }
 }
 @media (max-width: 640px) {
+  /* Phones: drop the costliest effects (backdrop blur on 8 cards, three
+     animated 500–1000 px rings). Solid tints look nearly identical. */
+  .hstat,
+  .icard,
+  .hero-badge {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(24, 8, 9, 0.72);
+  }
+  .ring {
+    animation: none;
+  }
+  .ring-3 {
+    display: none;
+  }
   #hero {
     padding: 112px 16px 88px;
   }

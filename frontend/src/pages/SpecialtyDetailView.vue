@@ -24,9 +24,23 @@ import SpecialtyMedia from "@/components/specialties/SpecialtyMedia.vue";
 import { TESTIMONIALS } from "@/constants/testimonials";
 import { applySeo, resetSeo } from "@/composables/useHead";
 import { mediaUrl } from "@/services/api";
+import { useScrollScene } from "@/motion/useScrollScene";
 import { useSpecialtiesStore } from "@/stores/specialties";
 
 const route = useRoute();
+
+// Cover photo drifts slower than the page while the hero scrolls away.
+const heroRef = ref<HTMLElement | null>(null);
+useScrollScene(heroRef, ({ gsap }, hero) => {
+  const img = hero.querySelector(".spd-hero-bg img");
+  if (!img) return;
+  gsap.fromTo(img, { yPercent: -5, scale: 1.1 }, {
+    yPercent: 10,
+    scale: 1,
+    ease: "none",
+    scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: true },
+  });
+});
 const specialties = useSpecialtiesStore();
 const loading = ref(true);
 const notFound = ref(false);
@@ -125,7 +139,7 @@ watch(
 
 <template>
 
-  <div v-if="loading" class="detail-loading"><Spinner :size="30" /></div>
+  <div v-if="loading" class="detail-loading" role="status" aria-live="polite"><Spinner :size="30" /><span class="sr-only">Chargement…</span></div>
 
   <template v-else-if="notFound || !specialties.current">
     <section class="section" style="padding-top: 128px">
@@ -140,7 +154,7 @@ watch(
   </template>
 
   <template v-else>
-    <section class="spd-hero" :class="{ 'has-image': heroImageUrl }">
+    <section ref="heroRef" class="spd-hero" :class="{ 'has-image': heroImageUrl }">
       <div v-if="heroImageUrl" class="spd-hero-bg">
         <img :src="heroImageUrl" :alt="specialties.current.image_alt || specialties.current.name" />
         <div class="spd-hero-overlay"></div>
@@ -165,9 +179,9 @@ watch(
           :name="specialties.current.name"
         />
         <span v-if="isAvailable24_7" v-reveal class="spd-badge"><Clock :size="14" aria-hidden="true" /> Disponible 24h/24</span>
-        <h1 v-reveal>{{ specialties.current.name }}</h1>
-        <p v-reveal>{{ specialties.current.description }}</p>
-        <div v-reveal class="spd-hero-btns">
+        <h1 v-reveal class="d1">{{ specialties.current.name }}</h1>
+        <p v-reveal class="d2">{{ specialties.current.description }}</p>
+        <div v-reveal class="spd-hero-btns d3">
           <a href="tel:+2252722590417" class="btn-primary"><Phone :size="16" aria-hidden="true" /> Prendre rendez-vous</a>
           <RouterLink to="/#contact" class="btn-outline-light">Nous contacter</RouterLink>
         </div>
@@ -182,7 +196,7 @@ watch(
           <p style="white-space: pre-line">{{ specialties.current.full_description }}</p>
         </div>
         <div class="spd-intro-stats">
-          <div v-for="(st, i) in introStats" :key="i" v-reveal class="spd-stat">
+          <div v-for="(st, i) in introStats" :key="i" v-reveal="{ type: 'scale', delay: i * 90 }" class="spd-stat">
             <div class="spd-stat-n">{{ st.n }}</div>
             <div class="spd-stat-l">{{ st.l }}</div>
           </div>
@@ -196,7 +210,7 @@ watch(
         <p v-reveal class="section-kicker">Nos services</p>
         <h2 v-reveal="'words'" class="section-title d1">Ce que nous proposons</h2>
         <div class="spd-svc-grid">
-          <div v-for="(item, i) in interventionItems" :key="i" v-reveal class="spd-svc-card">
+          <div v-for="(item, i) in interventionItems" :key="i" v-reveal="{ type: 'up', delay: (i % 3) * 90 }" class="spd-svc-card">
             <div class="spd-svc-icon"><component :is="item.icon" :size="22" :stroke-width="1.75" /></div>
             <h3>{{ item.title }}</h3>
             <p v-if="item.desc">{{ item.desc }}</p>
@@ -211,7 +225,7 @@ watch(
         <p v-reveal class="section-kicker" style="color: var(--sky-light)">Notre engagement</p>
         <h2 v-reveal="'words'" class="section-title d1" style="color: #fff">Un environnement médical de confiance</h2>
         <div class="spd-trust-grid">
-          <div v-for="(pt, i) in trustPoints" :key="i" v-reveal class="spd-trust-card">
+          <div v-for="(pt, i) in trustPoints" :key="i" v-reveal="{ type: 'up', delay: (i % 3) * 110 }" class="spd-trust-card">
             <div class="spd-trust-icon"><component :is="pt.icon" :size="24" :stroke-width="1.75" /></div>
             <h3>{{ pt.title }}</h3>
             <p>{{ pt.desc }}</p>
@@ -244,7 +258,7 @@ watch(
 
           <div v-if="specialties.current.faqs.length" class="spd-block">
             <h2>Questions fréquentes</h2>
-            <details v-for="f in specialties.current.faqs" :key="f.id" class="spd-faq">
+            <details v-for="f in specialties.current.faqs" :key="f.id" class="spd-faq faq-smooth">
               <summary>{{ f.question }}</summary>
               <p>{{ f.answer }}</p>
             </details>
@@ -278,7 +292,7 @@ watch(
         <p v-reveal class="section-kicker">Votre parcours</p>
         <h2 v-reveal="'words'" class="section-title d1">Avant votre prise en charge</h2>
         <div class="spd-timeline">
-          <div v-for="(step, i) in careSteps" :key="i" v-reveal class="spd-step">
+          <div v-for="(step, i) in careSteps" :key="i" v-reveal="{ type: 'up', delay: i * 120 }" class="spd-step">
             <div class="spd-step-icon"><component :is="step.icon" :size="20" :stroke-width="1.75" /></div>
             <div class="spd-step-n">{{ i + 1 }}</div>
             <h3>{{ step.title }}</h3>
@@ -316,11 +330,14 @@ watch(
 </template>
 
 <style scoped>
+/* Dark placeholder shaped like the hero: no white flash before it appears. */
 .detail-loading {
-  min-height: 100vh;
+  min-height: 480px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(155deg, var(--brand-900) 0%, var(--brand-700) 100%);
+  color: var(--brand-200);
 }
 .spd-hero {
   position: relative;

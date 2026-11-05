@@ -2,7 +2,8 @@
 import { Briefcase, Clock, Mail, MapPin, Phone } from "@lucide/vue";
 import { onMounted, ref } from "vue";
 
-import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
+import PageHeader from "@/components/common/PageHeader.vue";
+import SkeletonGrid from "@/components/common/SkeletonGrid.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
 import LoadError from "@/components/common/LoadError.vue";
 import LoadingOverlay from "@/components/common/LoadingOverlay.vue";
@@ -80,15 +81,15 @@ async function submitContact() {
 
 <template>
 
+  <PageHeader
+    kicker="Nous rejoindre"
+    title="Contactez-nous & rejoignez notre équipe"
+    lead="Une question, un besoin d'orientation ou l'envie de rejoindre nos équipes soignantes ? Nous sommes à votre écoute."
+    :crumbs="[{ label: 'Accueil', to: '/' }, { label: 'Nous rejoindre' }]"
+  />
+
   <section class="section join-hero">
     <div class="section-inner">
-      <Breadcrumbs :items="[{ label: 'Accueil', to: '/' }, { label: 'Nous rejoindre' }]" />
-      <p v-reveal class="section-kicker">Nous rejoindre</p>
-      <h1 v-reveal="'words'" class="section-title d1">Contactez-nous & rejoignez notre équipe</h1>
-      <p v-reveal class="section-lead d2">
-        Une question, un besoin d'orientation ou l'envie de rejoindre nos équipes soignantes ? Nous sommes à votre
-        écoute.
-      </p>
 
       <div class="join-grid">
         <div>
@@ -167,15 +168,15 @@ async function submitContact() {
             Découvrez nos opportunités de carrière et participez à une prise en charge médicale d'excellence.
           </p>
         </div>
-        <div v-reveal class="jobs-photo">
+        <div v-reveal="'mask'" class="jobs-photo">
           <img :src="teamPhoto" alt="L'équipe de la Clinique Médicale Saint Viateur" loading="lazy" />
         </div>
       </div>
 
-      <div v-if="jobsLoading" style="position: relative; min-height: 160px"><LoadingOverlay message="Chargement des offres…" /></div>
+      <SkeletonGrid v-if="jobsLoading" :count="3" :min-width="300" :media="false" />
       <LoadError v-else-if="jobsError" title="Impossible de charger les offres d'emploi" @retry="loadJobs" />
       <div v-else-if="jobs.items.length" class="jobs-grid">
-        <JobOfferCard v-for="o in jobs.items" :key="o.id" :offer="o" />
+        <JobOfferCard v-for="(o, i) in jobs.items" :key="o.id" v-reveal="{ type: 'up', delay: (i % 3) * 90 }" :offer="o" />
       </div>
       <EmptyState
         v-else
@@ -190,7 +191,6 @@ async function submitContact() {
 
 <style scoped>
 .join-hero {
-  padding-top: 128px;
   background: var(--bg-alt);
 }
 .join-grid {

@@ -212,38 +212,45 @@ button {
   margin-bottom: 52px;
 }
 
-/* ─── SCROLL REVEAL (v-reveal, see directives/reveal.ts) ─── */
+/* ─── SCROLL REVEAL (v-reveal, see directives/reveal.ts) ───
+   Entrances are CSS *animations*, not transitions: a component that defines
+   its own `transition` (hover effects on cards…) can no longer cancel them.
+   fill-mode "backwards" applies the start state during the stagger delay and
+   then hands the element back to its normal styles, so hover transforms keep
+   working once the entrance is over. */
 .rv {
-  opacity: 0;
-  transform: translateY(30px);
-  transition:
-    opacity 0.7s var(--ease-spring),
-    transform 0.7s var(--ease-spring);
-  transition-delay: calc(var(--intro-delay, 0ms) + var(--rv-delay, 0ms));
+  --rv-from: translateY(30px);
 }
 .rv.rl,
 .rv-left {
-  transform: translateX(-32px);
+  --rv-from: translateX(-32px);
 }
 .rv.rr,
 .rv-right {
-  transform: translateX(32px);
+  --rv-from: translateX(32px);
 }
 .rv-fade {
-  transform: none;
+  --rv-from: none;
 }
 .rv-scale {
-  transform: scale(0.94);
+  --rv-from: scale(0.94);
 }
-.rv.vis {
-  opacity: 1;
-  transform: none;
+.rv:not(.vis):not(.rv-mask):not(.rv-words) {
+  opacity: 0;
+  transform: var(--rv-from);
+}
+.rv.vis:not(.rv-mask):not(.rv-words) {
+  animation: rvIn 0.8s var(--ease-spring) calc(var(--intro-delay, 0ms) + var(--rv-delay, 0ms)) backwards;
+}
+@keyframes rvIn {
+  from {
+    opacity: 0;
+    transform: var(--rv-from);
+  }
 }
 
 /* Wipe in from the top. */
 .rv-mask {
-  opacity: 1;
-  transform: none;
   clip-path: inset(0 0 100% 0);
   transition: clip-path 1.1s var(--ease-out);
   transition-delay: calc(var(--intro-delay, 0ms) + var(--rv-delay, 0ms));
@@ -253,10 +260,6 @@ button {
 }
 
 /* Words rise one after another from behind their own mask. */
-.rv-words {
-  opacity: 1;
-  transform: none;
-}
 .rv-words .rv-w {
   display: inline-block;
   overflow: hidden;
@@ -275,22 +278,18 @@ button {
   transform: none;
 }
 
-/* Legacy stagger helpers: also feed the per-type delay variable. */
+/* Stagger helpers (delay before the entrance starts). */
 .d1 {
   --rv-delay: 80ms;
-  transition-delay: calc(var(--intro-delay, 0ms) + 0.08s) !important;
 }
 .d2 {
   --rv-delay: 160ms;
-  transition-delay: calc(var(--intro-delay, 0ms) + 0.16s) !important;
 }
 .d3 {
   --rv-delay: 260ms;
-  transition-delay: calc(var(--intro-delay, 0ms) + 0.26s) !important;
 }
 .d4 {
   --rv-delay: 380ms;
-  transition-delay: calc(var(--intro-delay, 0ms) + 0.38s) !important;
 }
 
 /* While the opening intro plays (main.ts), the hero's entrance waits for

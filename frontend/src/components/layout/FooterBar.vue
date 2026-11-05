@@ -13,7 +13,7 @@ const { reducedMotion, toggle: toggleMotion } = useMotionPreference();
   <footer class="site-footer">
     <div class="footer-grid">
       <div class="footer-col footer-about">
-        <RouterLink to="/" class="footer-brand" aria-label="Clinique Médicale Saint Viateur — Accueil">
+        <RouterLink to="/" class="footer-brand">
           <BrandMark :size="40" />
           <span>Clinique Médicale<br />Saint Viateur</span>
         </RouterLink>

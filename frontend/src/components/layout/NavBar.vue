@@ -78,7 +78,7 @@ function goAdmin() {
 
 <template>
   <nav id="nav" :class="{ stuck: solid, 'menu-open': menuOpen }" aria-label="Navigation principale">
-    <RouterLink to="/" class="nav-logo" aria-label="Clinique Médicale Saint Viateur — Accueil">
+    <RouterLink to="/" class="nav-logo">
       <BrandMark :size="38" />
       <div class="nav-wordmark">
         Clinique Médicale Saint Viateur<span>Cocody · Abidjan · C.I.</span>

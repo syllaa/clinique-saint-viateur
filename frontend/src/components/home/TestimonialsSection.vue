@@ -24,7 +24,7 @@ const starCount = (stars: string) => [...stars].filter((c) => c === "★").lengt
         >
           <Quote class="quote-mark" :size="44" aria-hidden="true" />
           <!-- Stars fill one by one once the card is revealed. -->
-          <p class="testi-stars" :aria-label="`Note : ${starCount(t.stars)} sur 5`">
+          <p class="testi-stars" role="img" :aria-label="`Note : ${starCount(t.stars)} sur 5`">
             <span v-for="n in 5" :key="n" class="star" :class="{ on: n <= starCount(t.stars) }" :style="{ '--n': n }" aria-hidden="true">★</span>
           </p>
           <blockquote class="testi-text">{{ t.text }}</blockquote>

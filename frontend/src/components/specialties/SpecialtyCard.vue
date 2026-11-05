@@ -8,7 +8,8 @@ defineProps<{ specialty: SpecialtyListItem }>();
 </script>
 
 <template>
-  <RouterLink :to="`/specialites/${specialty.slug}`" class="spc-card" v-reveal>
+  <!-- Reveal and tilt are applied by the parent list (v-reveal / v-tilt). -->
+  <RouterLink :to="`/specialites/${specialty.slug}`" class="spc-card">
     <SpecialtyMedia
       class="spc-media"
       :media-type="specialty.media_type"
@@ -37,10 +38,16 @@ defineProps<{ specialty: SpecialtyListItem }>();
     box-shadow 0.35s,
     border-color 0.35s;
 }
+/* Hover: lift + 3D tilt towards the cursor (variables set by v-tilt). */
 .spc-card:hover {
-  transform: translateY(-7px);
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-7px);
   box-shadow: 0 18px 44px rgba(150, 12, 30, 0.11);
   border-color: #e8a8ae;
+  transition:
+    transform 0.15s linear,
+    box-shadow 0.35s,
+    border-color 0.35s;
+  transition-delay: 0s;
 }
 .spc-card:hover :deep(.specialty-media.card:not(.is-image)) {
   transform: scale(1.12) rotate(-6deg);

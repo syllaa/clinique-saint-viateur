@@ -25,3 +25,22 @@ Objectifs de la refonte : LCP < 2,5 s, CLS < 0,05 et INP < 200 ms sur mobile.
 ## Limites de la mesure
 - « Cache des fichiers statiques » et « compression du texte » sont des artefacts de `vite preview` : en production, ils dépendent du serveur web (nginx ou autre), à configurer à l'étape 9.
 - Le site est mesuré en local : les temps réels dépendront de l'hébergement et du réseau mobile en Côte d'Ivoire.
+
+---
+
+## Après l'étape 5 (pages internes) — 5 novembre 2026
+
+Même protocole (build de production, `vite preview`, API locale).
+
+| Page | Format | Perf. | Access. | Bonnes prat. | SEO | FCP | LCP | TBT | CLS |
+|---|---|---|---|---|---|---|---|---|---|
+| Accueil | Mobile | 59 *(68)* | 100 *(90)* | 100 *(96)* | 100 *(92)* | 4,5 s | 5,8 s | 290 ms | 0 |
+| Accueil | Desktop | 87 *(89)* | 100 *(94)* | 100 | 100 | 0,7 s | 1,5 s | 160 ms | 0,003 |
+| Spécialités | Mobile | 80 *(85)* | 100 *(88)* | 100 | 100 | 3,0 s | 4,1 s | 30 ms | 0 |
+| Spécialités | Desktop | 96 *(78)* | 100 *(93)* | 100 | 100 | 0,8 s | 1,2 s | 0 ms | **0** *(0,342)* |
+| Blog | Mobile | 80 *(81)* | 100 *(90)* | 100 | 100 | 3,1 s | 4,0 s | 0 ms | 0 |
+| Blog | Desktop | 97 *(77)* | 100 *(96)* | 100 | 100 | 0,7 s | 1,1 s | 0 ms | **0** *(0,374)* |
+
+*Entre parenthèses : valeur de référence avant refonte.*
+
+**Reste à traiter (étape 9)** : la performance de l'accueil sur mobile a baissé avec la refonte animée (LCP 5,8 s, contre 4,3 s avant). Pistes : chargement différé des sections situées sous la ligne de flottaison, préchargement de l'image du hero, polices hébergées localement, allègement du CSS de l'accueil.

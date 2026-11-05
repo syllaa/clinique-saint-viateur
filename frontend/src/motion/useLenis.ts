@@ -20,6 +20,9 @@ export function getLenis(): Lenis | null {
 
 export function startLenis(): Promise<void> {
   if (motionBridge.lenis) return Promise.resolve();
+  // Touch screens keep native scrolling anyway: don't pay for Lenis there
+  // (measured: ~600 ms of main-thread work on a mid-range phone).
+  if (!window.matchMedia?.("(hover: hover) and (pointer: fine)").matches) return Promise.resolve();
   starting ??= import("lenis")
     .then(({ default: LenisCtor }) => {
       motionBridge.lenis = new LenisCtor({
@@ -73,6 +76,26 @@ export function scrollToHash(hash: string, timeoutMs = 2000): void {
     if (performance.now() - started < timeoutMs) requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
+}
+
+/**
+ * Restores a previous scroll position (browser back/forward). The page may
+ * still be growing (API data, images), so it retries until it is tall
+ * enough or the timeout expires.
+ */
+export function restoreScroll(top: number, timeoutMs = 1500): void {
+  const started = performance.now();
+  const jump = () => {
+    const lenis = motionBridge.lenis;
+    if (lenis) lenis.scrollTo(top, { immediate: true, force: true });
+    window.scrollTo(0, top);
+  };
+  const tick = () => {
+    jump();
+    const reachable = document.documentElement.scrollHeight - window.innerHeight >= top - 2;
+    if (!reachable && performance.now() - started < timeoutMs) requestAnimationFrame(tick);
+  };
+  tick();
 }
 
 /** Jumps to the top instantly (route changes). */

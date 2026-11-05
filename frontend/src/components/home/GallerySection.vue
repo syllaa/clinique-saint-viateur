@@ -185,7 +185,7 @@ figcaption {
 .gallery-n {
   font-family: "Cormorant Garamond", serif;
   font-size: 1.4rem;
-  color: var(--brand-400);
+  color: var(--brand-600);
 }
 
 @media (max-width: 980px) {

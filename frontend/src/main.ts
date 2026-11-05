@@ -27,7 +27,11 @@ const preloader = document.getElementById("preloader");
 if (preloader) {
   let playIntro = false;
   try {
-    playIntro = location.pathname === "/" && !isReducedMotion() && !sessionStorage.getItem("sv_intro");
+    // Desktop only: on phones (slower CPU and network) the curtain delayed the
+    // first readable content by ~2 s (measured), too much for a clinic site
+    // people may open in an emergency.
+    const desktop = window.matchMedia?.("(hover: hover) and (pointer: fine) and (min-width: 981px)").matches;
+    playIntro = desktop && location.pathname === "/" && !isReducedMotion() && !sessionStorage.getItem("sv_intro");
     sessionStorage.setItem("sv_intro", "1");
   } catch {
     playIntro = false;

@@ -120,6 +120,76 @@
   margin-top: 34px;
 }
 
+/* ─── Search field with icon (list pages) ─── */
+.list-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+  padding: 0 16px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--muted);
+  transition:
+    border-color var(--dur-fast),
+    box-shadow var(--dur-fast);
+}
+.list-search:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+.list-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+}
+
+/* ─── Smooth <details> accordions (FAQ) ───
+   Progressive enhancement: browsers supporting ::details-content and
+   interpolate-size animate the height; others open instantly as before. */
+:root {
+  interpolate-size: allow-keywords;
+}
+.faq-smooth::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition:
+    block-size 0.4s var(--ease-out),
+    content-visibility 0.4s allow-discrete;
+}
+.faq-smooth[open]::details-content {
+  block-size: auto;
+}
+.faq-smooth summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.faq-smooth summary::-webkit-details-marker {
+  display: none;
+}
+.faq-smooth summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--blue);
+  transition: rotate 0.3s var(--ease-out);
+}
+.faq-smooth[open] summary::after {
+  rotate: 45deg;
+}
+
 /* ─── Inline meta row (date · author · location…) ─── */
 .meta-row {
   display: flex;
@@ -198,4 +268,11 @@
 /* The skip link moves focus to <main tabindex="-1">: no ring on the container itself. */
 #main-content:focus {
   outline: none;
+}
+/* The footer lives outside the lazily-loaded page: without a minimum height,
+   it would first paint at the top of the screen and then be pushed down when
+   the page arrives (a large layout shift), and jump up during transitions. */
+#main-content {
+  min-height: 100vh;
+  min-height: 100svh;
 }

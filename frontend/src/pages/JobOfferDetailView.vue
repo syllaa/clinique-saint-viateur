@@ -131,7 +131,7 @@ async function submitApplication() {
 
 <template>
 
-  <div v-if="loading" class="detail-loading"><Spinner :size="30" /></div>
+  <div v-if="loading" class="detail-loading" role="status" aria-live="polite"><Spinner :size="30" /><span class="sr-only">Chargement…</span></div>
 
   <template v-else-if="notFound || !jobs.current">
     <section class="section" style="padding-top: 128px">
@@ -155,12 +155,12 @@ async function submitApplication() {
             { label: jobs.current.title },
           ]"
         />
-        <div class="job-hero-tags">
+        <div v-reveal class="job-hero-tags">
           <span class="job-contract">{{ jobs.current.contract_type }}</span>
           <span v-if="jobs.current.department" class="job-dept">{{ jobs.current.department }}</span>
         </div>
-        <h1>{{ jobs.current.title }}</h1>
-        <div class="job-meta">
+        <h1 v-reveal class="d1">{{ jobs.current.title }}</h1>
+        <div v-reveal class="job-meta d2">
           <span class="meta-item"><MapPin :size="14" aria-hidden="true" />{{ jobs.current.location }}</span>
           <span v-if="jobs.current.experience_level" class="meta-item"><GraduationCap :size="14" aria-hidden="true" />{{ jobs.current.experience_level }}</span>
           <span v-if="jobs.current.application_deadline" class="meta-item">
@@ -173,25 +173,25 @@ async function submitApplication() {
     <section class="section">
       <div class="section-inner job-grid">
         <div class="job-body">
-          <p v-if="jobs.current.short_description" class="job-lead">{{ jobs.current.short_description }}</p>
+          <p v-if="jobs.current.short_description" v-reveal class="job-lead">{{ jobs.current.short_description }}</p>
 
-          <div v-if="jobs.current.description" class="job-block" v-html="jobs.current.description"></div>
+          <div v-if="jobs.current.description" v-reveal class="job-block" v-html="jobs.current.description"></div>
 
-          <div v-if="jobs.current.missions" class="job-block">
+          <div v-if="jobs.current.missions" v-reveal class="job-block">
             <h2>Missions</h2>
             <p style="white-space: pre-line">{{ jobs.current.missions }}</p>
           </div>
-          <div v-if="jobs.current.profile_requirements" class="job-block">
+          <div v-if="jobs.current.profile_requirements" v-reveal class="job-block">
             <h2>Profil recherché</h2>
             <p style="white-space: pre-line">{{ jobs.current.profile_requirements }}</p>
           </div>
-          <div v-if="jobs.current.skills" class="job-block">
+          <div v-if="jobs.current.skills" v-reveal class="job-block">
             <h2>Compétences</h2>
             <p style="white-space: pre-line">{{ jobs.current.skills }}</p>
           </div>
         </div>
 
-        <aside class="job-side">
+        <aside v-reveal="'right'" class="job-side d2">
           <div v-if="!submitted" class="job-apply-card">
             <h3>Postuler à cette offre</h3>
             <div class="job-form" :class="{ 'is-sending': submitting }">
@@ -229,11 +229,14 @@ async function submitApplication() {
 </template>
 
 <style scoped>
+/* Dark placeholder shaped like the hero: no white flash before it appears. */
 .detail-loading {
-  min-height: 100vh;
+  min-height: 480px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(155deg, var(--brand-900) 0%, var(--brand-700) 100%);
+  color: var(--brand-200);
 }
 .job-hero {
   padding-top: 128px;
