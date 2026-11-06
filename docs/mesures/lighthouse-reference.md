@@ -65,3 +65,25 @@ Vérifications manuelles (Chrome) :
 - Tablette (768 px) : menu burger, mise en page une colonne, aucun débordement horizontal.
 
 À traiter à l'étape 9 : décalage de mise en page dû au chargement des polices sur la page Offres mobile (CLS 0,068).
+
+---
+
+## Étape 9 (performance) — mesures finales, 6 novembre 2026
+
+Build de production, API et base de données démarrées, Lighthouse 12.6.1.
+
+| Page | Format | Perf. | Access. | Bonnes prat. | SEO | FCP | LCP | TBT | CLS |
+|---|---|---|---|---|---|---|---|---|---|
+| Accueil | Mobile | **74–84** *(68)* | 100 | 100 | 100 | **1,4 s** *(3,3)* | 3,7–4,6 s *(4,3)* | 250–390 ms | 0 |
+| Accueil | Desktop | 91–92 *(89)* | 100 | 100 | 100 | 0,4 s | 1,4 s | 90–100 ms | 0 |
+| Spécialités | Mobile | 88 *(85)* | 100 | 100 | 100 | 1,4 s | 3,7 s | 150 ms | 0 |
+| Spécialités | Desktop | 99 *(78)* | 100 | 100 | 100 | 0,3 s | 1,0 s | 10 ms | 0 *(0,342)* |
+| Blog | Mobile | 81 *(81)* | 100 | 100 | 100 | 1,4 s | 4,0 s | 280 ms | 0 |
+| Blog | Desktop | 99 *(77)* | 100 | 100 | 100 | 0,3 s | 1,0 s | 0 ms | 0 *(0,374)* |
+| Offres | Mobile | 89 | 100 | 100 | 100 | 1,4 s | 3,7 s | 80 ms | 0 |
+| Offres | Desktop | 98 | 96* | 100 | 100 | 0,4 s | 1,1 s | 20 ms | 0 |
+
+*Entre parenthèses : référence avant refonte. Accueil : deux mesures successives (écart normal de la simulation mobile).*
+\* Faux positif connu : contraste mesuré pendant le fondu d'apparition des cartes.
+
+Leviers appliqués : polices auto-hébergées (fin de la requête bloquante vers Google Fonts), sections de l'accueil chargées en morceaux séparés, GSAP/ScrollTrigger réservés aux écrans ≥ 981 px (≈ 1,5 s de calcul économisé sur mobile), canvas du hero désactivé sur téléphone.
