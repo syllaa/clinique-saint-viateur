@@ -1,143 +1,143 @@
 1
-00:00:00,400 --> 00:00:04,792
+00:00:00,400 --> 00:00:03,917
 Voici le nouveau site de la Clinique Médicale Saint Viateur.
 
 2
-00:00:04,792 --> 00:00:08,672
+00:00:03,917 --> 00:00:07,024
 Plus vivant, plus rapide, et pensé pour vos patients.
 
 3
-00:00:09,972 --> 00:00:12,881
+00:00:08,333 --> 00:00:10,715
 Dès l'ouverture, votre marque s'affiche,
 
 4
-00:00:12,881 --> 00:00:15,718
+00:00:10,715 --> 00:00:13,036
 puis l'essentiel : vos urgences 24h/24,
 
 5
-00:00:15,718 --> 00:00:19,136
+00:00:13,036 --> 00:00:15,834
 avec un numéro qui s'appelle d'un simple geste,
 
 6
-00:00:19,136 --> 00:00:22,045
+00:00:15,834 --> 00:00:18,215
 et l'état d'ouverture des consultations,
 
 7
-00:00:22,045 --> 00:00:24,809
+00:00:18,215 --> 00:00:20,477
 calculé en direct à l'heure d'Abidjan.
 
 8
-00:00:26,109 --> 00:00:29,757
+00:00:21,777 --> 00:00:24,710
 Vos spécialités sont présentées en cartes animées,
 
 9
-00:00:29,757 --> 00:00:31,581
+00:00:24,710 --> 00:00:26,176
 qui réagissent au survol.
 
 10
-00:00:31,581 --> 00:00:34,499
+00:00:26,176 --> 00:00:28,521
 Chacune mène à sa propre page détaillée.
 
 11
-00:00:37,292 --> 00:00:40,432
+00:00:32,960 --> 00:00:35,376
 Votre histoire est racontée en quatre chapitres,
 
 12
-00:00:40,432 --> 00:00:44,291
+00:00:35,376 --> 00:00:38,346
 avec une ligne de rythme cardiaque qui se dessine au fil de
 
 13
-00:00:44,291 --> 00:00:45,011
+00:00:38,346 --> 00:00:38,900
 la lecture.
 
 14
-00:00:45,011 --> 00:00:47,889
+00:00:38,900 --> 00:00:41,115
 Vient ensuite une visite de l'établissement,
 
 15
-00:00:47,889 --> 00:00:49,394
+00:00:41,115 --> 00:00:42,272
 avec vos vraies photos.
 
 16
-00:00:55,400 --> 00:00:58,168
+00:00:51,068 --> 00:00:53,203
 Le numéro d'urgence revient au bon moment.
 
 17
-00:00:58,168 --> 00:01:01,265
+00:00:53,203 --> 00:00:55,592
 Les horaires mettent en avant le jour en cours,
 
 18
-00:01:01,265 --> 00:01:04,889
+00:00:55,592 --> 00:00:58,388
 et le formulaire de contact est protégé contre le spam.
 
 19
-00:01:07,108 --> 00:01:11,087
+00:01:02,776 --> 00:01:06,069
 Sur téléphone, là où se trouvent la plupart de vos patients,
 
 20
-00:01:11,087 --> 00:01:13,739
+00:01:06,069 --> 00:01:08,265
 tout reste accessible : le menu complet,
 
 21
-00:01:13,739 --> 00:01:16,127
+00:01:08,265 --> 00:01:10,240
 et l'appel des urgences en un geste.
 
 22
-00:01:19,841 --> 00:01:22,035
+00:01:15,510 --> 00:01:17,287
 Chaque page profite du même soin :
 
 23
-00:01:22,035 --> 00:01:24,874
+00:01:17,287 --> 00:01:19,586
 des transitions fluides, des filtres animés,
 
 24
-00:01:24,874 --> 00:01:28,553
+00:01:19,586 --> 00:01:22,566
 et une barre de progression pour la lecture des articles.
 
 25
-00:01:32,075 --> 00:01:33,381
+00:01:27,743 --> 00:01:28,778
 Côté administration,
 
 26
-00:01:33,381 --> 00:01:36,450
+00:01:28,778 --> 00:01:31,210
 votre équipe garde la main sur les spécialités,
 
 27
-00:01:36,450 --> 00:01:40,172
+00:01:31,210 --> 00:01:34,160
 les articles, les offres, le recrutement et les messages.
 
 28
-00:01:40,172 --> 00:01:43,959
+00:01:34,160 --> 00:01:37,161
 Elle peut désormais ajouter une vidéo à chaque spécialité,
 
 29
-00:01:43,959 --> 00:01:47,812
+00:01:37,161 --> 00:01:40,215
 et le site l'alerte tant que le mot de passe par défaut n'a
 
 30
-00:01:47,812 --> 00:01:48,791
+00:01:40,215 --> 00:01:40,991
 pas été changé.
 
 31
-00:01:50,092 --> 00:01:51,845
+00:01:42,291 --> 00:01:43,696
 Le résultat est mesuré :
 
 32
-00:01:51,845 --> 00:01:54,841
+00:01:43,696 --> 00:01:46,097
 accessibilité et référencement à 100/100,
 
 33
-00:01:54,841 --> 00:01:59,152
+00:01:46,097 --> 00:01:49,551
 un premier affichage sur mobile plus de 2 fois plus rapide,
 
 34
-00:01:59,152 --> 00:02:01,563
+00:01:49,551 --> 00:01:51,483
 et 83 tests automatiques au vert.
 
 35
-00:02:02,863 --> 00:02:04,913
+00:01:52,791 --> 00:01:54,340
 Votre nouveau site est prêt.
 
 36
-00:02:04,913 --> 00:02:07,916
+00:01:54,340 --> 00:01:56,607
 Il ne reste plus qu'à le mettre en ligne.
