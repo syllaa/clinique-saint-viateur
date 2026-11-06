@@ -13,7 +13,8 @@ export type AdminTab =
   | "jobs-applications"
   | "promotions-list"
   | "promotions-editor"
-  | "backups";
+  | "backups"
+  | "security";
 
 const TAB_TITLES: Record<AdminTab, string> = {
   dashboard: "Vue d'ensemble",
@@ -29,6 +30,7 @@ const TAB_TITLES: Record<AdminTab, string> = {
   "promotions-list": "Offres promotionnelles",
   "promotions-editor": "Éditeur d'offre promotionnelle",
   backups: "Sauvegardes",
+  security: "Sécurité du compte",
 };
 
 const activeTab = ref<AdminTab>("dashboard");

@@ -22,9 +22,15 @@ backend/uploads/images/*
 backend/uploads/cvs/*
 !backend/uploads/images/.gitkeep
 !backend/uploads/cvs/.gitkeep
+backend/uploads/videos/*
+!backend/uploads/videos/.gitkeep
 backend/backups/*
 !backend/backups/.gitkeep
 *.sql
+
+# Client presentation media (heavy, not source)
+docs/*.mp4
+docs/*.wav
 
 # OS / editors
 .DS_Store

@@ -31,9 +31,13 @@ const mediaType = ref<SpecialtyMediaType>("icon");
 const iconName = ref<string | null>(null);
 const coverImageUrl = ref<string | null>(null);
 const imageAlt = ref("");
+const coverVideoUrl = ref<string | null>(null);
 
 const saving = ref(false);
 const uploadingImage = ref(false);
+const uploadingVideo = ref(false);
+const MAX_VIDEO_MB = 15;
+const RECOMMENDED_VIDEO_MB = 2.5;
 const savedOk = ref(false);
 
 const newDoctorName = ref("");
@@ -60,6 +64,7 @@ function resetForm() {
   iconName.value = null;
   coverImageUrl.value = null;
   imageAlt.value = "";
+  coverVideoUrl.value = null;
 }
 
 async function loadForEdit(id: number) {
@@ -78,6 +83,7 @@ async function loadForEdit(id: number) {
   iconName.value = specialty.icon_name;
   coverImageUrl.value = specialty.cover_image_url;
   imageAlt.value = specialty.image_alt || "";
+  coverVideoUrl.value = specialty.cover_video_url;
 }
 
 onMounted(() => {
@@ -121,6 +127,50 @@ async function removeImage() {
   mediaType.value = "icon";
 }
 
+async function onVideoChange(e: Event) {
+  const input = e.target as HTMLInputElement;
+  const file = input.files?.[0];
+  input.value = "";
+  if (!file) return;
+  const ext = file.name.split(".").pop()?.toLowerCase();
+  if (ext !== "mp4" && ext !== "webm") {
+    await alertDialog("Formats acceptés : MP4 ou WebM.", { title: "Format non pris en charge" });
+    return;
+  }
+  const sizeMb = file.size / (1024 * 1024);
+  if (sizeMb > MAX_VIDEO_MB) {
+    await alertDialog(`La vidéo fait ${sizeMb.toFixed(1)} Mo : la limite est de ${MAX_VIDEO_MB} Mo.`, {
+      title: "Fichier trop lourd",
+    });
+    return;
+  }
+  if (sizeMb > RECOMMENDED_VIDEO_MB) {
+    const ok = await confirmDialog(
+      `Cette vidéo fait ${sizeMb.toFixed(1)} Mo. Au-delà de ${RECOMMENDED_VIDEO_MB} Mo, elle ralentira la page sur mobile. ` +
+        "Voir docs/medias-a-generer.md pour la compresser. L'envoyer quand même ?",
+      { title: "Vidéo lourde", confirmLabel: "Envoyer quand même" },
+    );
+    if (!ok) return;
+  }
+  uploadingVideo.value = true;
+  try {
+    coverVideoUrl.value = await uploadService.uploadVideo(file);
+  } catch {
+    await alertDialog("Échec de l'envoi de la vidéo (MP4 ou WebM valide requis).", { title: "Erreur d'upload" });
+  } finally {
+    uploadingVideo.value = false;
+  }
+}
+
+async function removeVideo() {
+  const ok = await confirmDialog("Retirer la vidéo de cette spécialité ? Le fichier sera supprimé à l'enregistrement.", {
+    title: "Retirer la vidéo",
+    danger: true,
+    confirmLabel: "Retirer",
+  });
+  if (ok) coverVideoUrl.value = null;
+}
+
 async function save() {
   if (!name.value.trim()) {
     await alertDialog("Le nom de la spécialité est requis.", { title: "Champ requis" });
@@ -148,6 +198,7 @@ async function save() {
       icon_name: mediaType.value === "icon" ? iconName.value : null,
       cover_image_url: mediaType.value === "image" ? coverImageUrl.value : null,
       image_alt: mediaType.value === "image" ? imageAlt.value.trim() || null : null,
+      cover_video_url: coverVideoUrl.value,
     };
     if (isEdit.value && currentId.value) {
       await specialties.update(currentId.value, payload);
@@ -369,6 +420,31 @@ async function removeFaqRow(id: number) {
           />
         </div>
 
+        <div class="video-block">
+          <div class="a-sec-title" style="margin-bottom: 6px">Vidéo de couverture (facultatif)</div>
+          <p class="media-dropzone-hint" style="margin-bottom: 10px">
+            Fond animé de l'en-tête de la page publique. Sans son, 4 à 10 s en boucle, MP4 ou WebM, idéalement moins de
+            2,5 Mo (limite {{ MAX_VIDEO_MB }} Mo). Sans vidéo, la photo ou le fond habituel s'affiche.
+          </p>
+          <div v-if="!coverVideoUrl" class="media-dropzone">
+            <input id="specialty-video-input" type="file" accept="video/mp4,video/webm" style="display: none" @change="onVideoChange" />
+            <label for="specialty-video-input" class="media-dropzone-label">
+              <span style="font-size: 1.5rem">🎬</span>
+              <span>Cliquez pour choisir une vidéo</span>
+              <span class="media-dropzone-hint">MP4 ou WebM — {{ MAX_VIDEO_MB }} Mo max</span>
+            </label>
+          </div>
+          <div v-else class="media-image-preview">
+            <video :src="mediaUrl(coverVideoUrl)!" muted loop playsinline controls preload="metadata" class="video-preview"></video>
+            <div class="media-image-actions">
+              <label for="specialty-video-replace" class="a-btn-sm">Remplacer</label>
+              <input id="specialty-video-replace" type="file" accept="video/mp4,video/webm" style="display: none" @change="onVideoChange" />
+              <button class="a-btn-sm del" type="button" @click="removeVideo">Retirer</button>
+            </div>
+          </div>
+          <div v-if="uploadingVideo" class="media-uploading"><Spinner :size="14" /> Envoi de la vidéo…</div>
+        </div>
+
         <label class="al" style="margin-top: 14px">Horaires de consultation</label>
         <input class="ai" v-model="consultationHours" type="text" placeholder="Lun–Ven 08h–18h" />
 
@@ -468,6 +544,18 @@ async function removeFaqRow(id: number) {
 .media-image-actions .a-btn-sm {
   display: inline-flex;
   align-items: center;
+}
+.video-block {
+  margin-top: 16px;
+  padding-top: 13px;
+  border-top: 1px solid var(--a-border);
+}
+.video-preview {
+  width: 100%;
+  max-height: 220px;
+  border-radius: 8px;
+  background: #000;
+  display: block;
 }
 .media-uploading {
   display: flex;

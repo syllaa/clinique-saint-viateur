@@ -10,3 +10,9 @@ router = APIRouter(prefix="/api/uploads", tags=["uploads"], dependencies=[Depend
 async def upload_image(file: UploadFile = File(...)):
     filename = await service.save_image(file)
     return {"url": service.image_url(filename)}
+
+
+@router.post("/videos")
+async def upload_video(file: UploadFile = File(...)):
+    filename = await service.save_video(file)
+    return {"url": service.video_url(filename)}

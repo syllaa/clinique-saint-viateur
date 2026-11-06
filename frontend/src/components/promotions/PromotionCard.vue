@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Gift } from "@lucide/vue";
 import { computed, ref } from "vue";
 
 import { mediaUrl } from "@/services/api";
@@ -44,7 +45,7 @@ async function react(type: ReactionType) {
         loading="lazy"
         decoding="async"
       />
-      <div v-else class="promo-thumb-fallback">🎁</div>
+      <div v-else class="promo-thumb-fallback"><Gift :size="36" aria-hidden="true" /></div>
       <span v-if="promotion.value_label" class="promo-value">{{ promotion.value_label }}</span>
       <span v-if="!canReact" class="promo-expired-badge">Offre expirée</span>
     </div>
@@ -162,7 +163,7 @@ async function react(type: ReactionType) {
   margin-bottom: 8px;
 }
 .promo-body h3 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.15rem;
   color: var(--heading);
   line-height: 1.3;
@@ -229,5 +230,8 @@ async function react(type: ReactionType) {
 }
 .promo-react-btn.active .promo-react-count {
   color: var(--blue);
+}
+.promo-thumb-fallback {
+  color: var(--brand-600);
 }
 </style>

@@ -1,0 +1,143 @@
+1
+00:00:00,400 --> 00:00:03,917
+Voici le nouveau site de la Clinique Médicale Saint Viateur.
+
+2
+00:00:03,917 --> 00:00:07,024
+Plus vivant, plus rapide, et pensé pour vos patients.
+
+3
+00:00:08,333 --> 00:00:10,715
+Dès l'ouverture, votre marque s'affiche,
+
+4
+00:00:10,715 --> 00:00:13,036
+puis l'essentiel : vos urgences 24h/24,
+
+5
+00:00:13,036 --> 00:00:15,834
+avec un numéro qui s'appelle d'un simple geste,
+
+6
+00:00:15,834 --> 00:00:18,215
+et l'état d'ouverture des consultations,
+
+7
+00:00:18,215 --> 00:00:20,477
+calculé en direct à l'heure d'Abidjan.
+
+8
+00:00:21,777 --> 00:00:24,710
+Vos spécialités sont présentées en cartes animées,
+
+9
+00:00:24,710 --> 00:00:26,176
+qui réagissent au survol.
+
+10
+00:00:26,176 --> 00:00:28,521
+Chacune mène à sa propre page détaillée.
+
+11
+00:00:34,885 --> 00:00:37,301
+Votre histoire est racontée en quatre chapitres,
+
+12
+00:00:37,301 --> 00:00:40,271
+avec une ligne de rythme cardiaque qui se dessine au fil de
+
+13
+00:00:40,271 --> 00:00:40,825
+la lecture.
+
+14
+00:00:40,825 --> 00:00:43,040
+Vient ensuite une visite de l'établissement,
+
+15
+00:00:43,040 --> 00:00:44,197
+avec vos vraies photos.
+
+16
+00:00:51,419 --> 00:00:53,554
+Le numéro d'urgence revient au bon moment.
+
+17
+00:00:53,554 --> 00:00:55,943
+Les horaires mettent en avant le jour en cours,
+
+18
+00:00:55,943 --> 00:00:58,739
+et le formulaire de contact est protégé contre le spam.
+
+19
+00:01:04,627 --> 00:01:07,920
+Sur téléphone, là où se trouvent la plupart de vos patients,
+
+20
+00:01:07,920 --> 00:01:10,115
+tout reste accessible : le menu complet,
+
+21
+00:01:10,115 --> 00:01:12,091
+et l'appel des urgences en un geste.
+
+22
+00:01:17,335 --> 00:01:19,112
+Chaque page profite du même soin :
+
+23
+00:01:19,112 --> 00:01:21,411
+des transitions fluides, des filtres animés,
+
+24
+00:01:21,411 --> 00:01:24,391
+et une barre de progression pour la lecture des articles.
+
+25
+00:01:29,943 --> 00:01:30,978
+Côté administration,
+
+26
+00:01:30,978 --> 00:01:33,410
+votre équipe garde la main sur les spécialités,
+
+27
+00:01:33,410 --> 00:01:36,360
+les articles, les offres, le recrutement et les messages.
+
+28
+00:01:36,360 --> 00:01:39,361
+Elle peut désormais ajouter une vidéo à chaque spécialité,
+
+29
+00:01:39,361 --> 00:01:42,414
+et le site l'alerte tant que le mot de passe par défaut n'a
+
+30
+00:01:42,414 --> 00:01:43,191
+pas été changé.
+
+31
+00:01:44,491 --> 00:01:45,896
+Le résultat est mesuré :
+
+32
+00:01:45,896 --> 00:01:48,296
+accessibilité et référencement à 100/100,
+
+33
+00:01:48,296 --> 00:01:51,751
+un premier affichage sur mobile plus de 2 fois plus rapide,
+
+34
+00:01:51,751 --> 00:01:53,683
+et 83 tests automatiques au vert.
+
+35
+00:01:54,991 --> 00:01:56,539
+Votre nouveau site est prêt.
+
+36
+00:01:56,539 --> 00:01:58,807
+Il ne reste plus qu'à le mettre en ligne.

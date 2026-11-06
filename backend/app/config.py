@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
+    # Public address of the website (absolute URLs in sitemap.xml / robots.txt)
+    site_url: str = "http://localhost:5173"
+
     # CORS
     cors_origins: list[str] = ["http://localhost:5173"]
 
@@ -37,10 +40,15 @@ class Settings(BaseSettings):
     admin_username: str = "admin"
     admin_password: str = "admin123"
 
-    # Uploads (images are served publicly from upload_dir/images; CVs never are)
+    # Uploads (images and videos are served publicly from upload_dir/images
+    # and upload_dir/videos; CVs never are)
     upload_dir: str = "uploads"
     max_image_mb: int = 5
     max_cv_mb: int = 5
+    max_video_mb: int = 15
+
+    # Rate limiting of public write endpoints (app/rate_limit.py)
+    rate_limit_enabled: bool = True
 
     # Automatic database backups (mysqldump). mysqldump_path lets a local dev
     # setup (e.g. XAMPP on Windows) point at a binary that isn't on PATH; on a

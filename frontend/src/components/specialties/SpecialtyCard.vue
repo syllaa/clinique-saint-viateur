@@ -8,7 +8,8 @@ defineProps<{ specialty: SpecialtyListItem }>();
 </script>
 
 <template>
-  <RouterLink :to="`/specialites/${specialty.slug}`" class="spc-card" v-reveal>
+  <!-- Reveal and tilt are applied by the parent list (v-reveal / v-tilt). -->
+  <RouterLink :to="`/specialites/${specialty.slug}`" class="spc-card">
     <SpecialtyMedia
       class="spc-media"
       :media-type="specialty.media_type"
@@ -37,17 +38,40 @@ defineProps<{ specialty: SpecialtyListItem }>();
     box-shadow 0.35s,
     border-color 0.35s;
 }
+/* Hover: lift + 3D tilt towards the cursor (variables set by v-tilt). */
 .spc-card:hover {
-  transform: translateY(-7px);
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-7px);
   box-shadow: 0 18px 44px rgba(150, 12, 30, 0.11);
   border-color: #e8a8ae;
+  transition:
+    transform 0.15s linear,
+    box-shadow 0.35s,
+    border-color 0.35s;
+  transition-delay: 0s;
 }
 .spc-card:hover :deep(.specialty-media.card:not(.is-image)) {
   transform: scale(1.12) rotate(-6deg);
   background: #fbe1e3;
 }
+.spc-card:hover :deep(.specialty-media.card:not(.is-image) svg) {
+  animation: iconBeat 1.2s ease-in-out infinite;
+}
+@keyframes iconBeat {
+  0%,
+  40%,
+  100% {
+    scale: 1;
+  }
+  10%,
+  28% {
+    scale: 1.18;
+  }
+  18% {
+    scale: 0.96;
+  }
+}
 .spc-card h3 {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--heading);

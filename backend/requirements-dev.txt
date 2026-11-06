@@ -1,0 +1,8 @@
+# Development and test tools (not installed in the production image).
+-r requirements.txt
+
+pytest==9.1.1
+httpx==0.28.1
+
+# Local MCP server for support tickets (backend/mcp/admin_ticket.py).
+mcp==2.1.0

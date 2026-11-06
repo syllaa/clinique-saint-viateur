@@ -12,10 +12,12 @@ import JobsManager from "@/components/admin/JobsManager.vue";
 import MessagesTable from "@/components/admin/MessagesTable.vue";
 import PromotionEditor from "@/components/admin/PromotionEditor.vue";
 import PromotionsManager from "@/components/admin/PromotionsManager.vue";
+import SecuritySettings from "@/components/admin/SecuritySettings.vue";
 import SpecialtiesManager from "@/components/admin/SpecialtiesManager.vue";
 import SpecialtyEditor from "@/components/admin/SpecialtyEditor.vue";
 import { useAdmin } from "@/composables/useAdmin";
 import { useArticlesStore } from "@/stores/articles";
+import { useAuthStore } from "@/stores/auth";
 import { useBlogCategoriesStore } from "@/stores/blogCategories";
 import { useJobApplicationsStore } from "@/stores/jobApplications";
 import { useJobOffersStore } from "@/stores/jobOffers";
@@ -23,7 +25,8 @@ import { useMessagesStore } from "@/stores/messages";
 import { usePromotionsStore } from "@/stores/promotions";
 import { useSpecialtiesStore } from "@/stores/specialties";
 
-const { activeTab, title } = useAdmin();
+const { activeTab, title, setTab } = useAdmin();
+const auth = useAuthStore();
 const messages = useMessagesStore();
 const articles = useArticlesStore();
 const categories = useBlogCategoriesStore();
@@ -56,6 +59,13 @@ onMounted(() => {
 
       <div class="a-content">
         <div v-if="activeTab === 'dashboard'">
+          <div v-if="auth.weakPassword" class="weak-pw-banner" role="alert">
+            <span>
+              <strong>Sécurité :</strong> vous utilisez le mot de passe par défaut ou un mot de passe trop court.
+              Changez-le avant toute mise en ligne.
+            </span>
+            <button class="ab ab-gold" type="button" @click="setTab('security')">Changer maintenant</button>
+          </div>
           <div class="dash-row">
             <div class="dcard">
               <div class="dcard-ico">✉️</div>
@@ -116,6 +126,7 @@ onMounted(() => {
         <PromotionsManager v-else-if="activeTab === 'promotions-list'" />
         <PromotionEditor v-else-if="activeTab === 'promotions-editor'" />
         <BackupsManager v-else-if="activeTab === 'backups'" />
+        <SecuritySettings v-else-if="activeTab === 'security'" />
       </div>
     </div>
   </div>
@@ -129,5 +140,19 @@ onMounted(() => {
   background: var(--a-bg);
   display: flex;
   flex-direction: row;
+}
+.weak-pw-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--a-text);
+  font-size: 0.84rem;
 }
 </style>

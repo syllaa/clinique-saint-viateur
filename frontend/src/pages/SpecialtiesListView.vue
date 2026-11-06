@@ -1,20 +1,36 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { Stethoscope } from "@lucide/vue";
+import { onMounted, ref } from "vue";
 
-import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
-import Spinner from "@/components/common/Spinner.vue";
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
+import LoadError from "@/components/common/LoadError.vue";
+import PageHeader from "@/components/common/PageHeader.vue";
+import SkeletonGrid from "@/components/common/SkeletonGrid.vue";
 import SpecialtyCard from "@/components/specialties/SpecialtyCard.vue";
+import { vTilt } from "@/directives/tilt";
 import { applySeo } from "@/composables/useHead";
 import { useSpecialtiesStore } from "@/stores/specialties";
 
 const specialties = useSpecialtiesStore();
-const loading = specialties.items.length === 0;
+// Start in the loading state when nothing is cached yet, so the empty state
+// never flashes before the first request.
+const loading = ref(!specialties.items.length);
+const loadError = ref(false);
+
+async function load() {
+  loading.value = true;
+  loadError.value = false;
+  try {
+    await specialties.fetchAll();
+  } catch {
+    loadError.value = true;
+  } finally {
+    loading.value = false;
+  }
+}
 
 onMounted(() => {
-  specialties.fetchAll();
+  load();
   applySeo({
     title: "Nos spécialités médicales – Clinique Saint Viateur",
     description:
@@ -25,48 +41,46 @@ onMounted(() => {
 </script>
 
 <template>
-  <NavBar />
+  <PageHeader
+    kicker="Nos spécialités"
+    title="Une gamme complète de soins médicaux"
+    lead="De la médecine générale aux spécialités les plus pointues, la Clinique Saint Viateur vous accueille avec un plateau technique complet et des médecins qualifiés. Sélectionnez une spécialité pour en savoir plus."
+    :crumbs="[{ label: 'Accueil', to: '/' }, { label: 'Nos spécialités' }]"
+  />
 
-  <section class="section specialties-hero">
+  <section class="section list-section" aria-labelledby="specialties-list-title">
     <div class="section-inner">
-      <Breadcrumbs :items="[{ label: 'Accueil', to: '/' }, { label: 'Nos spécialités' }]" />
-      <p v-reveal class="section-kicker">Nos spécialités</p>
-      <h1 v-reveal class="section-title d1">Une gamme complète de soins médicaux</h1>
-      <p v-reveal class="section-lead d2">
-        De la médecine générale aux spécialités les plus pointues, la Clinique Saint Viateur vous accueille avec un
-        plateau technique complet et des médecins qualifiés. Sélectionnez une spécialité pour en savoir plus.
-      </p>
-
+      <h2 id="specialties-list-title" class="sr-only">Liste de nos spécialités</h2>
       <div v-if="specialties.items.length" class="specialties-grid">
-        <SpecialtyCard v-for="s in specialties.items" :key="s.id" :specialty="s" />
+        <SpecialtyCard
+          v-for="(s, i) in specialties.items"
+          :key="s.id"
+          v-reveal="{ type: 'up', delay: (i % 4) * 80 }"
+          v-tilt="4"
+          :specialty="s"
+        />
       </div>
+      <SkeletonGrid v-else-if="loading" :count="8" :min-width="220" />
+      <LoadError v-else-if="loadError" @retry="load" />
       <EmptyState
-        v-else-if="!loading"
-        icon="🩺"
+        v-else
+        :icon="Stethoscope"
         title="Aucune spécialité pour le moment"
         message="Revenez bientôt, notre offre de soins est mise à jour régulièrement."
       />
-      <div v-else class="specialties-loading"><Spinner :size="26" /></div>
     </div>
   </section>
-
-  <FooterBar />
 </template>
 
 <style scoped>
-.specialties-hero {
-  padding-top: 128px;
+.list-section {
   background: var(--bg-alt);
-  min-height: 60vh;
+  min-height: 50vh;
 }
 .specialties-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
   gap: 18px;
-}
-.specialties-loading {
-  display: flex;
-  justify-content: center;
-  padding: 60px 0;
+  perspective: 1000px;
 }
 </style>

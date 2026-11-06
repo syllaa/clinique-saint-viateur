@@ -11,7 +11,9 @@ const emit = defineEmits<{ (e: "update:modelValue", value: string): void }>();
 
 const editor = useEditor({
   content: props.modelValue,
-  extensions: [StarterKit, Link.configure({ openOnClick: false, autolink: true })],
+  // StarterKit (TipTap 3) already bundles Link: disable it so only the
+  // configured one below is used (no click-to-open while editing).
+  extensions: [StarterKit.configure({ link: false }), Link.configure({ openOnClick: false, autolink: true })],
   onUpdate: ({ editor }) => {
     emit("update:modelValue", editor.getHTML());
   },

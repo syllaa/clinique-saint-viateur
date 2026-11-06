@@ -23,6 +23,9 @@ class Specialty(Base):
     icon_name: Mapped[str | None] = mapped_column(String(50), nullable=True)  # e.g. "heart-pulse" (Lucide slug)
     cover_image_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
     image_alt: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    # Optional ambient video for the detail page header (uploaded via
+    # /api/uploads/videos; only our own /uploads/videos/<uuid> URLs are accepted).
+    cover_video_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
     full_description: Mapped[str] = mapped_column(Text, default="", nullable=False)
     services_offered: Mapped[str] = mapped_column(Text, default="", nullable=False)
     symptoms_text: Mapped[str | None] = mapped_column(Text, nullable=True)

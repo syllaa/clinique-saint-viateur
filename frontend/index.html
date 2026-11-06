@@ -8,10 +8,30 @@
       name="description"
       content="Clinique Médicale Saint Viateur – Établissement privé de santé à Cocody, Abidjan. Soins 24h/24, urgences, gynécologie, chirurgie, pédiatrie et plus."
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
+    <meta name="theme-color" content="#7a0f1a" />
+    <link rel="canonical" href="%VITE_SITE_URL%/" />
+    <!-- Default social preview. Link-preview bots (Facebook, WhatsApp, X)
+         don't run JavaScript: they only ever read these static tags.
+         %VITE_SITE_URL% is replaced at build time (frontend/.env). -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Clinique Médicale Saint Viateur" />
+    <meta property="og:title" content="Clinique Médicale Saint Viateur – Riviera Sideci, Cocody, Abidjan" />
+    <meta
+      property="og:description"
+      content="Établissement médical privé à Cocody, Abidjan. Urgences et réanimation 24h/24, 7j/7. Appelez le 27 22 59 04 17."
     />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta property="og:image" content="%VITE_SITE_URL%/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Façade de la Clinique Médicale Saint Viateur, avec le numéro des urgences" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Fonts are self-hosted and bundled (src/main.ts): no render-blocking
+         request to a third-party domain. -->
     <style>
       #preloader {
         position: fixed;
@@ -22,7 +42,7 @@
         align-items: center;
         justify-content: center;
         gap: 20px;
-        background: #0a1f3c;
+        background: #1d0a0c;
         transition:
           opacity 0.35s ease,
           visibility 0.35s ease;
@@ -35,21 +55,14 @@
       .pl-emblem {
         width: 54px;
         height: 54px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #c48a2a, #e0ab4a);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 26px;
-        color: #fff;
-        font-weight: 700;
-        font-family: "DM Sans", sans-serif;
+        border-radius: 24%;
+        background: #180809;
       }
       .pl-spinner {
         width: 30px;
         height: 30px;
         border: 3px solid rgba(255, 255, 255, 0.15);
-        border-top-color: #e0ab4a;
+        border-top-color: #f3aab4;
         border-radius: 50%;
         animation: pl-spin 0.8s linear infinite;
       }
@@ -58,11 +71,77 @@
           transform: rotate(360deg);
         }
       }
+      .pl-name {
+        display: none;
+        color: #fff;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.5rem;
+        letter-spacing: 0.02em;
+        text-align: center;
+        line-height: 1.2;
+      }
+      .pl-name small {
+        display: block;
+        margin-top: 6px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.62rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: #f3aab4;
+      }
+      /* Opening intro (home, once per session — see main.ts): the emblem pops
+         and glows, the name rises, then the curtain lifts upwards. */
+      #preloader.pl-intro {
+        animation: plCurtain 0.8s cubic-bezier(0.76, 0, 0.24, 1) 1.05s forwards;
+      }
+      #preloader.pl-intro .pl-spinner {
+        display: none;
+      }
+      #preloader.pl-intro .pl-emblem {
+        width: 72px;
+        height: 72px;
+        animation: plPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      #preloader.pl-intro .pl-emblem {
+        animation:
+          plPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+          plGlow 0.9s ease-out 0.3s both;
+      }
+      #preloader.pl-intro .pl-name {
+        display: block;
+        animation: plRise 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
+      }
+      @keyframes plPop {
+        from {
+          transform: scale(0.4);
+          opacity: 0;
+        }
+      }
+      @keyframes plGlow {
+        50% {
+          box-shadow: 0 0 34px 6px rgba(224, 71, 90, 0.5);
+        }
+        to {
+          box-shadow: 0 0 0 0 rgba(224, 71, 90, 0);
+        }
+      }
+      @keyframes plRise {
+        from {
+          transform: translateY(18px);
+          opacity: 0;
+        }
+      }
+      @keyframes plCurtain {
+        to {
+          clip-path: inset(0 0 100% 0);
+        }
+      }
     </style>
   </head>
   <body>
     <div id="preloader">
-      <div class="pl-emblem">✚</div>
+      <img class="pl-emblem" src="/emblem-128.webp" width="54" height="54" alt="" aria-hidden="true" />
+      <div class="pl-name" aria-hidden="true">Clinique Médicale Saint Viateur<small>Cocody · Abidjan</small></div>
       <div class="pl-spinner"></div>
     </div>
     <div id="app"></div>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+
+import { reducedMotion } from "@/motion/motionPreferences";
 
 interface Particle {
   x: number;
@@ -22,8 +24,14 @@ let ecgX = 0;
 let rafId = 0;
 
 function resize(canvas: HTMLCanvasElement) {
-  width = canvas.width = canvas.offsetWidth;
-  height = canvas.height = canvas.offsetHeight;
+  // Draw in CSS pixels, back the canvas with device pixels (sharp on retina),
+  // capped at 2x to keep the fill cost reasonable on phones.
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  width = canvas.offsetWidth;
+  height = canvas.offsetHeight;
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+  canvas.getContext("2d")?.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
 function randomParticle(): Particle {
@@ -132,28 +140,69 @@ function frame(ctx: CanvasRenderingContext2D) {
     }
   });
 
-  rafId = requestAnimationFrame(() => frame(ctx));
 }
 
+// ─── Lifecycle: only animate while visible, on-screen and allowed ───
+let ctx2d: CanvasRenderingContext2D | null = null;
+let running = false;
+let onScreen = true;
 let onWindowResize: (() => void) | null = null;
+let io: IntersectionObserver | null = null;
+
+function loop() {
+  if (!ctx2d) return;
+  frame(ctx2d);
+  rafId = requestAnimationFrame(loop);
+}
+
+function shouldRun() {
+  return onScreen && !document.hidden && !reducedMotion.value;
+}
+
+function sync() {
+  if (shouldRun() && !running) {
+    running = true;
+    rafId = requestAnimationFrame(loop);
+  } else if (!shouldRun() && running) {
+    running = false;
+    cancelAnimationFrame(rafId);
+  }
+  // Reduced motion: keep one still frame as a decorative background.
+  if (reducedMotion.value && ctx2d) frame(ctx2d);
+}
+
+const stopMotionWatch = watch(reducedMotion, sync);
 
 onMounted(() => {
   const canvas = canvasRef.value;
   if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
+  ctx2d = canvas.getContext("2d");
+  if (!ctx2d) return;
 
   resize(canvas);
-  particles = Array.from({ length: N }, randomParticle);
+  // Fewer particles on small screens: same look, a quarter of the line checks.
+  const count = width < 640 ? Math.round(N * 0.55) : N;
+  particles = Array.from({ length: count }, randomParticle);
 
   onWindowResize = () => resize(canvas);
   window.addEventListener("resize", onWindowResize, { passive: true });
+  document.addEventListener("visibilitychange", sync);
 
-  frame(ctx);
+  io = new IntersectionObserver(([entry]) => {
+    onScreen = entry.isIntersecting;
+    sync();
+  });
+  io.observe(canvas);
+
+  sync();
 });
 
 onBeforeUnmount(() => {
+  running = false;
   cancelAnimationFrame(rafId);
+  stopMotionWatch();
+  io?.disconnect();
+  document.removeEventListener("visibilitychange", sync);
   if (onWindowResize) window.removeEventListener("resize", onWindowResize);
 });
 </script>
@@ -166,6 +215,8 @@ onBeforeUnmount(() => {
 .hero-canvas {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: 0;
 }
 </style>

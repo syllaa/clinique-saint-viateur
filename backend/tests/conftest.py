@@ -11,6 +11,25 @@ from app.main import app
 TEST_DATABASE_URL = "sqlite:///:memory:"
 
 
+@pytest.fixture(autouse=True)
+def reset_rate_limits():
+    """Rate-limit counters are process-wide: start every test with a clean slate."""
+    from app.rate_limit import limiter
+
+    limiter.reset()
+    yield
+    limiter.reset()
+
+
+@pytest.fixture()
+def isolated_uploads(tmp_path, monkeypatch):
+    """Points the upload directory at a temporary folder for the test."""
+    from app.config import get_settings
+
+    monkeypatch.setattr(get_settings(), "upload_dir", str(tmp_path))
+    return tmp_path
+
+
 @pytest.fixture()
 def client():
     engine = create_engine(

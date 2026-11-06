@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Calendar, MapPin } from "@lucide/vue";
 import type { JobOfferListItem } from "@/services/jobService";
 
 defineProps<{ offer: JobOfferListItem }>();
@@ -13,8 +14,8 @@ defineProps<{ offer: JobOfferListItem }>();
     <h3>{{ offer.title }}</h3>
     <p v-if="offer.short_description">{{ offer.short_description }}</p>
     <div class="job-card-meta">
-      <span>📍 {{ offer.location }}</span>
-      <span>📅 {{ new Date(offer.created_at).toLocaleDateString("fr-FR") }}</span>
+      <span class="meta-item"><MapPin :size="13" aria-hidden="true" />{{ offer.location }}</span>
+      <span class="meta-item"><Calendar :size="13" aria-hidden="true" />{{ new Date(offer.created_at).toLocaleDateString("fr-FR") }}</span>
     </div>
     <span class="job-more">Voir l'offre →</span>
   </RouterLink>
@@ -65,7 +66,7 @@ defineProps<{ offer: JobOfferListItem }>();
   border-radius: 100px;
 }
 .job-card h3 {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 600;
   color: var(--heading);

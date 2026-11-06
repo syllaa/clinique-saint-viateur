@@ -59,6 +59,7 @@ class SpecialtyCreate(BaseModel):
     icon_name: str | None = None
     cover_image_url: str | None = None
     image_alt: str | None = None
+    cover_video_url: str | None = None
     full_description: str = ""
     services_offered: str = ""
     symptoms_text: str | None = None
@@ -76,6 +77,7 @@ class SpecialtyUpdate(BaseModel):
     icon_name: str | None = None
     cover_image_url: str | None = None
     image_alt: str | None = None
+    cover_video_url: str | None = None
     full_description: str | None = None
     services_offered: str | None = None
     symptoms_text: str | None = None
@@ -96,6 +98,7 @@ class SpecialtyListOut(BaseModel):
     icon_name: str | None
     cover_image_url: str | None
     image_alt: str | None
+    cover_video_url: str | None = None
 
     model_config = {"from_attributes": True}
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { CircleHelp, Info, Link, TriangleAlert } from "@lucide/vue";
 import { nextTick, onBeforeUnmount, ref, watch } from "vue";
 
 import { resolveDialog, resolvePrompt, useDialogState } from "@/composables/useDialog";
@@ -40,10 +41,13 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
 <template>
   <Teleport to="body">
     <Transition name="dlg">
-      <div v-if="state.open" class="dlg-overlay" @click.self="dismiss">
+      <div v-if="state.open" class="dlg-overlay" data-lenis-prevent @click.self="dismiss">
         <div class="dlg-card" :class="{ danger: state.danger }">
-          <div class="dlg-icon">
-            {{ state.danger ? "⚠" : state.kind === "confirm" ? "❓" : state.kind === "prompt" ? "🔗" : "ℹ" }}
+          <div class="dlg-icon" aria-hidden="true">
+            <TriangleAlert v-if="state.danger" :size="22" />
+            <CircleHelp v-else-if="state.kind === 'confirm'" :size="22" />
+            <Link v-else-if="state.kind === 'prompt'" :size="22" />
+            <Info v-else :size="22" />
           </div>
           <h3 v-if="state.title">{{ state.title }}</h3>
           <p>{{ state.message }}</p>
@@ -123,7 +127,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
   color: var(--red-alert, #b3121f);
 }
 .dlg-card h3 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.2rem;
   color: var(--navy, #7a0f1a);
   margin-bottom: 8px;

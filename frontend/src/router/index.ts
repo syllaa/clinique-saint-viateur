@@ -1,15 +1,32 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useAdminAccess } from "@/composables/useAdminAccess";
+import { waitForPageLeave } from "@/motion/pageTransition";
+import { restoreScroll, scrollToHash, scrollToTop } from "@/motion/useLenis";
 import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHistory(),
-  scrollBehavior(to) {
+  // Scrolling is always done here by hand (Lenis-aware), hence `false`.
+  async scrollBehavior(to, from, savedPosition): Promise<false> {
+    // Changing page: wait until the old page has faded out (App.vue
+    // <Transition>), so it doesn't visibly jump while leaving.
+    // (Not on the very first navigation: nothing is leaving then.)
+    if (from.matched.length && to.path !== from.path) await waitForPageLeave();
+
     if (to.hash) {
-      return { el: to.hash, behavior: "smooth" };
+      // Waits for the target (sections often render after an API call) and
+      // goes through Lenis when smooth scrolling is active.
+      scrollToHash(to.hash);
+      return false;
     }
-    return { top: 0 };
+    // Back/forward restores where the visitor was, once the page is tall enough.
+    if (savedPosition) {
+      restoreScroll(savedPosition.top);
+      return false;
+    }
+    scrollToTop();
+    return false;
   },
   routes: [
     {

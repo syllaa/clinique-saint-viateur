@@ -6,7 +6,8 @@ import { useJobOffersStore } from "@/stores/jobOffers";
 const jobs = useJobOffersStore();
 
 onMounted(() => {
-  if (!jobs.items.length) jobs.fetchAll();
+  // Decorative ticker: on failure it just stays empty, never blocks the page.
+  if (!jobs.items.length) jobs.fetchAll().catch(() => undefined);
 });
 </script>
 

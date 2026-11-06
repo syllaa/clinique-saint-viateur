@@ -1,4 +1,5 @@
 import io
+import re
 import uuid
 from pathlib import Path
 
@@ -11,6 +12,9 @@ settings = get_settings()
 
 _IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 _CV_EXTENSIONS = {".pdf"}
+_VIDEO_EXTENSIONS = {".mp4", ".webm"}
+# Public URL of a video this service stored (server-generated UUID name only).
+_VIDEO_URL_RE = re.compile(r"/uploads/videos/[0-9a-f]{32}\.(mp4|webm)")
 _CHUNK_SIZE = 1024 * 1024
 _MAX_IMAGE_DIMENSION = 1600
 
@@ -22,6 +26,7 @@ def upload_root() -> Path:
 def ensure_upload_dirs() -> None:
     (upload_root() / "images").mkdir(parents=True, exist_ok=True)
     (upload_root() / "cvs").mkdir(parents=True, exist_ok=True)
+    (upload_root() / "videos").mkdir(parents=True, exist_ok=True)
 
 
 async def _read_upload(file: UploadFile, max_mb: int) -> bytes:
@@ -100,3 +105,49 @@ def cv_disk_path(filename: str) -> Path:
 
 def image_url(filename: str) -> str:
     return f"/uploads/images/{filename}"
+
+
+def _looks_like(ext: str, raw: bytes) -> bool:
+    """Checks the file signature, not just the name: MP4 files carry an
+    'ftyp' box at offset 4, WebM files start with the EBML magic number."""
+    if ext == ".mp4":
+        return raw[4:8] == b"ftyp"
+    if ext == ".webm":
+        return raw[:4] == bytes([0x1A, 0x45, 0xDF, 0xA3])
+    return False
+
+
+async def save_video(file: UploadFile) -> str:
+    """Stores an ambient video (MP4 or WebM) as-is under a random name.
+    Videos are not re-encoded server-side: they must be prepared beforehand
+    (see docs/medias-a-generer.md)."""
+    ext = Path(file.filename or "").suffix.lower()
+    if ext not in _VIDEO_EXTENSIONS:
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_CONTENT,
+            f"Type de fichier non autorisé ({ext or 'inconnu'}). Autorisés : .mp4, .webm",
+        )
+    raw = await _read_upload(file, settings.max_video_mb)
+    if not _looks_like(ext, raw):
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Fichier vidéo invalide ou corrompu")
+
+    ensure_upload_dirs()
+    filename = f"{uuid.uuid4().hex}{ext}"
+    (upload_root() / "videos" / filename).write_bytes(raw)
+    return filename
+
+
+def video_url(filename: str) -> str:
+    return f"/uploads/videos/{filename}"
+
+
+def is_uploaded_video_url(url: str | None) -> bool:
+    return bool(url and _VIDEO_URL_RE.fullmatch(url))
+
+
+def delete_uploaded_video(url: str | None) -> None:
+    """Removes a video file previously stored by save_video. Anything that is
+    not one of our own UUID-named files is ignored (no path traversal)."""
+    if not is_uploaded_video_url(url):
+        return
+    (upload_root() / "videos" / url.rsplit("/", 1)[1]).unlink(missing_ok=True)

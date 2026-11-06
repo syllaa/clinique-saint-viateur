@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 
+import BrandMark from "@/components/brand/BrandMark.vue";
 import { useAdmin, type AdminTab } from "@/composables/useAdmin";
 import { useTheme } from "@/composables/useTheme";
 import { useAuthStore } from "@/stores/auth";
@@ -31,7 +32,7 @@ function logout() {
 <template>
   <aside class="a-sidebar">
     <div class="a-logo">
-      <div class="a-logo-em">✚</div>
+      <BrandMark :size="34" />
       <div class="a-logo-txt">Saint Viateur<small>Administration</small></div>
     </div>
     <nav class="a-nav">
@@ -94,6 +95,10 @@ function logout() {
       <div class="a-nav-item" :class="{ on: activeTab === 'backups' }" @click="setTab('backups' as AdminTab)">
         <span class="a-nav-icon">🗄</span>Sauvegardes
       </div>
+      <div class="a-nav-item" :class="{ on: activeTab === 'security' }" @click="setTab('security' as AdminTab)">
+        <span class="a-nav-icon">🔒</span>Sécurité
+        <span v-if="auth.weakPassword" class="a-nav-badge" title="Mot de passe à changer">!</span>
+      </div>
     </nav>
     <div class="a-sidebar-foot">
       <button class="back-link theme-toggle-link" @click="toggle(true)">
@@ -119,18 +124,6 @@ function logout() {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-.a-logo-em {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--a-gold), #c8102e);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
 }
 .a-logo-txt {
   font-size: 0.78rem;

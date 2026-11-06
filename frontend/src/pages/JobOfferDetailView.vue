@@ -1,14 +1,14 @@
 <script setup lang="ts">
+import { Briefcase, GraduationCap, Hourglass, MapPin } from "@lucide/vue";
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 import Alert from "@/components/common/Alert.vue";
 import Breadcrumbs from "@/components/common/Breadcrumbs.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
+import HoneypotField from "@/components/common/HoneypotField.vue";
 import LoadingOverlay from "@/components/common/LoadingOverlay.vue";
 import Spinner from "@/components/common/Spinner.vue";
-import FooterBar from "@/components/layout/FooterBar.vue";
-import NavBar from "@/components/layout/NavBar.vue";
 import { alertDialog } from "@/composables/useDialog";
 import { applySeo, resetSeo } from "@/composables/useHead";
 import { useJobApplicationsStore } from "@/stores/jobApplications";
@@ -87,6 +87,8 @@ function onCvChange(e: Event) {
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
+const honeypot = ref("");
+
 async function submitApplication() {
   submitError.value = "";
   if (!firstName.value.trim() || !lastName.value.trim() || !phone.value.trim()) {
@@ -114,6 +116,7 @@ async function submitApplication() {
   formData.append("cover_letter", coverLetter.value.trim());
   formData.append("consent", "true");
   formData.append("cv", cvFile.value);
+  formData.append("website", honeypot.value);
 
   submitting.value = true;
   try {
@@ -131,14 +134,13 @@ async function submitApplication() {
 </script>
 
 <template>
-  <NavBar />
 
-  <div v-if="loading" class="detail-loading"><Spinner :size="30" /></div>
+  <div v-if="loading" class="detail-loading" role="status" aria-live="polite"><Spinner :size="30" /><span class="sr-only">Chargement…</span></div>
 
   <template v-else-if="notFound || !jobs.current">
     <section class="section" style="padding-top: 128px">
       <div class="section-inner">
-        <EmptyState icon="💼" title="Offre introuvable" message="Cette offre n'existe plus ou n'est plus ouverte aux candidatures.">
+        <EmptyState :icon="Briefcase" title="Offre introuvable" message="Cette offre n'existe plus ou n'est plus ouverte aux candidatures.">
           <RouterLink to="/nous-rejoindre" class="btn-primary" style="margin-top: 16px; display: inline-flex">
             ← Retour aux offres
           </RouterLink>
@@ -157,16 +159,16 @@ async function submitApplication() {
             { label: jobs.current.title },
           ]"
         />
-        <div class="job-hero-tags">
+        <div v-reveal class="job-hero-tags">
           <span class="job-contract">{{ jobs.current.contract_type }}</span>
           <span v-if="jobs.current.department" class="job-dept">{{ jobs.current.department }}</span>
         </div>
-        <h1>{{ jobs.current.title }}</h1>
-        <div class="job-meta">
-          <span>📍 {{ jobs.current.location }}</span>
-          <span v-if="jobs.current.experience_level">🎓 {{ jobs.current.experience_level }}</span>
-          <span v-if="jobs.current.application_deadline">
-            ⏳ Candidatures jusqu'au {{ new Date(jobs.current.application_deadline).toLocaleDateString("fr-FR") }}
+        <h1 v-reveal class="d1">{{ jobs.current.title }}</h1>
+        <div v-reveal class="job-meta d2">
+          <span class="meta-item"><MapPin :size="14" aria-hidden="true" />{{ jobs.current.location }}</span>
+          <span v-if="jobs.current.experience_level" class="meta-item"><GraduationCap :size="14" aria-hidden="true" />{{ jobs.current.experience_level }}</span>
+          <span v-if="jobs.current.application_deadline" class="meta-item">
+            <Hourglass :size="14" aria-hidden="true" /> Candidatures jusqu'au {{ new Date(jobs.current.application_deadline).toLocaleDateString("fr-FR") }}
           </span>
         </div>
       </div>
@@ -175,25 +177,25 @@ async function submitApplication() {
     <section class="section">
       <div class="section-inner job-grid">
         <div class="job-body">
-          <p v-if="jobs.current.short_description" class="job-lead">{{ jobs.current.short_description }}</p>
+          <p v-if="jobs.current.short_description" v-reveal class="job-lead">{{ jobs.current.short_description }}</p>
 
-          <div v-if="jobs.current.description" class="job-block" v-html="jobs.current.description"></div>
+          <div v-if="jobs.current.description" v-reveal class="job-block" v-html="jobs.current.description"></div>
 
-          <div v-if="jobs.current.missions" class="job-block">
+          <div v-if="jobs.current.missions" v-reveal class="job-block">
             <h2>Missions</h2>
             <p style="white-space: pre-line">{{ jobs.current.missions }}</p>
           </div>
-          <div v-if="jobs.current.profile_requirements" class="job-block">
+          <div v-if="jobs.current.profile_requirements" v-reveal class="job-block">
             <h2>Profil recherché</h2>
             <p style="white-space: pre-line">{{ jobs.current.profile_requirements }}</p>
           </div>
-          <div v-if="jobs.current.skills" class="job-block">
+          <div v-if="jobs.current.skills" v-reveal class="job-block">
             <h2>Compétences</h2>
             <p style="white-space: pre-line">{{ jobs.current.skills }}</p>
           </div>
         </div>
 
-        <aside class="job-side">
+        <aside v-reveal="'right'" class="job-side d2">
           <div v-if="!submitted" class="job-apply-card">
             <h3>Postuler à cette offre</h3>
             <div class="job-form" :class="{ 'is-sending': submitting }">
@@ -212,6 +214,7 @@ async function submitApplication() {
                 <input type="checkbox" v-model="consent" />
                 <span>J'accepte que mes données soient traitées dans le cadre de ma candidature.</span>
               </label>
+              <HoneypotField v-model="honeypot" />
               <button class="btn-submit" :disabled="submitting" @click="submitApplication">Envoyer ma candidature →</button>
               <LoadingOverlay v-if="submitting" message="Envoi de votre candidature…" />
             </div>
@@ -228,15 +231,17 @@ async function submitApplication() {
     </section>
   </template>
 
-  <FooterBar />
 </template>
 
 <style scoped>
+/* Dark placeholder shaped like the hero: no white flash before it appears. */
 .detail-loading {
-  min-height: 100vh;
+  min-height: 480px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(155deg, var(--brand-900) 0%, var(--brand-700) 100%);
+  color: var(--brand-200);
 }
 .job-hero {
   padding-top: 128px;
@@ -276,7 +281,7 @@ async function submitApplication() {
   border-radius: 100px;
 }
 .job-hero h1 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: clamp(1.7rem, 3.2vw, 2.4rem);
   color: #fff;
   margin-bottom: 14px;
@@ -310,7 +315,7 @@ async function submitApplication() {
   font-size: 1.1rem;
   color: var(--heading);
   margin-bottom: 12px;
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
 }
 .job-block :deep(p) {
   margin-bottom: 12px;
@@ -393,24 +398,6 @@ async function submitApplication() {
 }
 .job-consent input {
   margin-top: 3px;
-}
-.btn-submit {
-  width: 100%;
-  background: var(--blue);
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-}
-.btn-submit:hover {
-  background: var(--navy);
-}
-.btn-submit:active:not(:disabled) {
-  transform: scale(0.98);
 }
 .job-success {
   text-align: center;
