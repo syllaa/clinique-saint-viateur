@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import "@/assets/admin.css";
+import BrandMark from "@/components/brand/BrandMark.vue";
 import Spinner from "@/components/common/Spinner.vue";
 import { useAuthStore } from "@/stores/auth";
 import { apiErrorMessage } from "@/utils/apiError";
@@ -41,7 +42,7 @@ function backToSite() {
   <div class="login-screen">
     <div class="login-card">
       <div class="login-head">
-        <div class="login-emblem">✚</div>
+        <BrandMark :size="42" />
         <div>
           <div style="font-size: 0.83rem; font-weight: 600; color: var(--a-text)">Administration</div>
           <div style="font-size: 0.66rem; color: var(--a-muted); text-transform: uppercase; letter-spacing: 0.1em">

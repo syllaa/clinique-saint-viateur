@@ -27,7 +27,9 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Façade de la Clinique Médicale Saint Viateur, avec le numéro des urgences" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <!-- Fonts are self-hosted and bundled (src/main.ts): no render-blocking
          request to a third-party domain. -->
     <style>
@@ -53,6 +55,8 @@
       .pl-emblem {
         width: 54px;
         height: 54px;
+        border-radius: 24%;
+        background: #000;
       }
       .pl-spinner {
         width: 30px;
@@ -85,8 +89,8 @@
         text-transform: uppercase;
         color: #f3aab4;
       }
-      /* Opening intro (home, once per session — see main.ts): the emblem pops,
-         the cross draws, the name rises, then the curtain lifts upwards. */
+      /* Opening intro (home, once per session — see main.ts): the emblem pops
+         and glows, the name rises, then the curtain lifts upwards. */
       #preloader.pl-intro {
         animation: plCurtain 0.8s cubic-bezier(0.76, 0, 0.24, 1) 1.05s forwards;
       }
@@ -98,11 +102,10 @@
         height: 72px;
         animation: plPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
       }
-      #preloader.pl-intro .pl-cross {
-        fill-opacity: 0;
-        stroke-dasharray: 1;
-        stroke-dashoffset: 1;
-        animation: plDraw 0.55s ease-out 0.25s forwards;
+      #preloader.pl-intro .pl-emblem {
+        animation:
+          plPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+          plGlow 0.9s ease-out 0.3s both;
       }
       #preloader.pl-intro .pl-name {
         display: block;
@@ -114,14 +117,12 @@
           opacity: 0;
         }
       }
-      @keyframes plDraw {
-        70% {
-          stroke-dashoffset: 0;
-          fill-opacity: 0;
+      @keyframes plGlow {
+        50% {
+          box-shadow: 0 0 34px 6px rgba(40, 200, 120, 0.45);
         }
         to {
-          stroke-dashoffset: 0;
-          fill-opacity: 1;
+          box-shadow: 0 0 0 0 rgba(40, 200, 120, 0);
         }
       }
       @keyframes plRise {
@@ -139,16 +140,7 @@
   </head>
   <body>
     <div id="preloader">
-      <svg class="pl-emblem" viewBox="0 0 64 64" aria-hidden="true">
-        <defs>
-          <linearGradient id="pl-g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#c8102e" />
-            <stop offset="1" stop-color="#e0475a" />
-          </linearGradient>
-        </defs>
-        <circle cx="32" cy="32" r="32" fill="url(#pl-g)" />
-        <path class="pl-cross" d="M27 16h10v11h11v10H37v11H27V37H16V27h11z" fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round" pathLength="1" />
-      </svg>
+      <img class="pl-emblem" src="/emblem-128.webp" width="54" height="54" alt="" aria-hidden="true" />
       <div class="pl-name" aria-hidden="true">Clinique Médicale Saint Viateur<small>Cocody · Abidjan</small></div>
       <div class="pl-spinner"></div>
     </div>

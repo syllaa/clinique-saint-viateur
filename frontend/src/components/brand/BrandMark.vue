@@ -1,52 +1,39 @@
 <script setup lang="ts">
-import { useId } from "vue";
+import emblem128 from "@/assets/images/brand/emblem-128.webp";
+import emblem256 from "@/assets/images/brand/emblem-256.webp";
 
 /**
- * Clinic emblem: a white medical cross on a bordeaux disc.
- * The cross is a single stroked + filled path with pathLength="1" so the
- * motion system can "draw" it later (stroke-dashoffset 1 → 0).
+ * Clinic emblem (official logo supplied by the clinic): blue cross, white
+ * figure and green swoosh. The artwork has a black, glowing background that
+ * cannot be cut out cleanly, so it is shown as a rounded icon tile.
  */
 withDefaults(defineProps<{ size?: number; title?: string }>(), {
   size: 38,
   title: undefined,
 });
-
-const gradientId = `brand-grad-${useId()}`;
 </script>
 
 <template>
-  <svg
+  <img
     class="brand-mark"
+    :src="emblem128"
+    :srcset="`${emblem128} 128w, ${emblem256} 256w`"
+    :sizes="`${size}px`"
     :width="size"
     :height="size"
-    viewBox="0 0 64 64"
-    :role="title ? 'img' : undefined"
-    :aria-label="title"
+    :alt="title ?? ''"
     :aria-hidden="title ? undefined : 'true'"
-    focusable="false"
-  >
-    <defs>
-      <linearGradient :id="gradientId" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#c8102e" />
-        <stop offset="1" stop-color="#e0475a" />
-      </linearGradient>
-    </defs>
-    <circle class="brand-mark-disc" cx="32" cy="32" r="32" :fill="`url(#${gradientId})`" />
-    <path
-      class="brand-mark-cross"
-      d="M27 16h10v11h11v10H37v11H27V37H16V27h11z"
-      fill="#fff"
-      stroke="#fff"
-      stroke-width="2"
-      stroke-linejoin="round"
-      pathLength="1"
-    />
-  </svg>
+    decoding="async"
+    draggable="false"
+  />
 </template>
 
 <style scoped>
 .brand-mark {
   display: block;
   flex-shrink: 0;
+  border-radius: 24%;
+  background: #000;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 </style>

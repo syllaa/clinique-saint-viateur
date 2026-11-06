@@ -131,6 +131,7 @@ export function clinicJsonLd(): object {
     name: "Clinique Médicale Saint Viateur",
     url: `${SITE_URL}/`,
     image: DEFAULT_OG_IMAGE,
+    logo: `${SITE_URL}/icon-192.png`,
     description: DEFAULT_DESCRIPTION,
     telephone: "+225 27 22 59 04 17",
     email: "cliniquestviateur@aviso.ci",
