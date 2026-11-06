@@ -128,6 +128,11 @@ function goAdmin() {
         <li v-for="(link, i) in LINKS" :key="link.to" :style="{ '--i': i }">
           <RouterLink :to="link.to" @click="closeMenu()">{{ link.label }}</RouterLink>
         </li>
+        <li v-if="adminUnlocked" :style="{ '--i': LINKS.length }">
+          <button type="button" class="nav-mobile-admin" @click="goAdmin">
+            <Settings :size="18" aria-hidden="true" /> Administration
+          </button>
+        </li>
       </ul>
       <a href="tel:+2252722590417" class="nav-mobile-call">
         <Phone :size="18" aria-hidden="true" />
@@ -390,12 +395,35 @@ function goAdmin() {
   }
 }
 
+.nav-mobile-admin {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 4px;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.7);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+}
+.nav-mobile-admin:hover {
+  color: #fff;
+}
+
 @media (max-width: 980px) {
   .nav-links {
     display: none;
   }
   .btn-nav-burger {
     display: inline-flex;
+  }
+  /* Small screens: the Admin entry lives in the menu panel, not the bar. */
+  .btn-nav-admin {
+    display: none;
   }
 }
 @media (max-width: 560px) {
