@@ -59,7 +59,7 @@ Le site est passé d'une vitrine statique à une expérience animée, plus sûre
 
 **Nouveaux modules** : `frontend/src/motion/` (système d'animation), `components/home/` (10 sections), `components/common/` (PageHeader, FilterPills, SkeletonGrid, AmbientVideo, ReadingProgress, LoadError, HoneypotField), `backend/app/rate_limit.py`, `backend/app/seo/`.
 
-**Bilan des fichiers** : 58 créés, 72 modifiés (8 480 lignes ajoutées, 2 282 retirées). `HomeView.vue` est passé de 1 303 à 45 lignes.
+**Bilan des fichiers** : 58 créés, 72 modifiés (8 480 lignes ajoutées, 2 282 retirées). `HomeView.vue` est passé de 1 303 à 48 lignes.
 
 **Dépendances ajoutées** (versions exactes) : `gsap 3.15.0`, `lenis 1.3.27`, `@fontsource/cormorant-garamond 5.3.0`, `@fontsource-variable/dm-sans 5.3.0`. Mises à jour : `vue 3.5.45`, `axios 1.21.0`, `@tiptap/* 3.32.0`. Backend : versions figées dans `requirements.txt`, outils de test dans `requirements-dev.txt`.
 
