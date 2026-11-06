@@ -168,13 +168,13 @@ function goAdmin() {
 }
 .nav-wordmark {
   color: #fff;
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.05rem;
   line-height: 1.2;
 }
 .nav-wordmark span {
   display: block;
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.62rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -314,7 +314,7 @@ function goAdmin() {
   padding: 14px 4px;
   color: rgba(255, 255, 255, 0.86);
   text-decoration: none;
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.45rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   transition: color 0.2s, padding-left 0.2s;

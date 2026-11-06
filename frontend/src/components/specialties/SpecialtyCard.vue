@@ -71,7 +71,7 @@ defineProps<{ specialty: SpecialtyListItem }>();
   }
 }
 .spc-card h3 {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--heading);

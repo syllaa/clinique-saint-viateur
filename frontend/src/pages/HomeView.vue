@@ -1,21 +1,28 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { defineAsyncComponent, onMounted } from "vue";
 
-import AboutSection from "@/components/home/AboutSection.vue";
-import BlogSection from "@/components/home/BlogSection.vue";
-import ContactSection from "@/components/home/ContactSection.vue";
-import EmergencyBanner from "@/components/home/EmergencyBanner.vue";
-import GallerySection from "@/components/home/GallerySection.vue";
 import HeroSection from "@/components/home/HeroSection.vue";
 import InfoStrip from "@/components/home/InfoStrip.vue";
-import MapBanner from "@/components/home/MapBanner.vue";
-import OffersSection from "@/components/home/OffersSection.vue";
-import ServicesSection from "@/components/home/ServicesSection.vue";
-import TestimonialsSection from "@/components/home/TestimonialsSection.vue";
 import { applySeo, clinicJsonLd } from "@/composables/useHead";
 
 // Each section owns its data, markup, styles and animations
 // (see components/home/). This page only sets the order.
+//
+// Only what is visible on arrival (hero + info strip) is in the page's
+// initial bundle; every section below the fold is a separate chunk loaded
+// right after, so a phone parses and styles far less before first paint.
+// No layout shift: those sections sit below the first screen, and <main>
+// keeps a full-screen minimum height (ui.css).
+const ServicesSection = defineAsyncComponent(() => import("@/components/home/ServicesSection.vue"));
+const OffersSection = defineAsyncComponent(() => import("@/components/home/OffersSection.vue"));
+const AboutSection = defineAsyncComponent(() => import("@/components/home/AboutSection.vue"));
+const GallerySection = defineAsyncComponent(() => import("@/components/home/GallerySection.vue"));
+const EmergencyBanner = defineAsyncComponent(() => import("@/components/home/EmergencyBanner.vue"));
+const BlogSection = defineAsyncComponent(() => import("@/components/home/BlogSection.vue"));
+const TestimonialsSection = defineAsyncComponent(() => import("@/components/home/TestimonialsSection.vue"));
+const ContactSection = defineAsyncComponent(() => import("@/components/home/ContactSection.vue"));
+const MapBanner = defineAsyncComponent(() => import("@/components/home/MapBanner.vue"));
+
 onMounted(() =>
   applySeo({
     title: "Clinique Médicale Saint Viateur – Riviera Sideci, Cocody, Abidjan",

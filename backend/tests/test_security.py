@@ -45,14 +45,16 @@ def test_rate_limit_can_be_disabled(client, monkeypatch):
 def test_rate_limiter_window_expires():
     from app.rate_limit import SlidingWindowLimiter
 
-    limiter = SlidingWindowLimiter()
-    assert limiter.hit("k", 2, 0.05) is None
-    assert limiter.hit("k", 2, 0.05) is None
-    assert limiter.hit("k", 2, 0.05) is not None
-    import time
-
-    time.sleep(0.06)
-    assert limiter.hit("k", 2, 0.05) is None
+    now = [1000.0]  # fake clock (real sleeps are flaky: ~15 ms timer steps on Windows)
+    limiter = SlidingWindowLimiter(clock=lambda: now[0])
+    assert limiter.hit("k", 2, 60) is None
+    assert limiter.hit("k", 2, 60) is None
+    assert limiter.hit("k", 2, 60) == 61  # blocked, wait the full window
+    now[0] += 30
+    assert limiter.hit("k", 2, 60) == 31  # still blocked
+    now[0] += 31
+    assert limiter.hit("k", 2, 60) is None  # window passed
+    assert limiter.hit("other", 2, 60) is None  # keys are independent
 
 
 # ── Honeypot ──────────────────────────────────────────────

@@ -9,3 +9,6 @@
 *.webm binary
 *.doc binary
 *.docx binary
+*.sh text eol=lf
+nginx.conf text eol=lf
+Dockerfile text eol=lf

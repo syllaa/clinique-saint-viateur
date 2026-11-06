@@ -2,12 +2,20 @@ import { createPinia } from "pinia";
 import { createApp } from "vue";
 
 import App from "./App.vue";
+// Self-hosted fonts (no request to Google): only the weights the site uses.
+// Each file only downloads the Unicode ranges actually needed (latin here).
+import "@fontsource-variable/dm-sans/wght.css";
+import "@fontsource/cormorant-garamond/400.css";
+import "@fontsource/cormorant-garamond/600.css";
+import "@fontsource/cormorant-garamond/700.css";
+import "@fontsource/cormorant-garamond/400-italic.css";
+import "@fontsource/cormorant-garamond/600-italic.css";
 import "./assets/base.css";
 import "./assets/ui.css";
 import { vCountUp } from "./directives/countUp";
 import { vReveal } from "./directives/reveal";
-// Imported for its side effect: sets <html data-motion> before the first render,
-// so reveal animations never flash when reduced motion is on.
+// Importing this module sets <html data-motion> before the first render, so
+// reveal animations never flash when reduced motion is on.
 import { isReducedMotion } from "./motion/motionPreferences";
 import router from "./router";
 

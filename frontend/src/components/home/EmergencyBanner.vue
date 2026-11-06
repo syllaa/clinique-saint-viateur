@@ -169,13 +169,13 @@ useScrollScene(bannerRef, (kit, banner) => {
 .em-call span {
   display: flex;
   flex-direction: column;
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.8rem;
   font-weight: 700;
   line-height: 1.05;
 }
 .em-call small {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.16em;

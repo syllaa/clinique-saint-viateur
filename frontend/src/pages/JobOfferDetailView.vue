@@ -281,7 +281,7 @@ async function submitApplication() {
   border-radius: 100px;
 }
 .job-hero h1 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: clamp(1.7rem, 3.2vw, 2.4rem);
   color: #fff;
   margin-bottom: 14px;
@@ -315,7 +315,7 @@ async function submitApplication() {
   font-size: 1.1rem;
   color: var(--heading);
   margin-bottom: 12px;
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
 }
 .job-block :deep(p) {
   margin-bottom: 12px;

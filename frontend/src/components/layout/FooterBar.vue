@@ -105,7 +105,7 @@ const { reducedMotion, toggle: toggleMotion } = useMotionPreference();
   gap: var(--space-3);
   text-decoration: none;
   color: #fff;
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.15rem;
   line-height: 1.15;
 }
@@ -147,7 +147,7 @@ const { reducedMotion, toggle: toggleMotion } = useMotionPreference();
   opacity: 0.85;
 }
 .footer-heading {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.2em;

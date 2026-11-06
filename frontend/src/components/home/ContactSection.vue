@@ -277,7 +277,7 @@ async function backToForm() {
   color: var(--blue);
 }
 .ccard h3 {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--heading);
@@ -530,7 +530,7 @@ fieldset.fg {
 .open-now {
   background: var(--brand-600);
   color: #fff;
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;

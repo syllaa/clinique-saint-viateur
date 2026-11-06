@@ -183,7 +183,7 @@ figcaption {
   color: var(--heading);
 }
 .gallery-n {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.4rem;
   color: var(--brand-600);
 }

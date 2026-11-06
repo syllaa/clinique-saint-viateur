@@ -412,7 +412,7 @@ watch(
   margin-bottom: 16px;
 }
 .spd-hero-inner h1 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: clamp(2.1rem, 4vw, 3.1rem);
   color: #fff;
   margin-bottom: 12px;
@@ -443,7 +443,7 @@ watch(
   font-size: 1.15rem;
   color: var(--heading);
   margin-bottom: 14px;
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
 }
 .spd-block p {
   color: var(--muted);
@@ -480,7 +480,7 @@ watch(
   transform: translateY(-3px);
 }
 .spd-stat-n {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.9rem;
   color: var(--heading);
   line-height: 1;
@@ -565,7 +565,7 @@ watch(
   margin-bottom: 16px;
 }
 .spd-trust-card h3 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.15rem;
   color: #fff;
   margin-bottom: 8px;
@@ -721,7 +721,7 @@ watch(
   position: absolute;
   top: 18px;
   right: 20px;
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.5rem;
   color: var(--border-soft);
   line-height: 1;
@@ -758,7 +758,7 @@ watch(
   margin-bottom: 14px;
 }
 .spd-testi-text {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.3rem;
   color: var(--heading);
   line-height: 1.55;
@@ -788,7 +788,7 @@ watch(
   flex-wrap: wrap;
 }
 .spd-cta-banner-inner h2 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.7rem;
   color: #fff;
   margin-bottom: 6px;

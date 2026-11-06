@@ -127,7 +127,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", handleKeydown));
   color: var(--red-alert, #b3121f);
 }
 .dlg-card h3 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.2rem;
   color: var(--navy, #7a0f1a);
   margin-bottom: 8px;

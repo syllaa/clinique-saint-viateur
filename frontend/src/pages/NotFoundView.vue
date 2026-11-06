@@ -95,7 +95,7 @@ onMounted(() => {
   max-width: 520px;
 }
 .nf-code {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: clamp(6rem, 18vw, 10rem);
   font-weight: 600;
   line-height: 0.9;

@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import { Mail, MapPin, Phone } from "@lucide/vue";
-import { ref } from "vue";
+import { defineAsyncComponent, ref } from "vue";
 
 import IconFacebook from "@/components/brand/IconFacebook.vue";
 import AmbientVideo from "@/components/common/AmbientVideo.vue";
-import HeroCanvas from "@/components/hero/HeroCanvas.vue";
 import heroPhoto960 from "@/assets/images/hero/hero-ambulance-facade-960.webp";
 import heroPhoto from "@/assets/images/hero/hero-ambulance-facade.webp";
 import { useClinicHours } from "@/composables/useClinicHours";
 import { magnetic } from "@/motion/animations";
 import { useScrollScene } from "@/motion/useScrollScene";
 
+// Loaded only where it is shown (not on phones).
+const HeroCanvas = defineAsyncComponent(() => import("@/components/hero/HeroCanvas.vue"));
+
 const { statusLabel, consultationsOpen } = useClinicHours();
+
+// The particle canvas is decorative and costs CPU every frame: skipped on
+// phones, where the photo and gradient already carry the hero.
+const showCanvas = typeof window !== "undefined" && !!window.matchMedia?.("(min-width: 641px)").matches;
 
 // Click feedback on the emergency number: a ring ripples out from the card.
 const rippling = ref(false);
@@ -52,7 +58,7 @@ useScrollScene(heroRef, (kit, hero) => {
         poster-priority="high"
       />
     </div>
-    <HeroCanvas />
+    <HeroCanvas v-if="showCanvas" />
     <div class="hero-grad"></div>
     <div class="hero-grid"></div>
     <div class="ring ring-1"></div>
@@ -356,7 +362,7 @@ useScrollScene(heroRef, (kit, hero) => {
   text-align: center;
 }
 .hstat-n {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 2.1rem;
   color: var(--brand-200);
   line-height: 1;
@@ -434,7 +440,7 @@ useScrollScene(heroRef, (kit, hero) => {
   gap: 8px;
 }
 .urgence-phone {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: clamp(1.9rem, 3vw, 2.4rem);
   font-weight: 700;
   letter-spacing: 0.02em;

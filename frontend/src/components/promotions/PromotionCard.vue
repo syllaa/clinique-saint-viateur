@@ -163,7 +163,7 @@ async function react(type: ReactionType) {
   margin-bottom: 8px;
 }
 .promo-body h3 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.15rem;
   color: var(--heading);
   line-height: 1.3;

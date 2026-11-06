@@ -277,7 +277,7 @@ useScrollScene(storyRef, ({ gsap }, story) => {
   text-transform: uppercase;
 }
 .story-frame-n {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 2.4rem;
   letter-spacing: 0;
   color: var(--brand-200);
@@ -342,7 +342,7 @@ useScrollScene(storyRef, ({ gsap }, story) => {
   margin-bottom: 12px;
 }
 .chapter-label span {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.1rem;
   letter-spacing: 0;
   margin-right: 6px;
@@ -382,7 +382,7 @@ useScrollScene(storyRef, ({ gsap }, story) => {
   border-color: rgba(243, 170, 180, 0.3);
 }
 .astat-n {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 2.6rem;
   color: var(--brand-200);
   line-height: 1;

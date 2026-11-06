@@ -238,7 +238,7 @@ async function submitContact() {
   flex-shrink: 0;
 }
 .ccard h3 {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--heading);

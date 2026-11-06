@@ -172,7 +172,7 @@ onMounted(load);
   }
 }
 .svc-card h3 {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.94rem;
   font-weight: 600;
   color: var(--heading);

@@ -1,3 +1,20 @@
+@font-face {
+  font-family: "DM Sans Fallback";
+  src: local("Arial");
+  size-adjust: 103.3%;
+  ascent-override: 96.8%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Cormorant Fallback";
+  src: local("Georgia");
+  size-adjust: 87.5%;
+  ascent-override: 106.3%;
+  descent-override: 33.2%;
+  line-gap-override: 0%;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    DESIGN TOKENS
    Use the semantic names (--brand-*, --ink-*, --space-*, --radius-*,
@@ -24,6 +41,11 @@
   --ink: #1a1414;
   --ink-muted: #6b5457;
   --white: #ffffff;
+
+  /* Typography. Fallbacks are local fonts resized to the web fonts' metrics
+     (measured from the font files), so text barely moves when they load. */
+  --font-sans: "DM Sans Variable", "DM Sans Fallback", system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", "Cormorant Fallback", Georgia, serif;
 
   /* Spacing (4px base) */
   --space-1: 4px;
@@ -147,7 +169,7 @@ html.lenis {
   scroll-margin-top: 98px;
 }
 body {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   background: var(--bg);
   line-height: 1.65;
@@ -160,7 +182,7 @@ h1,
 h2,
 h3,
 .display {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
 }
 a {
   color: inherit;

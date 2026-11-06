@@ -287,7 +287,7 @@ async function share() {
   margin-bottom: 14px;
 }
 .art-hero-inner h1 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: clamp(1.7rem, 3.2vw, 2.4rem);
   color: #fff;
   max-width: 780px;
@@ -321,7 +321,7 @@ async function share() {
   font-size: 1.3rem;
   color: var(--heading);
   margin: 28px 0 14px;
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
 }
 .art-content :deep(h3) {
   font-size: 1.1rem;
@@ -350,7 +350,7 @@ async function share() {
   margin: 32px 0;
 }
 .art-section h2 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.25rem;
   color: var(--heading);
   margin-bottom: 16px;

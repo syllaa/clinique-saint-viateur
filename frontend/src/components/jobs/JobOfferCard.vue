@@ -66,7 +66,7 @@ defineProps<{ offer: JobOfferListItem }>();
   border-radius: 100px;
 }
 .job-card h3 {
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 600;
   color: var(--heading);

@@ -13,6 +13,7 @@ Limits of this approach (documented on purpose):
 import time
 from collections import deque
 from threading import Lock
+from typing import Callable
 
 from fastapi import HTTPException, Request, status
 
@@ -23,7 +24,9 @@ class SlidingWindowLimiter:
     PURGE_EVERY = 1000  # calls
     MAX_IDLE_SECONDS = 3600
 
-    def __init__(self) -> None:
+    def __init__(self, clock: Callable[[], float] = time.monotonic) -> None:
+        # Injectable clock: tests advance time deterministically.
+        self._clock = clock
         self._hits: dict[str, deque[float]] = {}
         self._lock = Lock()
         self._calls = 0
@@ -37,7 +40,7 @@ class SlidingWindowLimiter:
     def hit(self, key: str, limit: int, window_seconds: float) -> int | None:
         """Records one attempt. Returns None if allowed, else the number of
         seconds to wait before the next attempt is allowed."""
-        now = time.monotonic()
+        now = self._clock()
         with self._lock:
             self._calls += 1
             if self._calls % self.PURGE_EVERY == 0:

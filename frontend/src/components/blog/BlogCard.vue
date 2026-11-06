@@ -93,7 +93,7 @@ defineProps<{ article: ArticleListItem }>();
   padding: 20px;
 }
 .blog-title {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-serif);
   font-size: 1.1rem;
   color: var(--heading);
   line-height: 1.38;
