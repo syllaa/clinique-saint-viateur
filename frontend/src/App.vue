@@ -37,9 +37,9 @@ watch(
   { immediate: true },
 );
 
-// Hidden entry point: the "Admin" link and the /login, /admin routes stay
-// invisible/unreachable until unlocked with Ctrl+Shift+A (hide again with
-// Ctrl+Shift+U) — keeps casual visitors from stumbling onto the admin area.
+// Admin entry point: the "Admin" button and the /login, /admin routes are
+// shown by default; Ctrl+Shift+U hides them on this browser, Ctrl+Shift+A
+// shows them again (see useAdminAccess).
 const { unlocked } = useAdminAccess();
 
 function onKeydown(e: KeyboardEvent) {
