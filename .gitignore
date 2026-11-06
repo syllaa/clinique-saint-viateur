@@ -28,6 +28,10 @@ backend/backups/*
 !backend/backups/.gitkeep
 *.sql
 
+# Client presentation media (heavy, not source)
+docs/*.mp4
+docs/*.wav
+
 # OS / editors
 .DS_Store
 Thumbs.db
